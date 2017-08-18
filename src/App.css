@@ -1,21 +1,25 @@
 .longball-app {
-  text-align: center;
+    text-align: center;
 }
 
 .app-logo {
-  height: inherit;
+    height: inherit;
 }
 
 .app-header {
-  background-color: #307e34;
-  height: 50px;
-  padding: 10px;
-  color: white;
-  display: flex;
-  align-items: center;
+    background-color: #307e34;
+    height: 50px;
+    padding: 10px;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.header-user {
+    margin-left: auto;
 }
 
 .app-title {
-  font-size: large;
-  display: inline-flex;
+    font-size: large;
+    display: inline-flex;
 }
