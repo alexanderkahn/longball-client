@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import UserSessionControl from './UserSessionControl'
 import logo from './logo.svg';
 import './App.css';
 
@@ -16,27 +17,10 @@ function Header() {
             <div className="app-header">
                 <img src={logo} className="app-logo" alt="logo"/>
                 <h2 className="app-title">Longball</h2>
-                <User />
+                <UserSessionControl />
             </div>
         </div>
     );
-}
-
-function User() {
-    const isLoggedIn = true;
-    if (isLoggedIn) {
-        return <AuthenticatedUser />
-    } else {
-        return <AnonymousUser />
-    }
-}
-
-function AuthenticatedUser() {
-    return <span className="header-user">Hey, dude!</span>
-}
-
-function AnonymousUser() {
-    return <span classID="header-user"><a href="">Sign in</a></span>
 }
 
 export default LongballApp;
