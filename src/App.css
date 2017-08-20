@@ -13,6 +13,7 @@
     color: white;
     display: flex;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .header-user {
@@ -22,4 +23,8 @@
 .app-title {
     font-size: large;
     display: inline-flex;
+}
+
+.selector-list {
+    border: 1px black solid;
 }

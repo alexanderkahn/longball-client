@@ -28,18 +28,25 @@ function Header() {
 }
 
 function AppBody() {
+    const numbersList = _.range(1, 20).map(num => <div key={num.toString()}>{num}</div> );
     return (
         <div className="app-body">
-            <div className="section-title">A list of numbers for your enjoyment</div>
-            <NumberList />
+            <SelectorList title="List o' numbers">
+                {numbersList}
+            </SelectorList>
         </div>
     );
 }
 
-function NumberList() {
-    const numbers = _.range(1, 20);
-    const numberList = numbers.map(number => <li key={number}>{number}</li>);
-    return <ul>{numberList}</ul>
+function SelectorList(props) {
+    return (
+        <div className="selector-list">
+            <div className="selector-list-title">{props.title}</div>
+            <div className="selector-list-body">
+                {props.children}
+            </div>
+        </div>
+    );
 }
 
 export default LongballApp;
