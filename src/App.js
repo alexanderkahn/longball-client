@@ -1,30 +1,18 @@
 import React, {Component} from 'react';
 import _ from 'lodash' //TODO: this is overkill. Best practice is to import only the functions you need. babel-plugin-lodash might help?
-import UserSessionControl from './UserSessionControl'
-import logo from './logo.svg';
+import LongballAppBar from './LongballAppBar'
 import './App.css';
+import 'typeface-roboto'
 
 class LongballApp extends Component {
     render() {
         return (
             <div className="app-root">
-                <Header />
+                <LongballAppBar />
                 <AppBody />
             </div>
         );
     }
-}
-
-function Header() {
-    return (
-        <div className="longball-app">
-            <div className="app-header">
-                <img src={logo} className="app-logo" alt="logo"/>
-                <h2 className="app-title">Longball</h2>
-                <UserSessionControl />
-            </div>
-        </div>
-    );
 }
 
 function AppBody() {
