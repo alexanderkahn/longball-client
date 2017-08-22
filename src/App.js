@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import _ from 'lodash' //TODO: this is overkill. Best practice is to import only the functions you need. babel-plugin-lodash might help?
 import LongballAppBar from './LongballAppBar'
+import ManagementList from './ManagementList'
+import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
+import DraftsIcon from 'material-ui-icons/Drafts'
 import './App.css';
 import 'typeface-roboto'
 
@@ -16,24 +19,11 @@ class LongballApp extends Component {
 }
 
 function AppBody() {
-    const numbersList = _.range(1, 20).map(num => <div key={num.toString()}>{num}</div> );
+    const numbersList = _.range(1, 20).map(num => <ListItem><ListItemIcon><DraftsIcon /></ListItemIcon><ListItemText primary={num}/></ListItem>);
     return (
-        <div className="app-body">
-            <SelectorList title="List o' numbers">
-                {numbersList}
-            </SelectorList>
-        </div>
-    );
-}
-
-function SelectorList(props) {
-    return (
-        <div className="selector-list">
-            <div className="selector-list-title">{props.title}</div>
-            <div className="selector-list-body">
-                {props.children}
-            </div>
-        </div>
+        <ManagementList classes="yep">
+            {numbersList}
+        </ManagementList>
     );
 }
 
