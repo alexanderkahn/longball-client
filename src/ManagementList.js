@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Paper from 'material-ui/Paper'
-import List from 'material-ui/List';
+import List, {ListSubheader} from 'material-ui/List';
 
 const styles = theme => ({
     root: {
@@ -18,7 +18,7 @@ function ManagementList(props) {
     return (
         <div className={classes.root}>
             <Paper>
-                <List>
+                <List subheader={<ListSubheader>{props.title}</ListSubheader>}>
                     {props.children}
                 </List>
             </Paper>
@@ -27,7 +27,8 @@ function ManagementList(props) {
 }
 
 ManagementList.propTypes = {
-    classes: PropTypes.object.isRequired,
+    title: PropTypes.string.isRequired,
+    classes: PropTypes.object,
 };
 
 export default withStyles(styles)(ManagementList);

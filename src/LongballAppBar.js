@@ -28,12 +28,10 @@ class LongballAppBar extends Component {
     }
 
     handleLoginClick() {
-        console.info("setting true");
         this.setState({isLoggedIn: true});
     }
 
     handleLogoutClick() {
-        console.info("setting false");
         this.setState({isLoggedIn: false});
     }
 
@@ -45,7 +43,7 @@ class LongballAppBar extends Component {
                 <AppBar position="static">
                     <Toolbar>
                         <IconButton color="contrast" aria-label="Menu">
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <Typography type="title" color="inherit" className={classes.flex}>
                             Longball
@@ -61,7 +59,7 @@ class LongballAppBar extends Component {
         if (isLoggedIn) {
             return <Button color="contrast" onClick={this.handleLogoutClick}>Log out</Button>
         } else {
-            return <Button color="contrast"onClick={this.handleLoginClick}>Log in</Button>
+            return <Button color="contrast" onClick={this.handleLoginClick}>Log in</Button>
         }
     }
 }

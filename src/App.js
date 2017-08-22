@@ -19,12 +19,11 @@ class LongballApp extends Component {
 }
 
 function AppBody() {
-    const classes = { };
     const numbersList = _.range(1, 20)
         .map(num => <ListItem key={num.toString()}><ListItemIcon><DraftsIcon/></ListItemIcon><ListItemText primary={num}/></ListItem>);
     return (
         <div className="app-body">
-            <ManagementList classes={classes}>
+            <ManagementList title="List 'o numbers">
                 {numbersList}
             </ManagementList>
         </div>
