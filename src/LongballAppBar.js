@@ -40,7 +40,6 @@ class LongballAppBar extends Component {
     render() {
         const classes = this.props.classes;
         const userButton = this.getLogButton(this.state.isLoggedIn);
-        console.info("rendering!");
         return (
             <div className={classes.root}>
                 <AppBar position="static">

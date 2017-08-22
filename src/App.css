@@ -1,30 +1,10 @@
-.longball-app {
-    text-align: center;
+body {
+    background-color: gainsboro;
 }
 
-.app-logo {
-    height: inherit;
-}
-
-.app-header {
-    background-color: #307e34;
-    height: 50px;
-    padding: 10px;
-    color: white;
-    display: flex;
+.app-body {
+    width: 100%;
+    padding-top: 25pt;
+    padding-bottom: 25pt;
     align-items: center;
-    margin-bottom: 20px;
-}
-
-.header-user {
-    margin-left: auto;
-}
-
-.app-title {
-    font-size: large;
-    display: inline-flex;
-}
-
-.selector-list {
-    border: 1px black solid;
 }
