@@ -9,7 +9,9 @@
     "material-ui-icons": "^1.0.0-beta.5",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
     "react-scripts": "1.0.11",
+    "redux": "^3.7.2",
     "typeface-roboto": "0.0.35"
   },
   "scripts": {
@@ -17,5 +19,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "redux-devtools": "^3.4.0"
   }
 }
