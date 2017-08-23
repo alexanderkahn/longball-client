@@ -10,7 +10,7 @@ const styles = theme => ({});
 function NumberListItem(props) {
     const number = props.number;
     return (
-        <ListItem key={number.toString()}><ListItemIcon><DraftsIcon/></ListItemIcon><ListItemText primary={number}/></ListItem>
+        <ListItem button key={number.toString()}><ListItemIcon><DraftsIcon/></ListItemIcon><ListItemText primary={number}/></ListItem>
     );
 }
 
