@@ -6,7 +6,7 @@ import {withStyles} from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
+import UserLogControl from './UserLogControl';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 
@@ -20,24 +20,8 @@ const styles = {
 };
 
 class LongballAppBar extends Component {
-    constructor(props) {
-        super(props);
-        this.handleLoginClick = this.handleLoginClick.bind(this);
-        this.handleLogoutClick = this.handleLogoutClick.bind(this);
-        this.state = {isLoggedIn: false};
-    }
-
-    handleLoginClick() {
-        this.setState({isLoggedIn: true});
-    }
-
-    handleLogoutClick() {
-        this.setState({isLoggedIn: false});
-    }
-
     render() {
         const classes = this.props.classes;
-        const userButton = this.getLogButton(this.state.isLoggedIn);
         return (
             <div className={classes.root}>
                 <AppBar position="static">
@@ -48,19 +32,11 @@ class LongballAppBar extends Component {
                         <Typography type="title" color="inherit" className={classes.flex}>
                             Longball
                         </Typography>
-                        {userButton}
+                        <UserLogControl/>
                     </Toolbar>
                 </AppBar>
             </div>
         );
-    }
-
-    getLogButton(isLoggedIn) {
-        if (isLoggedIn) {
-            return <Button color="contrast" onClick={this.handleLogoutClick}>Log out</Button>
-        } else {
-            return <Button color="contrast" onClick={this.handleLoginClick}>Log in</Button>
-        }
     }
 }
 
