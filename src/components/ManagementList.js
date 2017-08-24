@@ -21,12 +21,15 @@ const styles = theme => ({
 
 function ManagementList(props) {
     const classes = props.classes;
+    const onClickAdd = props.onClickAdd;
+    console.info(onClickAdd);
+
     return (
         <div className={classes.root}>
             <Paper>
-                <List subheader={<ListSubheader>{props.title}</ListSubheader>}>
+                <List subheader={<ListSubheader classes={classes.default}>{props.title}</ListSubheader>}>
                     {props.children}
-                    <Button fab color="accent" aria-label="add" className={classes.button}>
+                    <Button fab color="accent" aria-label="add" className={classes.button} onClick={() => onClickAdd(0)}>
                         <AddIcon />
                     </Button>
                 </List>
@@ -37,7 +40,8 @@ function ManagementList(props) {
 
 ManagementList.propTypes = {
     title: PropTypes.string.isRequired,
-    classes: PropTypes.object,
+    children: PropTypes.node.isRequired,
+    onClickAdd: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ManagementList);

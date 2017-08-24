@@ -1,30 +1,29 @@
 import React, {Component} from 'react';
-import _ from 'lodash' //TODO: this is overkill. Best practice is to import only the functions you need. babel-plugin-lodash might help?
-import LongballAppBar from './component/LongballAppBar'
-import ManagementList from './component/ManagementList'
-import NumberListItem from "./component/NumberListItem";
+import LongballAppBar from './components/LongballAppBar'
+import longballStore from './reducers/index'
 import './App.css';
 import 'typeface-roboto'
+import {Provider} from "react-redux";
+import NumbersManagementList from "./components/containers/NumbersManagementList";
+import {createStore} from "redux";
+
+let store = createStore(longballStore);
 
 class LongballApp extends Component {
     render() {
         return (
-            <div className="app-root">
-                <LongballAppBar/>
+            <Provider store={store}>
                 <AppBody/>
-            </div>
+            </Provider>
         );
     }
 }
 
 function AppBody() {
-    const numbersList = _.range(1, 20)
-        .map(num => <NumberListItem number={num}/>);
     return (
         <div className="app-body">
-            <ManagementList title="List 'o numbers">
-                {numbersList}
-            </ManagementList>
+            <LongballAppBar/>
+            <NumbersManagementList title="List 'o numbers"/>
         </div>
     );
 }
