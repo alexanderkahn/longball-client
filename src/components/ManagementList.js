@@ -22,7 +22,6 @@ const styles = theme => ({
 function ManagementList(props) {
     const classes = props.classes;
     const onClickAdd = props.onClickAdd;
-    console.info(onClickAdd);
 
     return (
         <div className={classes.root}>

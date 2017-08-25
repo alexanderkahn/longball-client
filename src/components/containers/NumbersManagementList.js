@@ -7,7 +7,7 @@ import NumberListItem from "../NumberListItem";
 //TODO: no presentation components in state containers?
 const getChildListItems = (numbers) => {
     return numbers.map(num => <NumberListItem number={num}/>);
-}
+};
 
 const mapStateToProps = state => {
     return {

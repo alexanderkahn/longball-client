@@ -1,5 +1,16 @@
 import {combineReducers} from "redux";
 
+const user = (state = null, action) => {
+    switch (action.type) {
+        case 'LOG_IN':
+            return {first: 'Keith', last: 'Fudge'};
+        case 'LOG_OUT':
+            return null;
+        default:
+            return state;
+    }
+};
+
 const numbers = (state = [], action) => {
     switch (action.type) {
         case 'ADD_NUMBER':
@@ -8,11 +19,12 @@ const numbers = (state = [], action) => {
                 action.number
             ];
         default:
-            return state
+            return state;
     }
 };
 
 const longballStore = combineReducers({
+    user,
     numbers
 });
 

@@ -1,36 +1,26 @@
-import React, {Component} from "react";
+import React from "react";
+import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 
 const styles = theme => ({});
 
-class UserLogControl extends Component {
-    constructor(props) {
-        super(props);
-        this.handleLoginClick = this.handleLoginClick.bind(this);
-        this.handleLogoutClick = this.handleLogoutClick.bind(this);
-        this.state = {isLoggedIn: false};
-    }
-
-    handleLoginClick() {
-        this.setState({isLoggedIn: true});
-    }
-
-    handleLogoutClick() {
-        this.setState({isLoggedIn: false});
-    }
-
-    render() {
-        const isLoggedIn = this.state.isLoggedIn;
-        if (isLoggedIn) {
-            return <Button color="contrast" onClick={this.handleLogoutClick}>Log out</Button>;
+function UserLogControl(props) {
+    if (props.user) {
+            return <span>{props.user.first} {props.user.last}<Button color="contrast" onClick={props.onLogOut}>Log out</Button></span>;
         } else {
-            return <Button color="contrast" onClick={this.handleLoginClick}>Log in</Button>;
+            return <Button color="contrast" onClick={props.onLogIn}>Log in</Button>;
         }
-    }
 }
 
 
-UserLogControl.propTypes = {};
+UserLogControl.propTypes = {
+    onLogIn: PropTypes.func.isRequired,
+    onLogOut: PropTypes.func.isRequired,
+    user: PropTypes.shape({
+        first: PropTypes.string.isRequired,
+        last: PropTypes.string.isRequired
+    }),
+};
 
 export default withStyles(styles)(UserLogControl);
