@@ -11,12 +11,12 @@ const user = (state = null, action) => {
     }
 };
 
-const numbers = (state = [], action) => {
+const teams = (state = [], action) => {
     switch (action.type) {
-        case 'ADD_NUMBER':
+        case 'ADD_TEAM':
             return [
                 ...state,
-                action.number
+                action.team
             ];
         default:
             return state;
@@ -25,7 +25,7 @@ const numbers = (state = [], action) => {
 
 const longballStore = combineReducers({
     user,
-    numbers
+    teams
 });
 
 export default longballStore

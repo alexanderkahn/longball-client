@@ -1,7 +1,7 @@
-export const addNumber = number => {
+export const addTeam = team => {
     return {
-        type: 'ADD_NUMBER',
-        number
+        type: 'ADD_TEAM',
+        team
     }
 };
 

@@ -4,7 +4,7 @@ import longballStore from './reducers/index'
 import './App.css';
 import 'typeface-roboto'
 import {Provider} from "react-redux";
-import NumbersManagementList from "./components/containers/NumbersManagementList";
+import TeamManagementList from "./components/containers/TeamManagementList";
 import {createStore} from "redux";
 
 let store = createStore(longballStore);
@@ -23,7 +23,7 @@ function AppBody() {
     return (
         <div className="app-body">
             <LongballAppBar/>
-            <NumbersManagementList title="List 'o numbers"/>
+            <TeamManagementList title="List 'o numbers"/>
         </div>
     );
 }

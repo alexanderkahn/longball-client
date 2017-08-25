@@ -22,13 +22,18 @@ const styles = theme => ({
 function ManagementList(props) {
     const classes = props.classes;
     const onClickAdd = props.onClickAdd;
+    const demoTeam = {
+        abbreviation: 'WSH',
+        location: 'Washington',
+        nickname: 'Nationals'
+    };
 
     return (
         <div className={classes.root}>
             <Paper>
                 <List subheader={<ListSubheader classes={classes.default}>{props.title}</ListSubheader>}>
                     {props.children}
-                    <Button fab color="accent" aria-label="add" className={classes.button} onClick={() => onClickAdd(0)}>
+                    <Button fab color="accent" aria-label="add" className={classes.button} onClick={() => onClickAdd(demoTeam)}>
                         <AddIcon />
                     </Button>
                 </List>
