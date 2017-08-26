@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import ManagementList from '../ManagementList'
-import {addTeam} from "../../actions";
+import {ADD_TEAM} from "../../actions";
 import TeamListItem from "../TeamListItem";
 
 //TODO: no presentation components in state containers?
@@ -19,7 +19,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onClickAdd: team => {
-            dispatch(addTeam(team))
+            dispatch(ADD_TEAM(team))
         }
     }
 };

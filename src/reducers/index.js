@@ -23,9 +23,9 @@ const teams = (state = [], action) => {
     }
 };
 
-const longballStore = combineReducers({
+const rootReducer = combineReducers({
     user,
     teams
 });
 
-export default longballStore
+export default rootReducer

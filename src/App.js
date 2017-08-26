@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import LongballAppBar from './components/LongballAppBar'
-import longballStore from './reducers/index'
+import rootReducer from './reducers/index'
 import './App.css';
 import 'typeface-roboto'
 import {Provider} from "react-redux";
 import TeamManagementList from "./components/containers/TeamManagementList";
 import {createStore} from "redux";
 
-let store = createStore(longballStore);
+let store = createStore(rootReducer);
 
 class LongballApp extends Component {
     render() {

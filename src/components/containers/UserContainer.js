@@ -1,6 +1,6 @@
 import UserLogControl from "../UserLogControl";
 import {connect} from "react-redux";
-import {logIn, logOut} from "../../actions";
+import {LOG_IN, LOG_OUT} from "../../actions";
 
 const mapStateToProps = state => {
     return {
@@ -11,10 +11,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onLogIn: function () {
-            dispatch(logIn())
+            dispatch(LOG_IN())
         },
         onLogOut: function () {
-            dispatch(logOut());
+            dispatch(LOG_OUT());
         }
     }
 };
