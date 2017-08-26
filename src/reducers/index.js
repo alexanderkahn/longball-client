@@ -1,10 +1,11 @@
 import {combineReducers} from "redux";
+import {ADD_TEAM, LOG_IN, LOG_OUT} from "../actions/index";
 
 const user = (state = null, action) => {
     switch (action.type) {
-        case 'LOG_IN':
+        case LOG_IN:
             return {first: 'Keith', last: 'Fudge'};
-        case 'LOG_OUT':
+        case LOG_OUT:
             return null;
         default:
             return state;
@@ -13,7 +14,7 @@ const user = (state = null, action) => {
 
 const teams = (state = {}, action) => {
     switch (action.type) {
-        case 'ADD_TEAM':
+        case ADD_TEAM:
             return {
                 ...state,
                 [action.team.id]: action.team

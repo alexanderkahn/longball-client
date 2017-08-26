@@ -1,18 +1,21 @@
-export const ADD_TEAM = team => {
+export const ADD_TEAM = 'ADD_TEAM';
+export function addTeam(team) {
     return {
-        type: 'ADD_TEAM',
+        type: ADD_TEAM,
         team
     }
 };
 
-export function LOG_IN() {
+export const LOG_IN = 'LOG_IN';
+export function logIn() {
     return {
-        type: 'LOG_IN'
+        type: LOG_IN
     }
 }
 
-export function LOG_OUT() {
+export const LOG_OUT = 'LOG_OUT';
+export function logOut() {
     return {
-        type: 'LOG_OUT'
+        type: LOG_OUT
     }
 }

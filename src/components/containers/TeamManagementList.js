@@ -1,11 +1,10 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import ManagementList from '../ManagementList'
-import {ADD_TEAM} from "../../actions";
 import TeamListItem from "../TeamListItem";
+import {addTeam} from "../../actions/index";
 
 //TODO: no presentation components in state containers?
-//TODO perhaps complex objects should be represented by POJsOs?
 const getChildListItems = (teams) => {
     return Object.values(teams).map(team => <TeamListItem key={team.id} team={team} />);
 };
@@ -19,7 +18,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onClickAdd: team => {
-            dispatch(ADD_TEAM(team))
+            dispatch(addTeam(team))
         }
     }
 };
