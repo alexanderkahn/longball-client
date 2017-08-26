@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
-import DraftsIcon from 'material-ui-icons/Drafts'
 import {withStyles} from 'material-ui/styles';
+import {Icon} from "material-ui";
 
 
 const styles = theme => ({});
@@ -11,7 +11,7 @@ function TeamListItem(props) {
     const team = props.team;
     return (
         <ListItem button>
-            <ListItemIcon><DraftsIcon/></ListItemIcon>
+            <ListItemIcon><Icon>{team.abbreviation}</Icon></ListItemIcon>
             <ListItemText primary={team.location + " " + team.nickname}/>
         </ListItem>
     );
