@@ -11,21 +11,25 @@ const user = (state = null, action) => {
     }
 };
 
-const teams = (state = [], action) => {
+const teams = (state = {}, action) => {
     switch (action.type) {
         case 'ADD_TEAM':
-            return [
+            return {
                 ...state,
-                action.team
-            ];
+                [action.team.id]: action.team
+            };
         default:
             return state;
     }
 };
 
+const data = combineReducers({
+    teams,
+});
+
 const rootReducer = combineReducers({
     user,
-    teams
+    data
 });
 
 export default rootReducer

@@ -8,21 +8,22 @@ import {withStyles} from 'material-ui/styles';
 const styles = theme => ({});
 
 function TeamListItem(props) {
-    const abbreviation = props.team.abbreviation;
-    const location = props.team.location;
-    const nickname = props.team.nickname;
+    const team = props.team;
     return (
-        <ListItem button key={abbreviation}><ListItemIcon><DraftsIcon/></ListItemIcon><ListItemText primary={location + " " + nickname}/></ListItem>
+        <ListItem button>
+            <ListItemIcon><DraftsIcon/></ListItemIcon>
+            <ListItemText primary={team.location + " " + team.nickname}/>
+        </ListItem>
     );
 }
 
 TeamListItem.propTypes = {
     team: PropTypes.shape({
+        id: PropTypes.string.isRequired,
         abbreviation: PropTypes.string.isRequired,
         location: PropTypes.string.isRequired,
         nickname: PropTypes.string.isRequired,
     }).isRequired
-
 };
 
 export default withStyles(styles)(TeamListItem);

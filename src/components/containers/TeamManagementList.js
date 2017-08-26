@@ -7,12 +7,12 @@ import TeamListItem from "../TeamListItem";
 //TODO: no presentation components in state containers?
 //TODO perhaps complex objects should be represented by POJsOs?
 const getChildListItems = (teams) => {
-    return teams.map(team => <TeamListItem team={team} />);
+    return Object.values(teams).map(team => <TeamListItem key={team.id} team={team} />);
 };
 
 const mapStateToProps = state => {
     return {
-        children: getChildListItems(state.teams)
+        children: getChildListItems(state.data.teams)
     }
 };
 
