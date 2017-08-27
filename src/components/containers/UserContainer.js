@@ -1,6 +1,6 @@
 import UserLogControl from "../UserLogControl";
 import {connect} from "react-redux";
-import {logIn, logOut} from "../../actions/index";
+import {logIn, logOut} from "../../actions/user";
 
 const mapStateToProps = state => {
     return {

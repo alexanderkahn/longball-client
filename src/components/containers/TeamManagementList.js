@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import ManagementList from '../ManagementList'
 import TeamListItem from "../TeamListItem";
-import {addTeam} from "../../actions/index";
+import {addTeam} from "../../actions/teams";
 
 //TODO: no presentation components in state containers?
 const getChildListItems = (teams) => {
