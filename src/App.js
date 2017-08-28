@@ -5,9 +5,17 @@ import './App.css';
 import 'typeface-roboto'
 import {Provider} from "react-redux";
 import TeamManagementList from "./components/containers/TeamManagementList";
-import {createStore} from "redux";
+import {applyMiddleware, createStore} from "redux";
+import thunkMiddleware from 'redux-thunk'
+import {fetchTeams} from "./actions/teams";
 
-let store = createStore(rootReducer);
+let store = createStore(
+    rootReducer,
+    applyMiddleware(
+        thunkMiddleware
+    ));
+
+store.dispatch(fetchTeams(0));
 
 class LongballApp extends Component {
     render() {
@@ -23,7 +31,7 @@ function AppBody() {
     return (
         <div className="app-body">
             <LongballAppBar/>
-            <TeamManagementList title="List 'o numbers"/>
+            <TeamManagementList/>
         </div>
     );
 }

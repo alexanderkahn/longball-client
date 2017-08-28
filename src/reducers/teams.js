@@ -1,4 +1,5 @@
-import {ADD_TEAM} from "../actions/teams";
+import {ADD_TEAM, RECEIVE_TEAMS, REQUEST_TEAMS} from "../actions/teams";
+import {keyBy} from "lodash";
 
 export const teams = (state = {}, action) => {
     switch (action.type) {
@@ -6,6 +7,11 @@ export const teams = (state = {}, action) => {
             return {
                 ...state,
                 [action.team.id]: action.team
+            };
+        case RECEIVE_TEAMS:
+            return {
+                ...state,
+                ...keyBy(action.data, team => team.id)
             };
         default:
             return state;

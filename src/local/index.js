@@ -1,0 +1,1 @@
+export const DEV_AUTH_HEADER = 'Bearer raspberries';

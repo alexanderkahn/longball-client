@@ -11,6 +11,7 @@ const getChildListItems = (teams) => {
 
 const mapStateToProps = state => {
     return {
+        title: 'Teams',
         children: getChildListItems(state.data.teams)
     }
 };

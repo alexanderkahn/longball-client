@@ -32,3 +32,6 @@ chrome-user-data
 *.swo
 *react*min*.js
 !src/node_modules
+
+### Local config ###
+local/
