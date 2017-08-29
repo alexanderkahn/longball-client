@@ -17,6 +17,7 @@ const styles = theme => ({
     },
     button: {
         margin: 10,
+        alignSelf: 'right',
     },
     loading: {
         display: 'block',
@@ -29,7 +30,6 @@ const styles = theme => ({
 
 function ManagementList(props) {
     const classes = props.classes;
-    const onClickAdd = props.onClickAdd;
 
     let progressIndicator = null;
     if (props.isFetching) {
@@ -43,8 +43,7 @@ function ManagementList(props) {
                     {props.listItems}
                 </List>
                 {progressIndicator}
-                <Button fab color="accent" aria-label="add" className={classes.button}
-                        onClick={() => onClickAdd(getDemoTeam())}>
+                <Button fab color="accent" aria-label="add" className={classes.button} disabled>
                     <AddIcon/>
                 </Button>
             </Paper>
@@ -56,23 +55,5 @@ ManagementList.propTypes = {
     title: PropTypes.string.isRequired,
     listItems: PropTypes.node.isRequired,
     isFetching: PropTypes.bool.isRequired,
-    onClickAdd: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(ManagementList);
-
-// ============================= this is demo BS and can go away soon =============================
-
-let idCounter = 0;
-
-function getDemoTeam() {
-    idCounter += 1;
-    return {
-        id: idCounter.toString(),
-        abbreviation: 'WSH',
-        location: 'Washington',
-        nickname: 'Nationals'
-    };
-}
-
-// ================================================================================================
-

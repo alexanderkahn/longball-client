@@ -1,13 +1,5 @@
 import {DEV_AUTH_HEADER} from "../local/index";
 
-export const ADD_TEAM = 'ADD_TEAM';
-export function addTeam(team) {
-    return {
-        type: ADD_TEAM,
-        team
-    }
-}
-
 export const REQUEST_TEAMS = 'REQUEST_TEAMS';
 function requestTeams() {
     return {
