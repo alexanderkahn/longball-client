@@ -1,4 +1,4 @@
-import {ADD_TEAM, RECEIVE_TEAMS, REQUEST_TEAMS} from "../actions/teams";
+import {ADD_TEAM, RECEIVE_TEAMS} from "../../actions/teams";
 import {keyBy} from "lodash";
 
 export const teams = (state = {}, action) => {

@@ -1,14 +1,12 @@
 import {combineReducers} from "redux";
-import {teams} from "./teams";
 import {user} from "./user";
-
-const data = combineReducers({
-    teams,
-});
+import {data} from "./data/index";
+import {routes} from "./routes/index";
 
 const rootReducer = combineReducers({
     user,
-    data
+    data,
+    routes,
 });
 
 export default rootReducer

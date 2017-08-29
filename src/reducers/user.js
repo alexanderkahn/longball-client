@@ -9,4 +9,4 @@ export const user = (state = null, action) => {
         default:
             return state;
     }
-}
+};

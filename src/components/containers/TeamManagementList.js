@@ -12,7 +12,8 @@ const getChildListItems = (teams) => {
 const mapStateToProps = state => {
     return {
         title: 'Teams',
-        children: getChildListItems(state.data.teams)
+        listItems: getChildListItems(state.data.teams),
+        isFetching: state.routes.manageTeams.isFetching,
     }
 };
 

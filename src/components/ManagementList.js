@@ -5,6 +5,7 @@ import Paper from 'material-ui/Paper'
 import List, {ListSubheader} from 'material-ui/List';
 import {Button} from "material-ui";
 import AddIcon from 'material-ui-icons/Add'
+import {CircularProgress} from "material-ui/Progress";
 
 
 const styles = theme => ({
@@ -16,6 +17,13 @@ const styles = theme => ({
     },
     button: {
         margin: 10,
+    },
+    loading: {
+        display: 'block',
+        width: '100%',
+        margin: '0 auto',
+        paddingTop: 10,
+        paddingBottom: 10,
     }
 });
 
@@ -23,15 +31,21 @@ function ManagementList(props) {
     const classes = props.classes;
     const onClickAdd = props.onClickAdd;
 
+    let progressIndicator = null;
+    if (props.isFetching) {
+        progressIndicator = <CircularProgress className={classes.loading}/>
+    }
+
     return (
         <div className={classes.root}>
             <Paper>
                 <List subheader={<ListSubheader classes={classes.default}>{props.title}</ListSubheader>}>
-                    {props.children}
+                    {props.listItems}
                 </List>
+                {progressIndicator}
                 <Button fab color="accent" aria-label="add" className={classes.button}
                         onClick={() => onClickAdd(getDemoTeam())}>
-                    <AddIcon />
+                    <AddIcon/>
                 </Button>
             </Paper>
         </div>
@@ -40,7 +54,8 @@ function ManagementList(props) {
 
 ManagementList.propTypes = {
     title: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
+    listItems: PropTypes.node.isRequired,
+    isFetching: PropTypes.bool.isRequired,
     onClickAdd: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(ManagementList);
