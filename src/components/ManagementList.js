@@ -14,6 +14,7 @@ const styles = theme => ({
         maxWidth: 360,
         background: theme.palette.background.paper,
         margin: '0 auto',
+        marginBottom: 25,
     },
     button: {
         margin: 10,

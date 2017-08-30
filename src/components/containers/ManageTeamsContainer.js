@@ -20,9 +20,9 @@ const mapDispatchToProps = dispatch => {
     return {}
 };
 
-const TeamManagementList = connect(
+const ManageTeamsContainer = connect(
     mapStateToProps,
     mapDispatchToProps
 )(ManagementList);
 
-export default TeamManagementList
+export default ManageTeamsContainer
