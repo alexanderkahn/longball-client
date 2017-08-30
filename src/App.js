@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import LongballAppBar from './components/LongballAppBar'
+import Header from './components/Header'
 import rootReducer from './reducers/index'
 import './App.css';
 import 'typeface-roboto'
@@ -10,6 +10,7 @@ import {fetchTeams} from "./actions/teams";
 import {fetchPlayers} from "./actions/players";
 import ManageTeamsContainer from "./components/containers/ManageTeamsContainer";
 import ManagePlayersContainer from "./components/containers/ManagePlayersContainer";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 let store = createStore(
     rootReducer,
@@ -20,24 +21,35 @@ let store = createStore(
 store.dispatch(fetchTeams(0));
 store.dispatch(fetchPlayers(0));
 
-class LongballApp extends Component {
+class Root extends Component {
     render() {
         return (
             <Provider store={store}>
-                <AppBody/>
+                <BrowserRouter>
+                    <App/>
+                </BrowserRouter>
             </Provider>
         );
     }
 }
 
-function AppBody() {
+function App() {
     return (
         <div className="app-body">
-            <LongballAppBar/>
-            <ManageTeamsContainer/>
-            <ManagePlayersContainer/>
+            <Header/>
+            <Main/>
         </div>
     );
 }
 
-export default LongballApp;
+function Main() {
+    return (
+      <Switch>
+          <Route exact path='/' component={ManageTeamsContainer}/>
+          <Route exact path='/teams' component={ManageTeamsContainer}/>
+          <Route exact path='/players' component={ManagePlayersContainer}/>
+      </Switch>
+    );
+}
+
+export default Root;

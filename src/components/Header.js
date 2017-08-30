@@ -20,7 +20,7 @@ const styles = {
     },
 };
 
-class LongballAppBar extends Component {
+class Header extends Component {
     render() {
         const classes = this.props.classes;
         return (
@@ -42,8 +42,8 @@ class LongballAppBar extends Component {
 }
 
 
-LongballAppBar.propTypes = {
+Header.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(LongballAppBar);
+export default withStyles(styles)(Header);
