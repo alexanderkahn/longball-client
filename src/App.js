@@ -1,21 +1,30 @@
 import React, {Component} from 'react';
 import Header from './components/Header'
-import rootReducer from './reducers/index'
+import reducers from './reducers/index'
 import './App.css';
 import 'typeface-roboto'
 import {Provider} from "react-redux";
-import {applyMiddleware, createStore} from "redux";
+import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunkMiddleware from 'redux-thunk'
 import {fetchTeams} from "./actions/teams";
 import {fetchPlayers} from "./actions/players";
 import ManageTeamsContainer from "./components/containers/ManageTeamsContainer";
 import ManagePlayersContainer from "./components/containers/ManagePlayersContainer";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+import createBrowserHistory from 'history/createBrowserHistory'
+import {ConnectedRouter, routerMiddleware, routerReducer} from "react-router-redux";
+
+const history = createBrowserHistory();
+const reactRouterMiddleware = routerMiddleware(history);
 
 let store = createStore(
-    rootReducer,
+    combineReducers({
+        ...reducers,
+        routerReducer,
+    }),
     applyMiddleware(
-        thunkMiddleware
+        thunkMiddleware,
+        reactRouterMiddleware
     ));
 
 store.dispatch(fetchTeams(0));
@@ -25,9 +34,9 @@ class Root extends Component {
     render() {
         return (
             <Provider store={store}>
-                <BrowserRouter>
+                <ConnectedRouter history={history}>
                     <App/>
-                </BrowserRouter>
+                </ConnectedRouter>
             </Provider>
         );
     }
@@ -44,11 +53,11 @@ function App() {
 
 function Main() {
     return (
-      <Switch>
-          <Route exact path='/' component={ManageTeamsContainer}/>
-          <Route exact path='/teams' component={ManageTeamsContainer}/>
-          <Route exact path='/players' component={ManagePlayersContainer}/>
-      </Switch>
+        <Switch>
+            <Route exact path='/' component={ManageTeamsContainer}/>
+            <Route exact path='/teams' component={ManageTeamsContainer}/>
+            <Route exact path='/players' component={ManagePlayersContainer}/>
+        </Switch>
     );
 }
 
