@@ -9,8 +9,9 @@ const styles = theme => ({});
 
 function TeamListItem(props) {
     const team = props.team;
+    const onClick = props.onClick;
     return (
-        <ListItem button>
+        <ListItem button onClick={onClick(`/teams/${team.id}`)}>
             <ListItemIcon><Icon>{team.abbreviation}</Icon></ListItemIcon>
             <ListItemText primary={team.location + " " + team.nickname}/>
         </ListItem>
@@ -23,7 +24,8 @@ TeamListItem.propTypes = {
         abbreviation: PropTypes.string.isRequired,
         location: PropTypes.string.isRequired,
         nickname: PropTypes.string.isRequired,
-    }).isRequired
+    }).isRequired,
+    onClick: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(TeamListItem);
