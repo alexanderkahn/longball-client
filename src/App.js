@@ -6,11 +6,9 @@ import 'typeface-roboto'
 import {Provider} from "react-redux";
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunkMiddleware from 'redux-thunk'
-import {fetchTeams} from "./actions/teams";
-import {fetchPlayers} from "./actions/players";
 import ManageTeamsContainer from "./components/containers/ManageTeamsContainer";
 import ManagePlayersContainer from "./components/containers/ManagePlayersContainer";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import createBrowserHistory from 'history/createBrowserHistory'
 import {ConnectedRouter, routerMiddleware, routerReducer} from "react-router-redux";
 
@@ -26,9 +24,6 @@ let store = createStore(
         thunkMiddleware,
         reactRouterMiddleware
     ));
-
-store.dispatch(fetchTeams(0));
-store.dispatch(fetchPlayers(0));
 
 class Root extends Component {
     render() {

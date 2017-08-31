@@ -29,13 +29,19 @@ const styles = theme => ({
     }
 });
 
-function ManagementList(props) {
-    const classes = props.classes;
-
-    let progressIndicator = null;
-    if (props.isFetching) {
-        progressIndicator = <CircularProgress className={classes.loading}/>
+function getLoadingProgressIndicator(isFetching, styles) {
+    if (isFetching) {
+        return <CircularProgress className={styles}/>
     }
+    return null;
+}
+
+function ManagementList(props) {
+    if (!props.lastFetched && !props.isFetching) {
+        props.fetchListItems();
+    }
+    const classes = props.classes;
+    const progressIndicator = getLoadingProgressIndicator(props.isFetching, classes.loading);
 
     return (
         <div className={classes.root}>
@@ -56,5 +62,7 @@ ManagementList.propTypes = {
     title: PropTypes.string.isRequired,
     listItems: PropTypes.node.isRequired,
     isFetching: PropTypes.bool.isRequired,
+    lastFetched: PropTypes.number,
+    fetchListItems: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(ManagementList);

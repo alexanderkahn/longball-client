@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import ManagementList from '../ManagementList'
 import TeamListItem from "../TeamListItem";
+import {fetchTeams} from "../../actions/teams";
 
 //TODO: no presentation components in state containers?
 const getChildListItems = (teams) => {
@@ -13,11 +14,16 @@ const mapStateToProps = state => {
         title: 'Teams',
         listItems: getChildListItems(state.data.teams),
         isFetching: state.routes.manageTeams.isFetching,
+        lastFetched: state.routes.manageTeams.lastFetched,
     }
 };
 
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        fetchListItems: function () {
+            dispatch(fetchTeams(0));
+        },
+    }
 };
 
 const ManageTeamsContainer = connect(
