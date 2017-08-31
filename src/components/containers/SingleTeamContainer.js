@@ -2,9 +2,8 @@ import {connect} from 'react-redux'
 import SingleTeamView from "../SingleTeamView";
 
 function mapStateToProps(state, ownProps) {
-    console.info(state);
     return {
-        id: ownProps.match.params.teamId
+        team: state.data.teams[ownProps.match.params.teamId],
     }
 }
 
