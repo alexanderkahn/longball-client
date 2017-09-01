@@ -18,7 +18,7 @@ const styles = theme => ({
     }
 });
 
-
+//TODO: didMount & didUpdate should probably be split into a separate container so that the form is just a dumb form
 class TeamDetail extends Component {
 
     componentDidMount() {

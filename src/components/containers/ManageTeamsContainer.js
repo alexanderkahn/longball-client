@@ -2,11 +2,11 @@ import React from 'react'
 import {connect} from 'react-redux'
 import ManagementList from '../ManagementList'
 import {fetchTeams} from "../../actions/teams";
-import TeamListItemContainer from "./TeamListItemContainer";
+import TeamListItem from "../TeamListItem";
 
 //TODO: no presentation components in state containers?
 const getChildListItems = (teams) => {
-    return Object.values(teams).map(team => <TeamListItemContainer key={team.id} team={team}/>);
+    return Object.values(teams).map(team => <TeamListItem key={team.id} team={team}/>);
 };
 
 const mapStateToProps = state => {

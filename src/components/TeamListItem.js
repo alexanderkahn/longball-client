@@ -3,18 +3,22 @@ import PropTypes from 'prop-types';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
 import {withStyles} from 'material-ui/styles';
 import {Icon} from "material-ui";
+import {Link} from "react-router-dom";
 
 
 const styles = theme => ({});
 
 function TeamListItem(props) {
     const team = props.team;
-    const onClick = props.onClick;
+    const teamDetailRoute = `/teams/${props.team.id}`;
     return (
-        <ListItem button onClick={onClick(`/teams/${team.id}`)}>
-            <ListItemIcon><Icon>{team.abbreviation}</Icon></ListItemIcon>
-            <ListItemText primary={team.location + " " + team.nickname}/>
-        </ListItem>
+        <Link to={teamDetailRoute} style={{ textDecoration: 'none' }}>
+            < ListItem
+                button>
+                <ListItemIcon><Icon>{team.abbreviation}</Icon></ListItemIcon>
+                <ListItemText primary={team.location + " " + team.nickname}/>
+            </ListItem>
+        </Link>
     );
 }
 
@@ -25,7 +29,6 @@ TeamListItem.propTypes = {
         location: PropTypes.string.isRequired,
         nickname: PropTypes.string.isRequired,
     }).isRequired,
-    onClick: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(TeamListItem);
