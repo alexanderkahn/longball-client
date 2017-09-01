@@ -5,7 +5,7 @@ import Paper from 'material-ui/Paper'
 import List, {ListSubheader} from 'material-ui/List';
 import {Button} from "material-ui";
 import AddIcon from 'material-ui-icons/Add'
-import {CircularProgress} from "material-ui/Progress";
+import LoadingProgressIndicator from './LoadingProgressIndicator'
 
 
 const styles = theme => ({
@@ -20,28 +20,14 @@ const styles = theme => ({
         margin: 10,
         alignSelf: 'right',
     },
-    loading: {
-        display: 'block',
-        width: '100%',
-        margin: '0 auto',
-        paddingTop: 10,
-        paddingBottom: 10,
-    }
 });
-
-function getLoadingProgressIndicator(isFetching, styles) {
-    if (isFetching) {
-        return <CircularProgress className={styles}/>
-    }
-    return null;
-}
 
 function ManagementList(props) {
     if (!props.lastFetched && !props.isFetching) {
         props.fetchListItems();
     }
+
     const classes = props.classes;
-    const progressIndicator = getLoadingProgressIndicator(props.isFetching, classes.loading);
 
     return (
         <div className={classes.root}>
@@ -49,7 +35,7 @@ function ManagementList(props) {
                 <List subheader={<ListSubheader classes={classes.default}>{props.title}</ListSubheader>}>
                     {props.listItems}
                 </List>
-                {progressIndicator}
+                <LoadingProgressIndicator enabled={props.isFetching}/>
                 <Button fab color="accent" aria-label="add" className={classes.button} disabled>
                     <AddIcon/>
                 </Button>

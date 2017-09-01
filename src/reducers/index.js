@@ -1,11 +1,11 @@
 import {user} from "./user";
 import {data} from "./data/index";
-import {routes} from "./routes/index";
+import {views} from "./views/index";
 
 const reducers = {
     user,
     data,
-    routes,
+    views,
 };
 
 export default reducers

@@ -13,8 +13,8 @@ const mapStateToProps = state => {
     return {
         title: 'Players',
         listItems: getChildListItems(state.data.players),
-        isFetching: state.routes.managePlayers.isFetching,
-        lastFetched: state.routes.managePlayers.lastFetched,
+        isFetching: state.views.managePlayers.isFetching,
+        lastFetched: state.views.managePlayers.lastFetched,
 
     }
 };
