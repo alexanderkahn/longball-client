@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Paper from 'material-ui/Paper'
@@ -22,26 +22,34 @@ const styles = theme => ({
     },
 });
 
-function ManagementList(props) {
-    if (!props.lastFetched && !props.isFetching) {
-        props.fetchListItems();
+class ManagementList extends Component {
+
+    componentDidMount() {
+        const props = this.props;
+        if (!props.lastFetched && !props.isFetching) {
+            props.fetchListItems();
+        }
     }
 
-    const classes = props.classes;
 
-    return (
-        <div className={classes.root}>
-            <Paper>
-                <List subheader={<ListSubheader classes={classes.default}>{props.title}</ListSubheader>}>
-                    {props.listItems}
-                </List>
-                <LoadingProgressIndicator enabled={props.isFetching}/>
-                <Button fab color="accent" aria-label="add" className={classes.button} disabled>
-                    <AddIcon/>
-                </Button>
-            </Paper>
-        </div>
-    );
+    render() {
+        const props = this.props;
+        const classes = props.classes;
+
+        return (
+            <div className={classes.root}>
+                <Paper>
+                    <List subheader={<ListSubheader classes={classes.default}>{props.title}</ListSubheader>}>
+                        {props.listItems}
+                    </List>
+                    <LoadingProgressIndicator enabled={props.isFetching}/>
+                    <Button fab color="accent" aria-label="add" className={classes.button} disabled>
+                        <AddIcon/>
+                    </Button>
+                </Paper>
+            </div>
+        );
+    }
 }
 
 ManagementList.propTypes = {

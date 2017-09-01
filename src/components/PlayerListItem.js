@@ -3,17 +3,21 @@ import PropTypes from 'prop-types';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
 import {withStyles} from 'material-ui/styles';
 import {Avatar} from "material-ui";
+import {Link} from "react-router-dom";
 
 
 const styles = theme => ({});
 
 function PlayerListItem(props) {
     const player = props.player;
+    const playerDetailRoute = `/players/${props.player.id}`;
     return (
-        <ListItem button>
-            <ListItemIcon><Avatar>{player.last[0]}</Avatar></ListItemIcon>
-            <ListItemText primary={player.first + " " + player.last}/>
-        </ListItem>
+        <Link to={playerDetailRoute} style={{textDecoration: 'none'}}>
+            <ListItem button>
+                <ListItemIcon><Avatar>{player.last[0]}</Avatar></ListItemIcon>
+                <ListItemText primary={player.first + " " + player.last}/>
+            </ListItem>
+        </Link>
     );
 }
 
