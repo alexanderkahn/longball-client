@@ -1,5 +1,4 @@
-
-import {DEV_AUTH_HEADER} from "../local/index";
+import {fetchJson} from "./restHelper";
 
 export const REQUEST_PLAYERS = 'REQUEST_PLAYERS';
 function requestPlayers() {
@@ -17,28 +16,43 @@ function receivePlayers(json) {
     }
 }
 
-//TODO: this and fetchPlayers is copied from teams.js. There should be a reuse opportunity here.
-const fetchInit = {
-    headers: {
-        Authorization: DEV_AUTH_HEADER,
-    }
-};
-
-
 export function fetchPlayers(page) {
     return function (dispatch) {
         dispatch(requestPlayers(page));
 
-        return fetch(`/rest/v1/players?page=${page}`, fetchInit)
-            .then(
-                response => {
-                    return response
-                },
-                error => console.log('An error occurred.', error) //TODO this is obviously not good enough
-            )
-            .then(response => response.json())
-            .then(json =>
-                dispatch(receivePlayers(json))
-            )
+        return fetchJson(`/rest/v1/players?page=${page}`)
+            .then(json => dispatch(receivePlayers(json)))
+    }
+}
+
+export const SELECT_PLAYER_DETAIL = 'SELECT_PLAYER_DETAIL';
+export function selectPlayerDetail(playerId) {
+    return {
+        type: SELECT_PLAYER_DETAIL,
+        playerId
+    }
+}
+
+export const REQUEST_PLAYER_DETAIL = 'REQUEST_PLAYER_DETAIL';
+function requestPlayerDetail() {
+    return {
+        type: REQUEST_PLAYER_DETAIL
+    }
+}
+
+export const RECEIVE_PLAYER_DETAIL = 'RECEIVE_PLAYER_DETAIL';
+function receivePlayerDetail(json) {
+    return {
+        type: RECEIVE_PLAYER_DETAIL,
+        data: json,
+        receivedAt: Date.now()
+    }
+}
+
+export function fetchPlayerDetail(playerId) {
+    return function (dispatch) {
+        dispatch(requestPlayerDetail());
+        return fetchJson(`/rest/v1/players/${playerId}`)
+            .then(json => dispatch(receivePlayerDetail(json)))
     }
 }

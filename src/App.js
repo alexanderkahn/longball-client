@@ -11,7 +11,8 @@ import ManagePlayersContainer from "./components/containers/ManagePlayersContain
 import {Route, Switch} from "react-router-dom";
 import createBrowserHistory from 'history/createBrowserHistory'
 import {ConnectedRouter, routerMiddleware, routerReducer} from "react-router-redux";
-import SingleTeamContainer from "./components/containers/TeamDetailContainer";
+import TeamDetailContainer from "./components/containers/TeamDetailContainer";
+import PlayerDetailContainer from "./components/containers/PlayerDetailContainer";
 
 const history = createBrowserHistory();
 const reactRouterMiddleware = routerMiddleware(history);
@@ -51,17 +52,26 @@ function Main() {
     return (
         <Switch>
             <Route exact path='/' component={ManageTeamsContainer}/>
-            <Route path='/teams' component={TeamsRoutes}/>
-            <Route exact path='/players' component={ManagePlayersContainer}/>
+            <Route path='/teams' component={ManageTeamsRoutes}/>
+            <Route path='/players' component={ManagePlayersRoutes}/>
         </Switch>
     );
 }
 
-function TeamsRoutes() {
+function ManageTeamsRoutes() {
     return (
         <Switch>
             <Route exact path='/teams' component={ManageTeamsContainer}/>
-            <Route path="/teams/:teamId" component={SingleTeamContainer}/>
+            <Route path="/teams/:teamId" component={TeamDetailContainer}/>
+        </Switch>
+    )
+}
+
+function ManagePlayersRoutes() {
+    return (
+        <Switch>
+            <Route exact path='/players' component={ManagePlayersContainer}/>
+            <Route path="/players/:playerId" component={PlayerDetailContainer}/>
         </Switch>
     )
 }

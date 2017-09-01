@@ -1,5 +1,5 @@
 import {keyBy} from "lodash";
-import {RECEIVE_PLAYERS} from "../../actions/players";
+import {RECEIVE_PLAYER_DETAIL, RECEIVE_PLAYERS} from "../../actions/players";
 
 export const players = (state = {}, action) => {
     switch (action.type) {
@@ -7,6 +7,11 @@ export const players = (state = {}, action) => {
             return {
                 ...state,
                 ...keyBy(action.data, team => team.id)
+            };
+        case RECEIVE_PLAYER_DETAIL:
+            return {
+                ...state,
+                [action.data.id]: action.data
             };
         default:
             return state;
