@@ -1,4 +1,5 @@
-import {DEV_AUTH_HEADER} from "../local/index";
+
+import {fetchJson} from "./restHelper";
 
 export const REQUEST_TEAMS = 'REQUEST_TEAMS';
 function requestTeams() {
@@ -18,27 +19,10 @@ function receiveTeams(json) {
 
 export function fetchTeams(page) {
 
-    const fetchInit = {
-        headers: {
-            //TODO temporary prototype solution until oauth is implemented
-            Authorization: DEV_AUTH_HEADER,
-        }
-    };
-
     return function (dispatch) {
         dispatch(requestTeams(page));
-
-        return fetch(`/rest/v1/teams?page=${page}`, fetchInit)
-            .then(
-                response => {
-                    return response
-                },
-                error => console.log('An error occurred.', error) //TODO this is obviously not good enough
-            )
-            .then(response => response.json())
-            .then(json =>
-                dispatch(receiveTeams(json))
-            )
+        return fetchJson(`/rest/v1/teams?page=${page}`)
+            .then(json => dispatch(receiveTeams(json)));
     }
 }
 
@@ -67,22 +51,9 @@ function receiveTeamDetail(json) {
 }
 
 export function fetchTeamDetail(teamId) {
-    const fetchInit = {
-        headers: {
-            //TODO temporary prototype solution until oauth is implemented
-            Authorization: DEV_AUTH_HEADER,
-        }
-    };
-
     return function (dispatch) {
         dispatch(requestTeamDetail());
-
-        return fetch(`/rest/v1/teams/${teamId}`, fetchInit)
-            .then(
-                response => response,
-                error => console.log('An error occurred.', error) //TODO this is obviously not good enough
-            )
-            .then(response => response.json())
+        return fetchJson(`/rest/v1/teams/${teamId}`)
             .then(json => dispatch(receiveTeamDetail(json)))
     }
 }
