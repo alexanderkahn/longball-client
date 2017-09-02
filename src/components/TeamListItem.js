@@ -10,7 +10,7 @@ const styles = theme => ({});
 
 function TeamListItem(props) {
     const team = props.team;
-    const teamDetailRoute = `/teams/${props.team.id}`;
+    const teamDetailRoute = `/manage/teams/${props.team.id}`;
     return (
         <Link to={teamDetailRoute} style={{ textDecoration: 'none' }}>
             < ListItem

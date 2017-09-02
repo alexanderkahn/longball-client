@@ -8,7 +8,7 @@ import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunkMiddleware from 'redux-thunk'
 import ManageTeamsContainer from "./components/containers/ManageTeamsContainer";
 import ManagePlayersContainer from "./components/containers/ManagePlayersContainer";
-import {Route, Switch} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 import createBrowserHistory from 'history/createBrowserHistory'
 import {ConnectedRouter, routerMiddleware, routerReducer} from "react-router-redux";
 import TeamDetailContainer from "./components/containers/TeamDetailContainer";
@@ -49,30 +49,28 @@ function App() {
 }
 
 function Main() {
+    console.info("rendering main");
     return (
         <Switch>
-            <Route exact path='/' component={ManageTeamsContainer}/>
-            <Route path='/teams' component={ManageTeamsRoutes}/>
-            <Route path='/players' component={ManagePlayersRoutes}/>
+            <Route path="/manage" component={ManagementNavWrapper}/>
+            <Redirect from="/" to="/manage/teams"/>
         </Switch>
     );
 }
 
-function ManageTeamsRoutes() {
+function ManagementNavWrapper({match}) {
+    console.info(match);
     return (
-        <Switch>
-            <Route exact path='/teams' component={ManageTeamsContainer}/>
-            <Route path="/teams/:teamId" component={TeamDetailContainer}/>
-        </Switch>
-    )
-}
+        <div>
+            <div>Navigation toolbar will go here</div>
+            <Switch>
+                <Route exact path={`${match.url}/teams`} component={ManageTeamsContainer}/>
+                <Route path={`${match.url}/teams/:teamId`} component={TeamDetailContainer}/>
+                <Route exact path={`${match.url}/players`} component={ManagePlayersContainer}/>
+                <Route path={`${match.url}/players/:playerId`} component={PlayerDetailContainer}/>
+            </Switch>
 
-function ManagePlayersRoutes() {
-    return (
-        <Switch>
-            <Route exact path='/players' component={ManagePlayersContainer}/>
-            <Route path="/players/:playerId" component={PlayerDetailContainer}/>
-        </Switch>
+        </div>
     )
 }
 

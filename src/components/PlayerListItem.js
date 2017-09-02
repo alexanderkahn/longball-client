@@ -10,7 +10,7 @@ const styles = theme => ({});
 
 function PlayerListItem(props) {
     const player = props.player;
-    const playerDetailRoute = `/players/${props.player.id}`;
+    const playerDetailRoute = `/manage/players/${props.player.id}`;
     return (
         <Link to={playerDetailRoute} style={{textDecoration: 'none'}}>
             <ListItem button>
