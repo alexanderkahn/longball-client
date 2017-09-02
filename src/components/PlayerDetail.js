@@ -1,17 +1,12 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import {Paper, TextField} from "material-ui";
+import {TextField} from "material-ui";
 import {withStyles} from 'material-ui/styles';
 import LoadingProgressIndicator from "./LoadingProgressIndicator";
 
 const styles = theme => ({
     root: {
-        width: '100%',
-        maxWidth: 360,
         padding: 10,
-        background: theme.palette.background.paper,
-        margin: '0 auto',
-        marginBottom: 25,
     },
     input: {
         display: 'block',
@@ -37,40 +32,32 @@ class PlayerDetail extends Component {
 
     render() {
         const props = this.props;
+        const player = props.player;
         const classes = props.classes;
-        return (
-            <Paper className={classes.root}>
-                <PlayerDetailEditForm player={props.player} playerDetailView={props.playerDetailView} classes={classes}/>
-            </Paper>
-        );
+        if (props.playerDetailView.isFetching) {
+            return (
+                <LoadingProgressIndicator enabled={true}/>
+            );
+        } else if (!props.player) {
+            return <div>I can't find a player with id: {props.playerDetailView.playerId}</div>
+        } else {
+            return (
+                <form className={classes.root}>
+                    <TextField className={classes.input}
+                               disabled={true}
+                               id="first"
+                               label="First Name"
+                               value={player.first}/>
+                    <TextField className={classes.input}
+                               disabled={true}
+                               id="last"
+                               label="Last Name"
+                               value={player.last}/>
+                </form>
+            );
+        }
     }
-}
 
-function PlayerDetailEditForm(props) {
-    const player = props.player;
-    const classes = props.classes;
-    if (props.playerDetailView.isFetching) {
-        return (
-            <LoadingProgressIndicator enabled={true}/>
-        );
-    } else if (!props.player) {
-        return <div>I can't find a player with id: {props.playerDetailView.playerId}</div>
-    } else {
-        return (
-            <form>
-                <TextField className={classes.input}
-                           disabled={true}
-                           id="first"
-                           label="First Name"
-                           value={player.first}/>
-                <TextField className={classes.input}
-                           disabled={true}
-                           id="last"
-                           label="Last Name"
-                           value={player.last}/>
-            </form>
-        );
-    }
 }
 
 PlayerDetail.propTypes = {

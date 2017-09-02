@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
-import Paper from 'material-ui/Paper'
 import List, {ListSubheader} from 'material-ui/List';
 import {Button} from "material-ui";
 import AddIcon from 'material-ui-icons/Add'
@@ -37,18 +36,16 @@ class ManagementList extends Component {
         const classes = props.classes;
 
         return (
-            <div className={classes.root}>
-                <Paper>
-                    <List subheader={<ListSubheader classes={classes.default}>{props.title}</ListSubheader>}>
-                        {props.listItems}
-                    </List>
-                    <LoadingProgressIndicator enabled={props.isFetching}/>
-                    <Button fab color="accent" aria-label="add" className={classes.button} disabled>
-                        <AddIcon/>
-                    </Button>
-                </Paper>
+            <div>
+                <List subheader={<ListSubheader classes={classes.default}>{props.title}</ListSubheader>}>
+                    {props.listItems}
+                </List>
+                <LoadingProgressIndicator enabled={props.isFetching}/>
+                <Button fab color="accent" aria-label="add" className={classes.button} disabled>
+                    <AddIcon/>
+                </Button>
             </div>
-        );
+        )
     }
 }
 

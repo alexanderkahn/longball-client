@@ -6,13 +6,10 @@ import 'typeface-roboto'
 import {Provider} from "react-redux";
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunkMiddleware from 'redux-thunk'
-import ManageTeamsContainer from "./components/containers/ManageTeamsContainer";
-import ManagePlayersContainer from "./components/containers/ManagePlayersContainer";
 import {Redirect, Route, Switch} from "react-router-dom";
 import createBrowserHistory from 'history/createBrowserHistory'
 import {ConnectedRouter, routerMiddleware, routerReducer} from "react-router-redux";
-import TeamDetailContainer from "./components/containers/TeamDetailContainer";
-import PlayerDetailContainer from "./components/containers/PlayerDetailContainer";
+import ManageViewWrapper from "./components/ManageViewWrapper";
 
 const history = createBrowserHistory();
 const reactRouterMiddleware = routerMiddleware(history);
@@ -52,26 +49,10 @@ function Main() {
     console.info("rendering main");
     return (
         <Switch>
-            <Route path="/manage" component={ManagementNavWrapper}/>
+            <Route path="/manage" component={ManageViewWrapper}/>
             <Redirect from="/" to="/manage/teams"/>
         </Switch>
     );
-}
-
-function ManagementNavWrapper({match}) {
-    console.info(match);
-    return (
-        <div>
-            <div>Navigation toolbar will go here</div>
-            <Switch>
-                <Route exact path={`${match.url}/teams`} component={ManageTeamsContainer}/>
-                <Route path={`${match.url}/teams/:teamId`} component={TeamDetailContainer}/>
-                <Route exact path={`${match.url}/players`} component={ManagePlayersContainer}/>
-                <Route path={`${match.url}/players/:playerId`} component={PlayerDetailContainer}/>
-            </Switch>
-
-        </div>
-    )
 }
 
 export default Root;

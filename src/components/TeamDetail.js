@@ -6,12 +6,7 @@ import LoadingProgressIndicator from "./LoadingProgressIndicator";
 
 const styles = theme => ({
     root: {
-        width: '100%',
-        maxWidth: 360,
         padding: 10,
-        background: theme.palette.background.paper,
-        margin: '0 auto',
-        marginBottom: 25,
     },
     input: {
         display: 'block',
@@ -37,44 +32,35 @@ class TeamDetail extends Component {
 
     render() {
         const props = this.props;
+        const team = props.team;
         const classes = props.classes;
-        return (
-            <Paper className={classes.root}>
-                <TeamDetailEditForm team={props.team} teamDetailView={props.teamDetailView} classes={classes}/>
-            </Paper>
-        );
-    }
-}
-
-function TeamDetailEditForm(props) {
-    const team = props.team;
-    const classes = props.classes;
-    if (props.teamDetailView.isFetching) {
-        return (
-            <LoadingProgressIndicator enabled={true}/>
-        );
-    } else if (!props.team) {
-        return <div>I can't find a team with id: {props.teamDetailView.teamId}</div>
-    } else {
-        return (
-            <form>
-                <TextField className={classes.input}
-                           disabled={true}
-                           id="abbreviation"
-                           label="Abbreviation"
-                           value={team.abbreviation}/>
-                <TextField className={classes.input}
-                           disabled={true}
-                           id="location"
-                           label="Location"
-                           value={team.location}/>
-                <TextField className={classes.input}
-                           disabled={true}
-                           id="nickname"
-                           label="Nickname"
-                           value={team.nickname}/>
-            </form>
-        );
+        if (props.teamDetailView.isFetching) {
+            return (
+                <LoadingProgressIndicator enabled={true}/>
+            );
+        } else if (!props.team) {
+            return <div>I can't find a team with id: {props.teamDetailView.teamId}</div>
+        } else {
+            return (
+                <form className={classes.root}>
+                    <TextField className={classes.input}
+                               disabled={true}
+                               id="abbreviation"
+                               label="Abbreviation"
+                               value={team.abbreviation}/>
+                    <TextField className={classes.input}
+                               disabled={true}
+                               id="location"
+                               label="Location"
+                               value={team.location}/>
+                    <TextField className={classes.input}
+                               disabled={true}
+                               id="nickname"
+                               label="Nickname"
+                               value={team.nickname}/>
+                </form>
+            );
+        }
     }
 }
 
