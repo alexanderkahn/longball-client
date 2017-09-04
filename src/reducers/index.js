@@ -1,9 +1,9 @@
-import {user} from "./user";
+import {auth} from "./user";
 import {data} from "./data/index";
 import {views} from "./views/index";
 
 const reducers = {
-    user,
+    auth,
     data,
     views,
 };

@@ -1,11 +1,9 @@
-import {LOG_IN, LOG_OUT} from "../actions/user";
+import {RECEIVE_AUTHENTICATION} from "../actions/user";
 
-export const user = (state = null, action) => {
+export const auth = (state = {}, action) => {
     switch (action.type) {
-        case LOG_IN:
-            return {first: 'Keith', last: 'Fudge'};
-        case LOG_OUT:
-            return null;
+        case RECEIVE_AUTHENTICATION:
+            return action.auth;
         default:
             return state;
     }

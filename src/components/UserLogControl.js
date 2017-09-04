@@ -6,8 +6,9 @@ import Button from 'material-ui/Button';
 const styles = theme => ({});
 
 function UserLogControl(props) {
+    console.info(props.user);
     if (props.user) {
-            return <span>{props.user.first} {props.user.last}<Button color="contrast" onClick={props.onLogOut}>Log out</Button></span>;
+            return <span>{props.user.displayName} <Button color="contrast">Log out</Button></span>;
         } else {
             return <Button color="contrast" onClick={props.onLogIn}>Log in</Button>;
         }
@@ -16,10 +17,8 @@ function UserLogControl(props) {
 
 UserLogControl.propTypes = {
     onLogIn: PropTypes.func.isRequired,
-    onLogOut: PropTypes.func.isRequired,
     user: PropTypes.shape({
-        first: PropTypes.string.isRequired,
-        last: PropTypes.string.isRequired
+        displayName: PropTypes.string.isRequired,
     }),
 };
 

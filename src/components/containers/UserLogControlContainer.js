@@ -1,21 +1,18 @@
 import UserLogControl from "../UserLogControl";
 import {connect} from "react-redux";
-import {logIn, logOut} from "../../actions/user";
+import {redirectToAuthenticationProvider} from "../../actions/user";
 
 const mapStateToProps = state => {
     return {
-        user: state.user
+        user: state.auth.user
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         onLogIn: function () {
-            dispatch(logIn())
+            dispatch(redirectToAuthenticationProvider())
         },
-        onLogOut: function () {
-            dispatch(logOut());
-        }
     }
 };
 

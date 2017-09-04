@@ -22,7 +22,6 @@ const styles = theme => ({
 });
 
 function ManageViewWrapper(props) {
-    console.info(props); //TODO remove this
     const classes = props.classes;
     const match = props.match;
     return (

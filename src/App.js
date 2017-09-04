@@ -9,7 +9,8 @@ import thunkMiddleware from 'redux-thunk'
 import {Redirect, Route, Switch} from "react-router-dom";
 import createBrowserHistory from 'history/createBrowserHistory'
 import {ConnectedRouter, routerMiddleware, routerReducer} from "react-router-redux";
-import ManageViewWrapper from "./components/ManageViewWrapper";
+import ManageViewWrapper from "./components/ManageViewWrapper"
+import {attemptVerifyAuthentication} from "./actions/user";
 
 const history = createBrowserHistory();
 const reactRouterMiddleware = routerMiddleware(history);
@@ -23,6 +24,8 @@ let store = createStore(
         thunkMiddleware,
         reactRouterMiddleware
     ));
+
+store.dispatch(attemptVerifyAuthentication());
 
 class Root extends Component {
     render() {
@@ -46,7 +49,6 @@ function App() {
 }
 
 function Main() {
-    console.info("rendering main");
     return (
         <Switch>
             <Route path="/manage" component={ManageViewWrapper}/>

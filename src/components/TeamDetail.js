@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import {Paper, TextField} from "material-ui";
+import {TextField} from "material-ui";
 import {withStyles} from 'material-ui/styles';
 import LoadingProgressIndicator from "./LoadingProgressIndicator";
 
