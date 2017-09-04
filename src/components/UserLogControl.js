@@ -8,7 +8,7 @@ const styles = theme => ({});
 function UserLogControl(props) {
     console.info(props.user);
     if (props.user) {
-            return <span>{props.user.displayName} <Button color="contrast">Log out</Button></span>;
+            return <span>{props.user.name}<Button color="contrast">Log out</Button></span>;
         } else {
             return <Button color="contrast" onClick={props.onLogIn}>Log in</Button>;
         }
@@ -18,7 +18,7 @@ function UserLogControl(props) {
 UserLogControl.propTypes = {
     onLogIn: PropTypes.func.isRequired,
     user: PropTypes.shape({
-        displayName: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
     }),
 };
 

@@ -1,4 +1,4 @@
-import {auth} from "./user";
+import {auth} from "./auth";
 import {data} from "./data/index";
 import {views} from "./views/index";
 

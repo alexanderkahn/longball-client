@@ -34,8 +34,15 @@ export function attemptVerifyAuthentication() {
     return function (dispatch) {
         if (!firebase.auth().currentUser)
             firebase.auth().getRedirectResult().then(
-                result => dispatch(receiveAuthentication(result)),
-                error => console.warn(error)
+                result => {
+                    if (result.credential) {
+                        console.info(result);
+                        dispatch(receiveAuthentication({
+                            user: result.additionalUserInfo.profile,
+                            credential: result.credential
+                        }));
+                    }
+                }, error => console.warn(error)
             )
     }
 }
