@@ -2,7 +2,6 @@ import firebase from 'firebase'
 
 export const RECEIVE_AUTHENTICATION = 'RECEIVE_AUTHENTICATION';
 function receiveAuthentication(auth) {
-    console.info(auth);
     return {
         type: RECEIVE_AUTHENTICATION,
         auth
@@ -36,7 +35,6 @@ export function attemptVerifyAuthentication() {
             firebase.auth().getRedirectResult().then(
                 result => {
                     if (result.credential) {
-                        console.info(result);
                         dispatch(receiveAuthentication({
                             user: result.additionalUserInfo.profile,
                             credential: result.credential

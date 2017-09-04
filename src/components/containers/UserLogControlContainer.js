@@ -1,6 +1,6 @@
 import UserLogControl from "../UserLogControl";
 import {connect} from "react-redux";
-import {redirectToAuthenticationProvider} from "../../actions/user";
+import {redirectToAuthenticationProvider} from "../../actions/auth";
 
 const mapStateToProps = state => {
     return {

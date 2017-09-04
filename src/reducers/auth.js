@@ -1,4 +1,4 @@
-import {RECEIVE_AUTHENTICATION} from "../actions/user";
+import {RECEIVE_AUTHENTICATION} from "../actions/auth";
 
 export const auth = (state = {}, action) => {
     switch (action.type) {

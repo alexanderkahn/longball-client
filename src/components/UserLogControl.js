@@ -6,7 +6,6 @@ import Button from 'material-ui/Button';
 const styles = theme => ({});
 
 function UserLogControl(props) {
-    console.info(props.user);
     if (props.user) {
             return <span>{props.user.name}<Button color="contrast">Log out</Button></span>;
         } else {
