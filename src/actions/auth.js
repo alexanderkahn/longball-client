@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import {storeAuthSession} from "../helpers/session";
 
 export const RECEIVE_AUTHENTICATION = 'RECEIVE_AUTHENTICATION';
 export function receiveAuthentication(user) {
@@ -28,27 +29,6 @@ provider.addScope('https://www.googleapis.com/auth/plus.login');
 export function redirectToAuthenticationProvider() {
     return function (dispatch) {
         return firebase.auth().signInWithRedirect(provider)
-    }
-}
-
-//TODO: these three are not really actions in that they don't modify store. Maybe split into some kind of session manager module.
-const LONGBALL_AUTH = 'longballAuth';
-function storeAuthSession(auth) {
-    localStorage.setItem(LONGBALL_AUTH, JSON.stringify(auth));
-}
-
-export function getSessionUser() {
-    const auth = localStorage.getItem(LONGBALL_AUTH);
-
-    if (auth && auth !== '') {
-        try {
-            return JSON.parse(auth).user;
-        } catch (e) {
-            console.warn("Error parsing stored session: " + e);
-            return null;
-        }
-    } else {
-        return null;
     }
 }
 

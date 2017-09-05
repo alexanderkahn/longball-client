@@ -1,5 +1,5 @@
 
-import {fetchJson} from "./restHelper";
+import {fetchJson} from "../helpers/rest";
 
 export const REQUEST_TEAMS = 'REQUEST_TEAMS';
 function requestTeams() {

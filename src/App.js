@@ -5,9 +5,10 @@ import 'typeface-roboto'
 import {Provider} from "react-redux";
 import {applyMiddleware, createStore} from "redux";
 import thunkMiddleware from 'redux-thunk'
-import {attemptVerifyAuthentication, getSessionUser, receiveAuthentication} from "./actions/auth"; //TODO could probably move this to didMount on AppRouter
+import {attemptVerifyAuthentication, receiveAuthentication} from "./actions/auth"; //TODO could probably move this to didMount on AppRouter
 import AppRouterContainer from "./components/containers/AppRouterContainer";
 import {BrowserRouter} from "react-router-dom";
+import {getSessionUser} from "./helpers/session";
 
 let store = createStore(
     reducers,
