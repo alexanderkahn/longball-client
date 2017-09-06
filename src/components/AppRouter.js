@@ -1,10 +1,10 @@
 import React from "react";
 import SignInContainer from "./containers/SignInContainer";
-import Header from "./Header";
 import {Redirect, Route, Switch} from "react-router-dom";
 import PropTypes from 'prop-types';
 import ManageViewWrapper from "./ManageViewWrapper";
 import {Component} from "react";
+import HeaderContainer from "./containers/HeaderContainer";
 
 class AppRouter extends Component {
     render() {
@@ -13,7 +13,7 @@ class AppRouter extends Component {
         } else {
             return (
                 <div className="app-body">
-                    <Header/>
+                    <HeaderContainer/>
                     <Main/>
                 </div>
             );
@@ -30,8 +30,7 @@ function Main(props) {
     );
 }
 
-AppRouter
-    .propTypes = {
+AppRouter.propTypes = {
     user: PropTypes.shape(),
 };
 

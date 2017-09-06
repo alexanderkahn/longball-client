@@ -30,7 +30,7 @@ function SignInPage(props) {
             <Card className={classes.card}>
                 <CardContent>
                     <Typography type="body1" className={classes.title}>
-                        Longball
+                        Dingerz!
                     </Typography>
                     <Typography component="p">
                        A baseball scoring app to make your dreams come true.
