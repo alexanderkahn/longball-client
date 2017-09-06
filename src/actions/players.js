@@ -1,4 +1,4 @@
-import {fetchJson} from "../helpers/rest";
+import {fetchJson} from "./rest";
 
 export const REQUEST_PLAYERS = 'REQUEST_PLAYERS';
 function requestPlayers() {
