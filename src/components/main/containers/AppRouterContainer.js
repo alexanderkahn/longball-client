@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import AppRouter from "../AppRouter";
+import AppRouter from "../presenters/AppRouter";
 import {withRouter} from "react-router-dom";
 
 const mapStateToProps = state => {

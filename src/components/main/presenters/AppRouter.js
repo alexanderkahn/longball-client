@@ -1,10 +1,10 @@
 import React from "react";
-import SignInContainer from "./containers/SignInContainer";
+import SignInContainer from "../containers/SignInContainer";
 import {Redirect, Route, Switch} from "react-router-dom";
 import PropTypes from 'prop-types';
-import ManageViewWrapper from "./ManageViewWrapper";
+import ManageViewWrapper from "../../manage/shared/presenters/ManageViewWrapper";
 import {Component} from "react";
-import HeaderContainer from "./containers/HeaderContainer";
+import HeaderContainer from "../containers/HeaderContainer";
 
 class AppRouter extends Component {
     render() {

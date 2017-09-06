@@ -5,7 +5,7 @@ import 'typeface-roboto'
 import {Provider} from "react-redux";
 import {applyMiddleware, createStore} from "redux";
 import thunkMiddleware from 'redux-thunk'
-import AppRouterContainer from "./components/containers/AppRouterContainer";
+import AppRouterContainer from "./components/main/containers/AppRouterContainer";
 import {BrowserRouter} from "react-router-dom";
 import {watchForAuthChanges} from "./actions/session";
 

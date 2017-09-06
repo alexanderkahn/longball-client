@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
-import Header from "../Header";
-import {incrementCreditsClick, resetCreditsClick} from "../../actions/easteregg";
+import Header from "../presenters/Header";
+import {incrementCreditsClick, resetCreditsClick} from "../../../actions/easteregg";
 
 const mapStateToProps = state => {
     return {

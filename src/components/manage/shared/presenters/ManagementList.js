@@ -4,7 +4,7 @@ import {withStyles} from 'material-ui/styles';
 import List, {ListSubheader} from 'material-ui/List';
 import {Button} from "material-ui";
 import AddIcon from 'material-ui-icons/Add'
-import LoadingProgressIndicator from './LoadingProgressIndicator'
+import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator'
 
 
 const styles = theme => ({

@@ -1,6 +1,6 @@
-import SignInPage from "../SignInPage";
+import SignInPage from "../presenters/SignInPage";
 import {connect} from "react-redux";
-import {redirectToAuthenticationProvider} from "../../actions/session";
+import {redirectToAuthenticationProvider} from "../../../actions/session";
 
 const mapStateToProps = dispatch => {
   return {}

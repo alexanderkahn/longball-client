@@ -2,10 +2,10 @@ import React from "react";
 import {NavLink, Route, Switch, withRouter} from "react-router-dom";
 import {Paper, Button} from "material-ui";
 import {withStyles} from 'material-ui/styles';
-import ManageTeamsContainer from "./containers/ManageTeamsContainer";
-import TeamDetailContainer from "./containers/TeamDetailContainer";
-import ManagePlayersContainer from "./containers/ManagePlayersContainer";
-import PlayerDetailContainer from "./containers/PlayerDetailContainer";
+import ManageTeamsContainer from "../../teams/containers/ManageTeamsContainer";
+import TeamDetailContainer from "../../teams/containers/TeamDetailContainer";
+import ManagePlayersContainer from "../../players/containers/ManagePlayersContainer";
+import PlayerDetailContainer from "../../players/containers/PlayerDetailContainer";
 
 const styles = theme => ({
     root: {

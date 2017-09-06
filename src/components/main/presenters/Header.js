@@ -6,8 +6,8 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
-import UserContainer from "./containers/UserLogControlContainer";
-import DingerzCreditsContainer from "./containers/DingerzCreditsContainer";
+import UserContainer from "../containers/UserLogControlContainer";
+import DingerzCreditsContainer from "../containers/DingerzCreditsContainer";
 
 const styles = {
     root: {

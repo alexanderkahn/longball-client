@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
-import {resetCreditsClick} from "../../actions/easteregg";
-import DingerzCredits from "../DingerzCredits";
+import {resetCreditsClick} from "../../../actions/easteregg";
+import DingerzCredits from "../presenters/DingerzCredits";
 
 const mapStateToProps = state => {
     return {}

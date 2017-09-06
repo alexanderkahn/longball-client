@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
-import TeamDetail from "../TeamDetail";
-import {fetchTeamDetail, selectTeamDetail} from "../../actions/teams";
+import TeamDetail from "../presenters/TeamDetail";
+import {fetchTeamDetail, selectTeamDetail} from "../../../../actions/teams";
 
 function mapStateToProps(state, ownProps) {
     return {

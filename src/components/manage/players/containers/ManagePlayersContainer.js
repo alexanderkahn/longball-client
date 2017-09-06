@@ -1,8 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import ManagementList from '../ManagementList'
-import PlayerListItem from "../PlayerListItem";
-import {fetchPlayers} from "../../actions/players";
+import ManagementList from '../../shared/presenters/ManagementList'
+import PlayerListItem from "../presenters/PlayerListItem";
+import {fetchPlayers} from "../../../../actions/players";
 
 //TODO: no presentation components in state containers?
 const getChildListItems = (players) => {
