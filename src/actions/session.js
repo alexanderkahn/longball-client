@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import {receiveAuthentication} from "./auth";
+import {receiveAuthentication, tryResolveAuthentication} from "./auth";
 
 const config = {
     apiKey: "AIzaSyDKd4LVFbOySsyC3a4fyps7klanKMH34jc",
@@ -19,7 +19,11 @@ export function watchForAuthChanges() {
     return function (dispatch) {
         dispatch(attemptVerifyAuthentication()); //TODO: this should not happen on every request
         firebase.auth().onAuthStateChanged(function(user) {
-            dispatch(receiveAuthentication({name: user.displayName}))
+            if (user) {
+                dispatch(receiveAuthentication({name: user.displayName}))
+            } else {
+                dispatch(receiveAuthentication(null));
+            }
         })
     }
 }
@@ -33,6 +37,7 @@ export function redirectToAuthenticationProvider() {
 export function attemptVerifyAuthentication() {
     return function (dispatch) {
         if (!firebase.auth().currentUser) {
+            dispatch(tryResolveAuthentication());
             firebase.auth().getRedirectResult();
             //watchForAuthChanges() will handle the state change
         }

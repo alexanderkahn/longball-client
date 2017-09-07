@@ -5,11 +5,16 @@ import PropTypes from 'prop-types';
 import ManageViewWrapper from "../../manage/shared/presenters/ManageViewWrapper";
 import {Component} from "react";
 import HeaderContainer from "../containers/HeaderContainer";
+import LoadingUserPage from "./LoadingUserPage";
 
 class AppRouter extends Component {
     render() {
         if (!this.props.user) {
-            return <SignInContainer/>
+            if (this.props.isFetching) {
+                return <LoadingUserPage/>
+            } else {
+                return <SignInContainer/>
+            }
         } else {
             return (
                 <div className="app-body">
@@ -32,6 +37,7 @@ function Main(props) {
 
 AppRouter.propTypes = {
     user: PropTypes.shape(),
+    isFetching: PropTypes.bool.isRequired,
 };
 
 export default AppRouter

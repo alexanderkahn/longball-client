@@ -4,7 +4,8 @@ import {withRouter} from "react-router-dom";
 
 const mapStateToProps = state => {
     return {
-        user: state.auth.user
+        user: state.auth.user,
+        isFetching: state.auth.isFetching
     }
 };
 

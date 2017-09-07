@@ -1,9 +1,20 @@
-import {RECEIVE_AUTHENTICATION} from "../actions/auth";
+import {RECEIVE_AUTHENTICATION, TRY_RESOLVE_AUTHENTICATION} from "../actions/auth";
 
-export const auth = (state = {}, action) => {
+const initialState = { isFetching: false};
+
+export const auth = (state = initialState, action) => {
     switch (action.type) {
         case RECEIVE_AUTHENTICATION:
-            return action.auth;
+            return {
+                ...state,
+                user: action.user,
+                isFetching: false
+            };
+        case TRY_RESOLVE_AUTHENTICATION:
+            return {
+                ...state,
+                isFetching: true
+            };
         default:
             return state;
     }
