@@ -30,7 +30,7 @@ function Main(props) {
     return (
         <Switch>
             <Route path="/manage" component={ManageViewWrapper}/>
-            <Redirect from="/" to="/manage/teams"/>
+            <Redirect from="/" to="/manage/leagues"/>
         </Switch>
     );
 }
