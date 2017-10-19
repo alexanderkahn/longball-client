@@ -20,7 +20,7 @@ export function fetchPlayers(page) {
     return function (dispatch) {
         dispatch(requestPlayers(page));
 
-        return fetchJson(`/rest/v1/players?page=${page}`)
+        return fetchJson(`/rest/players?page=${page}`)
             .then(json => dispatch(receivePlayers(json)))
     }
 }
@@ -52,7 +52,7 @@ function receivePlayerDetail(json) {
 export function fetchPlayerDetail(playerId) {
     return function (dispatch) {
         dispatch(requestPlayerDetail());
-        return fetchJson(`/rest/v1/players/${playerId}`)
+        return fetchJson(`/rest/players/${playerId}`)
             .then(json => dispatch(receivePlayerDetail(json)))
     }
 }

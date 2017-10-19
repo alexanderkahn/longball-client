@@ -21,7 +21,7 @@ export function fetchTeams(page) {
 
     return function (dispatch) {
         dispatch(requestTeams(page));
-        return fetchJson(`/rest/v1/teams?page=${page}`)
+        return fetchJson(`/rest/teams?page=${page}`)
             .then(json => dispatch(receiveTeams(json)));
     }
 }
@@ -53,7 +53,7 @@ function receiveTeamDetail(json) {
 export function fetchTeamDetail(teamId) {
     return function (dispatch) {
         dispatch(requestTeamDetail());
-        return fetchJson(`/rest/v1/teams/${teamId}`)
+        return fetchJson(`/rest/teams/${teamId}`)
             .then(json => dispatch(receiveTeamDetail(json)))
     }
 }
