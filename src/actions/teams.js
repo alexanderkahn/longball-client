@@ -12,7 +12,7 @@ export const RECEIVE_TEAMS = 'RECEIVE_TEAMS';
 function receiveTeams(json) {
     return {
         type: RECEIVE_TEAMS,
-        data: json.content,
+        data: json.data,
         receivedAt: Date.now()
     }
 }

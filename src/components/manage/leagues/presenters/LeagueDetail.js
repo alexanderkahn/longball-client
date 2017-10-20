@@ -47,7 +47,7 @@ class LeagueDetail extends Component {
                                disabled={true}
                                id="name"
                                label="Name"
-                               value={league.name}/>
+                               value={league.attributes.name}/>
                 </form>
             );
         }
@@ -64,8 +64,10 @@ LeagueDetail.propTypes = {
     fetchLeagueDetail: PropTypes.func.isRequired,
     league: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-    })
+        attributes: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+        }).isRequired,
+    }).isRequired
 };
 
 export default withStyles(styles)(LeagueDetail);

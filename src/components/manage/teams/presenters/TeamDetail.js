@@ -47,17 +47,17 @@ class TeamDetail extends Component {
                                disabled={true}
                                id="abbreviation"
                                label="Abbreviation"
-                               value={team.abbreviation}/>
+                               value={team.attributes.abbreviation}/>
                     <TextField className={classes.input}
                                disabled={true}
                                id="location"
                                label="Location"
-                               value={team.location}/>
+                               value={team.attributes.location}/>
                     <TextField className={classes.input}
                                disabled={true}
                                id="nickname"
                                label="Nickname"
-                               value={team.nickname}/>
+                               value={team.attributes.nickname}/>
                 </form>
             );
         }
@@ -74,9 +74,11 @@ TeamDetail.propTypes = {
     fetchTeamDetail: PropTypes.func.isRequired,
     team: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        abbreviation: PropTypes.string.isRequired,
-        location: PropTypes.string.isRequired,
-        nickname: PropTypes.string.isRequired
+        attributes: PropTypes.shape({
+            abbreviation: PropTypes.string.isRequired,
+            location: PropTypes.string.isRequired,
+            nickname: PropTypes.string.isRequired,
+        }).isRequired,
     })
 };
 

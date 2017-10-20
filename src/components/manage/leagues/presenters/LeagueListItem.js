@@ -15,8 +15,8 @@ function LeagueListItem(props) {
         <Link to={leagueDetailRoute} style={{ textDecoration: 'none' }}>
             < ListItem
                 button>
-                <ListItemIcon><Icon>{league.name[0]}</Icon></ListItemIcon>
-                <ListItemText primary={league.name}/>
+                <ListItemIcon><Icon>{league.attributes.name[0]}</Icon></ListItemIcon>
+                <ListItemText primary={league.attributes.name}/>
             </ListItem>
         </Link>
     );
@@ -25,7 +25,9 @@ function LeagueListItem(props) {
 LeagueListItem.propTypes = {
     league: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
+        attributes: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+        }).isRequired,
     }).isRequired,
 };
 

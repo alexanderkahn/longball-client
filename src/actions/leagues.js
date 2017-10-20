@@ -12,7 +12,7 @@ export const RECEIVE_LEAGUES = 'RECEIVE_LEAGUES';
 function receiveLeagues(json) {
     return {
         type: RECEIVE_LEAGUES,
-        data: json.content,
+        data: json.data,
         receivedAt: Date.now()
     }
 }

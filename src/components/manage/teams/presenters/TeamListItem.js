@@ -15,8 +15,8 @@ function TeamListItem(props) {
         <Link to={teamDetailRoute} style={{ textDecoration: 'none' }}>
             < ListItem
                 button>
-                <ListItemIcon><Icon>{team.abbreviation}</Icon></ListItemIcon>
-                <ListItemText primary={team.location + " " + team.nickname}/>
+                <ListItemIcon><Icon>{team.attributes.abbreviation}</Icon></ListItemIcon>
+                <ListItemText primary={team.attributes.location + " " + team.attributes.nickname}/>
             </ListItem>
         </Link>
     );
@@ -25,9 +25,11 @@ function TeamListItem(props) {
 TeamListItem.propTypes = {
     team: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        abbreviation: PropTypes.string.isRequired,
-        location: PropTypes.string.isRequired,
-        nickname: PropTypes.string.isRequired,
+        attributes: PropTypes.shape({
+            abbreviation: PropTypes.string.isRequired,
+            location: PropTypes.string.isRequired,
+            nickname: PropTypes.string.isRequired,
+        }).isRequired,
     }).isRequired,
 };
 

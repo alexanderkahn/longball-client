@@ -11,7 +11,7 @@ export const RECEIVE_PLAYERS = 'RECEIVE_PLAYERS';
 function receivePlayers(json) {
     return {
         type: RECEIVE_PLAYERS,
-        data: json.content,
+        data: json.data,
         receivedAt: Date.now()
     }
 }
