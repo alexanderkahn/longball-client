@@ -10,12 +10,13 @@ const styles = theme => ({});
 
 function PlayerListItem(props) {
     const player = props.player;
-    const playerDetailRoute = `/manage/players/${props.player.id}`;
+    const personInfo = player.relationships.player.data.attributes;
+    const playerDetailRoute = `/manage/players/${player.id}`;
     return (
         <Link to={playerDetailRoute} style={{textDecoration: 'none'}}>
             <ListItem button>
-                <ListItemIcon><Avatar>{player.last[0]}</Avatar></ListItemIcon>
-                <ListItemText primary={player.first + " " + player.last}/>
+                <ListItemIcon><Avatar>{personInfo.last[0]}</Avatar></ListItemIcon>
+                <ListItemText primary={personInfo.first + " " + personInfo.last}/>
             </ListItem>
         </Link>
     );
@@ -24,8 +25,16 @@ function PlayerListItem(props) {
 PlayerListItem.propTypes = {
     player: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        first: PropTypes.string.isRequired,
-        last: PropTypes.string.isRequired,
+        relationships: PropTypes.shape({
+            player: PropTypes.shape({
+                data: PropTypes.shape({
+                    attributes: PropTypes.shape({
+                        first: PropTypes.string.isRequired,
+                        last: PropTypes.string.isRequired,
+                    }).isRequired,
+                }).isRequired,
+            }).isRequired,
+        }).isRequired,
     }).isRequired
 };
 

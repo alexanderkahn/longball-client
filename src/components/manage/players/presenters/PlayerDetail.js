@@ -47,12 +47,12 @@ class PlayerDetail extends Component {
                                disabled={true}
                                id="first"
                                label="First Name"
-                               value={player.first}/>
+                               value={player.relationships.player.data.attributes.first}/>
                     <TextField className={classes.input}
                                disabled={true}
                                id="last"
                                label="Last Name"
-                               value={player.last}/>
+                               value={player.relationships.player.data.attributes.last}/>
                 </form>
             );
         }
@@ -69,10 +69,18 @@ PlayerDetail.propTypes = {
     selectPlayerDetail: PropTypes.func.isRequired,
     fetchPlayerDetail: PropTypes.func.isRequired,
     player: PropTypes.shape({
-       id: PropTypes.string.isRequired,
-       first: PropTypes.string.isRequired,
-       last: PropTypes.string.isRequired,
-    }),
+        id: PropTypes.string.isRequired,
+        relationships: PropTypes.shape({
+            player: PropTypes.shape({
+                data: PropTypes.shape({
+                    attributes: PropTypes.shape({
+                        first: PropTypes.string.isRequired,
+                        last: PropTypes.string.isRequired,
+                    }).isRequired,
+                }).isRequired,
+            }).isRequired,
+        }).isRequired,
+    }).isRequired,
 };
 
 export default withStyles(styles)(PlayerDetail);

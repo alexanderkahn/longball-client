@@ -9,6 +9,7 @@ function requestPlayers() {
 
 export const RECEIVE_PLAYERS = 'RECEIVE_PLAYERS';
 function receivePlayers(json) {
+    collapseIncluded(json);
     return {
         type: RECEIVE_PLAYERS,
         data: json.data,
@@ -20,7 +21,7 @@ export function fetchPlayers(page) {
     return function (dispatch) {
         dispatch(requestPlayers(page));
 
-        return fetchJson(`/rest/players?page=${page}`)
+        return fetchJson(`/rest/rosterpositions?include=player&page=${page}`)
             .then(json => dispatch(receivePlayers(json)))
     }
 }
@@ -54,5 +55,12 @@ export function fetchPlayerDetail(playerId) {
         dispatch(requestPlayerDetail());
         return fetchJson(`/rest/players/${playerId}`)
             .then(json => dispatch(receivePlayerDetail(json)))
+    }
+}
+
+function collapseIncluded(json) {
+    for (const rosterPos of json.data) {
+        const matchesId = (person) => { return person.id === rosterPos.relationships.player.data.id };
+        rosterPos.relationships.player.data = json.included.find(matchesId)
     }
 }
