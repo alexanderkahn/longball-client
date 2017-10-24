@@ -43,9 +43,11 @@ function requestPlayerDetail() {
 
 export const RECEIVE_PLAYER_DETAIL = 'RECEIVE_PLAYER_DETAIL';
 function receivePlayerDetail(json) {
+    //TODO: this will likely break if any other includes are implemented later
+    json.data.relationships.player.data = json.included[0];
     return {
         type: RECEIVE_PLAYER_DETAIL,
-        data: json,
+        data: json.data,
         receivedAt: Date.now()
     }
 }
@@ -53,7 +55,7 @@ function receivePlayerDetail(json) {
 export function fetchPlayerDetail(playerId) {
     return function (dispatch) {
         dispatch(requestPlayerDetail());
-        return fetchJson(`/rest/players/${playerId}`)
+        return fetchJson(`/rest/rosterpositions/${playerId}?include=player`)
             .then(json => dispatch(receivePlayerDetail(json)))
     }
 }

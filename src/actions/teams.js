@@ -45,7 +45,7 @@ export const RECEIVE_TEAM_DETAIL = 'RECEIVE_TEAM_DETAIL';
 function receiveTeamDetail(json) {
     return {
         type: RECEIVE_TEAM_DETAIL,
-        data: json,
+        data: json.data,
         receivedAt: Date.now()
     }
 }
