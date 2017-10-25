@@ -17,16 +17,13 @@ const styles = theme => ({
 class LeagueDetail extends Component {
 
     componentDidMount() {
-        const props = this.props;
-        if (props.selectedLeagueId !== props.leagueDetailView.leagueId) {
-            props.selectLeagueDetail(props.selectedLeagueId);
-        }
+        this.props.resetView();
     }
 
     componentDidUpdate() {
         const props = this.props;
-        if (!props.leagueDetailView.isFetching && !props.league) {
-            props.fetchLeagueDetail(props.leagueDetailView.leagueId);
+        if (!props.currentView.isFetching && !props.league) {
+            props.fetchLeagueDetail(props.selectedLeagueId);
         }
     }
 
@@ -34,12 +31,12 @@ class LeagueDetail extends Component {
         const props = this.props;
         const league = props.league;
         const classes = props.classes;
-        if (props.leagueDetailView.isFetching) {
+        if (props.currentView.isFetching) {
             return (
                 <LoadingProgressIndicator enabled={true}/>
             );
         } else if (!props.league) {
-            return <div>I can't find a league with id: {props.leagueDetailView.leagueId}</div>
+            return <div>I can't find a league with id: {props.selectedLeagueId}</div>
         } else {
             return (
                 <form className={classes.root}>
@@ -56,18 +53,18 @@ class LeagueDetail extends Component {
 
 LeagueDetail.propTypes = {
     selectedLeagueId: PropTypes.string.isRequired,
-    leagueDetailView: PropTypes.shape({
-        leagueId: PropTypes.string.isRequired,
+    currentView: PropTypes.shape({
         isFetching: PropTypes.bool.isRequired,
+        lastUpdated: PropTypes.number,
     }).isRequired,
-    selectLeagueDetail: PropTypes.func.isRequired,
+    resetView: PropTypes.func.isRequired,
     fetchLeagueDetail: PropTypes.func.isRequired,
     league: PropTypes.shape({
         id: PropTypes.string.isRequired,
         attributes: PropTypes.shape({
             name: PropTypes.string.isRequired,
         }).isRequired,
-    }).isRequired
+    })
 };
 
 export default withStyles(styles)(LeagueDetail);

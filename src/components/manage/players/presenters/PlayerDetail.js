@@ -17,29 +17,27 @@ const styles = theme => ({
 class PlayerDetail extends Component {
 
     componentDidMount() {
-        const props = this.props;
-        if (props.selectedPlayerId !== props.playerDetailView.playerId) {
-            props.selectPlayerDetail(props.selectedPlayerId);
-        }
+        this.props.resetView();
     }
 
     componentDidUpdate() {
         const props = this.props;
-        if (!props.playerDetailView.isFetching && !props.player) {
-            props.fetchPlayerDetail(props.playerDetailView.playerId);
+        if (!props.currentView.isFetching && !props.rosterPosition) {
+            props.fetchPlayerDetail(props.selectedPlayerId);
         }
     }
 
     render() {
         const props = this.props;
-        const player = props.player;
+        const rosterPosition = props.rosterPosition;
+        const person = props.person;
         const classes = props.classes;
-        if (props.playerDetailView.isFetching) {
+        if (props.currentView.isFetching) {
             return (
                 <LoadingProgressIndicator enabled={true}/>
             );
-        } else if (!props.player) {
-            return <div>I can't find a player with id: {props.playerDetailView.playerId}</div>
+        } else if (!rosterPosition) {
+            return <div>I can't find a player with id: {props.selectedPlayerId}</div>
         } else {
             return (
                 <form className={classes.root}>
@@ -47,12 +45,12 @@ class PlayerDetail extends Component {
                                disabled={true}
                                id="first"
                                label="First Name"
-                               value={player.relationships.player.data.attributes.first}/>
+                               value={person.attributes.first}/>
                     <TextField className={classes.input}
                                disabled={true}
                                id="last"
                                label="Last Name"
-                               value={player.relationships.player.data.attributes.last}/>
+                               value={person.attributes.last}/>
                 </form>
             );
         }
@@ -62,25 +60,21 @@ class PlayerDetail extends Component {
 
 PlayerDetail.propTypes = {
     selectedPlayerId: PropTypes.string.isRequired,
-    playerDetailView: PropTypes.shape({
-        playerId: PropTypes.string.isRequired,
+    currentView: PropTypes.shape({
         isFetching: PropTypes.bool.isRequired,
+        lastUpdated: PropTypes.number,
     }).isRequired,
-    selectPlayerDetail: PropTypes.func.isRequired,
+    resetView: PropTypes.func.isRequired,
     fetchPlayerDetail: PropTypes.func.isRequired,
-    player: PropTypes.shape({
+    rosterPosition: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        relationships: PropTypes.shape({
-            player: PropTypes.shape({
-                data: PropTypes.shape({
-                    attributes: PropTypes.shape({
-                        first: PropTypes.string.isRequired,
-                        last: PropTypes.string.isRequired,
-                    }).isRequired,
-                }).isRequired,
-            }).isRequired,
+    }),
+    person: PropTypes.shape({
+        attributes: PropTypes.shape({
+            first: PropTypes.string.isRequired,
+            last: PropTypes.string.isRequired,
         }).isRequired,
-    }).isRequired,
+    }),
 };
 
 export default withStyles(styles)(PlayerDetail);

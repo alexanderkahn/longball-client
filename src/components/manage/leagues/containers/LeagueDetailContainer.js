@@ -1,19 +1,20 @@
 import {connect} from 'react-redux'
 import LeagueDetail from "../presenters/LeagueDetail";
-import {fetchLeagueDetail, selectLeagueDetail} from "../../../../actions/leagues";
+import {fetchLeagueDetail} from "../../../../actions/leagues";
+import {setCurrentViewFetching} from "../../../../actions/currentView";
 
 function mapStateToProps(state, ownProps) {
     return {
         selectedLeagueId: ownProps.match.params.leagueId,
-        leagueDetailView: state.views.leagueDetail,
         league: state.data.leagues[ownProps.match.params.leagueId],
+        currentView: state.currentView
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        selectLeagueDetail: function (leagueId) {
-            dispatch(selectLeagueDetail(leagueId));
+        resetView: function () {
+            dispatch(setCurrentViewFetching(false));
         },
         fetchLeagueDetail: function (leagueId) {
             dispatch(fetchLeagueDetail(leagueId));

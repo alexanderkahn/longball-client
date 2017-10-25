@@ -1,18 +1,12 @@
 
 import {fetchJson} from "./rest";
-
-export const REQUEST_LEAGUES = 'REQUEST_LEAGUES';
-function requestLeagues() {
-    return {
-        type: REQUEST_LEAGUES
-    }
-}
+import {setCurrentViewFetching} from "./currentView";
 
 export const RECEIVE_LEAGUES = 'RECEIVE_LEAGUES';
-function receiveLeagues(json) {
+function receiveLeagues(jsonData) {
     return {
         type: RECEIVE_LEAGUES,
-        data: json.data,
+        data: jsonData,
         receivedAt: Date.now()
     }
 }
@@ -20,40 +14,22 @@ function receiveLeagues(json) {
 export function fetchLeagues(page) {
 
     return function (dispatch) {
-        dispatch(requestLeagues(page));
+        dispatch(setCurrentViewFetching(true));
         return fetchJson(`/rest/leagues?page=${page}`)
-            .then(json => dispatch(receiveLeagues(json)));
-    }
-}
-
-export const SELECT_LEAGUE_DETAIL = 'SELECT_LEAGUE_DETAIL';
-export function selectLeagueDetail(leagueId) {
-    return {
-        type: SELECT_LEAGUE_DETAIL,
-        leagueId
-    }
-}
-
-export const REQUEST_LEAGUE_DETAIL = 'REQUEST_LEAGUE_DETAIL';
-function requestLeagueDetail() {
-    return {
-        type: REQUEST_LEAGUE_DETAIL
-    }
-}
-
-export const RECEIVE_LEAGUE_DETAIL = 'RECEIVE_LEAGUE_DETAIL';
-function receiveLeagueDetail(json) {
-    return {
-        type: RECEIVE_LEAGUE_DETAIL,
-        data: json.data,
-        receivedAt: Date.now()
+            .then(json => {
+                dispatch(receiveLeagues(json.data));
+                dispatch(setCurrentViewFetching(false));
+            });
     }
 }
 
 export function fetchLeagueDetail(leagueId) {
     return function (dispatch) {
-        dispatch(requestLeagueDetail());
+        dispatch(setCurrentViewFetching(true));
         return fetchJson(`/rest/leagues/${leagueId}`)
-            .then(json => dispatch(receiveLeagueDetail(json)))
+            .then(json => {
+                dispatch(receiveLeagues([json.data]));
+                dispatch(setCurrentViewFetching(false));
+            })
     }
 }

@@ -17,16 +17,13 @@ const styles = theme => ({
 class TeamDetail extends Component {
 
     componentDidMount() {
-        const props = this.props;
-        if (props.selectedTeamId !== props.teamDetailView.teamId) {
-            props.selectTeamDetail(props.selectedTeamId);
-        }
+        this.props.resetView();
     }
 
     componentDidUpdate() {
         const props = this.props;
-        if (!props.teamDetailView.isFetching && !props.team) {
-            props.fetchTeamDetail(props.teamDetailView.teamId);
+        if (!props.currentView.isFetching && !props.team) {
+            props.fetchTeamDetail(props.selectedTeamId);
         }
     }
 
@@ -34,12 +31,12 @@ class TeamDetail extends Component {
         const props = this.props;
         const team = props.team;
         const classes = props.classes;
-        if (props.teamDetailView.isFetching) {
+        if (props.currentView.isFetching) {
             return (
                 <LoadingProgressIndicator enabled={true}/>
             );
         } else if (!props.team) {
-            return <div>I can't find a team with id: {props.teamDetailView.teamId}</div>
+            return <div>I can't find a team with id: {props.selectedTeamId}</div>
         } else {
             return (
                 <form className={classes.root}>
@@ -66,11 +63,11 @@ class TeamDetail extends Component {
 
 TeamDetail.propTypes = {
     selectedTeamId: PropTypes.string.isRequired,
-    teamDetailView: PropTypes.shape({
-        teamId: PropTypes.string.isRequired,
+    currentView: PropTypes.shape({
         isFetching: PropTypes.bool.isRequired,
+        lastUpdated: PropTypes.number,
     }).isRequired,
-    selectTeamDetail: PropTypes.func.isRequired,
+    resetView: PropTypes.func.isRequired,
     fetchTeamDetail: PropTypes.func.isRequired,
     team: PropTypes.shape({
         id: PropTypes.string.isRequired,

@@ -2,19 +2,21 @@ import React from 'react'
 import {connect} from 'react-redux'
 import ManagementList from '../../shared/presenters/ManagementList'
 import PlayerListItem from "../presenters/PlayerListItem";
-import {fetchPlayers} from "../../../../actions/players";
+import {fetchPlayers} from "../../../../actions/rosterpositions";
 
 //TODO: no presentation components in state containers?
-const getChildListItems = (players) => {
-    return Object.values(players).map(player => <PlayerListItem key={player.id} player={player}/>);
+const getChildListItems = (rosterPositions, people) => {
+    return Object.values(rosterPositions)
+        .map(rosterPosition => <PlayerListItem key={rosterPosition.id}
+                                               rosterPosition={rosterPosition}
+                                               person={people[rosterPosition.relationships.player.data.id]}/>);
 };
 
 const mapStateToProps = state => {
     return {
         title: 'Players',
-        listItems: getChildListItems(state.data.players),
-        isFetching: state.views.managePlayers.isFetching,
-        lastFetched: state.views.managePlayers.lastFetched,
+        listItems: getChildListItems(state.data.rosterPositions, state.data.people),
+        isFetching: state.currentView.isFetching,
 
     }
 };
