@@ -14,30 +14,11 @@ const styles = theme => ({
     }
 });
 
-//TODO: didMount & didUpdate should probably be split into a separate container so that the form is just a dumb form
-class TeamDetail extends Component {
-
-    componentDidMount() {
-        this.props.resetView();
-    }
-
-    componentDidUpdate() {
-        const props = this.props;
-        if (!props.currentView.isFetching && !props.team) {
-            props.fetchTeamDetail(props.selectedTeamId);
-        }
-    }
-
+class TeamDetailForm extends Component {
     render() {
-        const props = this.props;
-        const team = props.team;
-        const classes = props.classes;
-        if (props.currentView.isFetching) {
-            return (
-                <LoadingProgressIndicator enabled={true}/>
-            );
-        } else if (!props.team) {
-            return <div>I can't find a team with id: {props.selectedTeamId}</div>
+        const {team, classes} = this.props;
+        if (!team) {
+            return <div>I can't find the requested team</div>
         } else {
             return (
                 <form className={classes.root}>
@@ -62,12 +43,8 @@ class TeamDetail extends Component {
     }
 }
 
-TeamDetail.propTypes = {
-    selectedTeamId: PropTypes.string.isRequired,
-    currentView: currentViewProp.isRequired,
-    resetView: PropTypes.func.isRequired,
-    fetchTeamDetail: PropTypes.func.isRequired,
+TeamDetailForm.propTypes = {
     team: teamProp,
 };
 
-export default withStyles(styles)(TeamDetail);
+export default withStyles(styles)(TeamDetailForm);

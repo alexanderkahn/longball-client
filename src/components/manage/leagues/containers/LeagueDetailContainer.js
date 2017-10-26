@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
         itemDetailForm: <LeagueDetailForm league={state.data.leagues[leagueId]}/>,
         currentView: state.currentView
     }
-}
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     const leagueId = ownProps.match.params.leagueId;

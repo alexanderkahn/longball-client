@@ -1,22 +1,25 @@
+import React from "react";
 import {connect} from 'react-redux'
-import TeamDetail from "../presenters/TeamDetail";
 import {fetchTeamDetail} from "../../../../actions/teams";
 import {resetView} from "../../../../actions/currentView";
+import ManagementItemDetail from "../../shared/presenters/ManagementItemDetail";
+import TeamDetailForm from "../presenters/TeamDetailForm";
 
-function mapStateToProps(state, ownProps) {
+const mapStateToProps = (state, ownProps) => {
+    const teamId = ownProps.match.params.teamId;
     return {
-        selectedTeamId: ownProps.match.params.teamId,
-        team: state.data.teams[ownProps.match.params.teamId],
+        itemDetailForm: <TeamDetailForm team={state.data.teams[teamId]}/>,
         currentView: state.currentView
     }
-}
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
+    const teamId = ownProps.match.params.teamId;
     return {
-        resetView: function () {
+        resetView: function() {
             dispatch(resetView());
         },
-        fetchTeamDetail: function (teamId) {
+        fetchItemDetail: function() {
             dispatch(fetchTeamDetail(teamId));
         }
     }
@@ -25,6 +28,6 @@ const mapDispatchToProps = dispatch => {
 const TeamDetailContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(TeamDetail);
+)(ManagementItemDetail);
 
 export default TeamDetailContainer

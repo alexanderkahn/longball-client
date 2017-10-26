@@ -1,25 +1,26 @@
+import React from "react";
 import {connect} from 'react-redux'
-import PlayerDetail from "../presenters/PlayerDetail";
 import {fetchPlayerDetail} from "../../../../actions/rosterpositions";
-import {resetView, setCurrentViewFetching} from "../../../../actions/currentView";
+import {resetView} from "../../../../actions/currentView";
+import ManagementItemDetail from "../../shared/presenters/ManagementItemDetail";
+import PlayerDetailForm from "../presenters/PlayerDetailForm";
 
 function mapStateToProps(state, ownProps) {
     const rosterPosition = state.data.rosterPositions[ownProps.match.params.playerId];
     const person = !rosterPosition ? null : state.data.people[rosterPosition.relationships.player.data.id];
     return {
-        selectedPlayerId: ownProps.match.params.playerId,
-        rosterPosition,
-        person,
+        itemDetailForm: <PlayerDetailForm rosterPosition={rosterPosition} person={person}/>,
         currentView: state.currentView
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
+    const playerId = ownProps.match.params.playerId;
     return {
         resetView: function () {
             dispatch(resetView());
         },
-        fetchPlayerDetail: function (playerId) {
+        fetchItemDetail: function () {
             dispatch(fetchPlayerDetail(playerId));
         }
     }
@@ -28,6 +29,6 @@ const mapDispatchToProps = dispatch => {
 const PlayerDetailContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(PlayerDetail);
+)(ManagementItemDetail);
 
 export default PlayerDetailContainer
