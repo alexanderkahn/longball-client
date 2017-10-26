@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
 import {withStyles} from 'material-ui/styles';
 import {Icon} from "material-ui";
 import {Link} from "react-router-dom";
+import {teamProp} from "../../../../models/models";
 
 
 const styles = theme => ({});
@@ -23,14 +23,7 @@ function TeamListItem(props) {
 }
 
 TeamListItem.propTypes = {
-    team: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        attributes: PropTypes.shape({
-            abbreviation: PropTypes.string.isRequired,
-            location: PropTypes.string.isRequired,
-            nickname: PropTypes.string.isRequired,
-        }).isRequired,
-    }).isRequired,
+    team: teamProp.isRequired,
 };
 
 export default withStyles(styles)(TeamListItem);

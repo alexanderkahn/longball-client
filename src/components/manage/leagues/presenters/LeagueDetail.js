@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {TextField} from "material-ui";
 import {withStyles} from 'material-ui/styles';
 import LoadingProgressIndicator from "../../../shared/presenters/LoadingProgressIndicator";
+import {currentViewProp, leagueProp} from "../../../../models/models";
 
 const styles = theme => ({
     root: {
@@ -53,18 +54,10 @@ class LeagueDetail extends Component {
 
 LeagueDetail.propTypes = {
     selectedLeagueId: PropTypes.string.isRequired,
-    currentView: PropTypes.shape({
-        isFetching: PropTypes.bool.isRequired,
-        lastUpdated: PropTypes.number,
-    }).isRequired,
+    currentView: currentViewProp.isRequired,
     resetView: PropTypes.func.isRequired,
     fetchLeagueDetail: PropTypes.func.isRequired,
-    league: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        attributes: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-        }).isRequired,
-    })
+    league: leagueProp
 };
 
 export default withStyles(styles)(LeagueDetail);

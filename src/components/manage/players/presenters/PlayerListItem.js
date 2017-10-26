@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
 import {withStyles} from 'material-ui/styles';
 import {Avatar} from "material-ui";
 import {Link} from "react-router-dom";
+import {personProp, rosterPositionProp} from "../../../../models/models";
 
 
 const styles = theme => ({});
@@ -23,15 +23,8 @@ function PlayerListItem(props) {
 }
 
 PlayerListItem.propTypes = {
-    rosterPosition: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-    }).isRequired,
-    person: PropTypes.shape({
-        attributes: PropTypes.shape({
-            first: PropTypes.string.isRequired,
-            last: PropTypes.string.isRequired,
-        }).isRequired,
-    }).isRequired,
+    rosterPosition: rosterPositionProp.isRequired,
+    person: personProp.isRequired,
 };
 
 export default withStyles(styles)(PlayerListItem);

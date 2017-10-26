@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
 import {withStyles} from 'material-ui/styles';
 import {Icon} from "material-ui";
 import {Link} from "react-router-dom";
+import {leagueProp} from "../../../../models/models";
 
 
 const styles = theme => ({});
@@ -23,12 +23,7 @@ function LeagueListItem(props) {
 }
 
 LeagueListItem.propTypes = {
-    league: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        attributes: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-        }).isRequired,
-    }).isRequired,
+    league: leagueProp.isRequired,
 };
 
 export default withStyles(styles)(LeagueListItem);

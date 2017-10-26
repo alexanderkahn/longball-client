@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {TextField} from "material-ui";
 import {withStyles} from 'material-ui/styles';
 import LoadingProgressIndicator from "../../../shared/presenters/LoadingProgressIndicator";
+import {currentViewProp, personProp, rosterPositionProp} from "../../../../models/models";
 
 const styles = theme => ({
     root: {
@@ -59,22 +60,12 @@ class PlayerDetail extends Component {
 }
 
 PlayerDetail.propTypes = {
+    currentView: currentViewProp.isRequired,
     selectedPlayerId: PropTypes.string.isRequired,
-    currentView: PropTypes.shape({
-        isFetching: PropTypes.bool.isRequired,
-        lastUpdated: PropTypes.number,
-    }).isRequired,
+    rosterPosition: rosterPositionProp,
+    person: personProp,
     resetView: PropTypes.func.isRequired,
     fetchPlayerDetail: PropTypes.func.isRequired,
-    rosterPosition: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-    }),
-    person: PropTypes.shape({
-        attributes: PropTypes.shape({
-            first: PropTypes.string.isRequired,
-            last: PropTypes.string.isRequired,
-        }).isRequired,
-    }),
 };
 
 export default withStyles(styles)(PlayerDetail);

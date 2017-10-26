@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
+import {userProp} from "../../../models/models";
 
 const styles = theme => ({});
 
@@ -16,9 +17,7 @@ function UserLogControl(props) {
 
 UserLogControl.propTypes = {
     onLogIn: PropTypes.func.isRequired,
-    user: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-    }),
+    user: userProp,
 };
 
 export default withStyles(styles)(UserLogControl);
