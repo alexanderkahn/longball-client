@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import TeamDetail from "../presenters/TeamDetail";
 import {fetchTeamDetail} from "../../../../actions/teams";
-import {setCurrentViewFetching} from "../../../../actions/currentView";
+import {resetView} from "../../../../actions/currentView";
 
 function mapStateToProps(state, ownProps) {
     return {
@@ -14,7 +14,7 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = dispatch => {
     return {
         resetView: function () {
-            dispatch(setCurrentViewFetching(false));
+            dispatch(resetView());
         },
         fetchTeamDetail: function (teamId) {
             dispatch(fetchTeamDetail(teamId));

@@ -2,7 +2,7 @@ import React from "react";
 import SignInContainer from "../containers/SignInContainer";
 import {Redirect, Route, Switch} from "react-router-dom";
 import PropTypes from 'prop-types';
-import ManageViewWrapper from "../../manage/shared/presenters/ManageViewWrapper";
+import ManageViewWrapper from "../../manage/shared/presenters/ManagementViewRouter";
 import {Component} from "react";
 import HeaderContainer from "../containers/HeaderContainer";
 import LoadingUserPage from "./LoadingUserPage";

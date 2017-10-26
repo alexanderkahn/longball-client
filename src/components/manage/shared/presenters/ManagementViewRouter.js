@@ -23,7 +23,7 @@ const styles = theme => ({
     },
 });
 
-function ManageViewWrapper(props) {
+function ManagementViewRouter(props) {
     const classes = props.classes;
     const match = props.match;
     return (
@@ -47,5 +47,5 @@ function ManageViewWrapper(props) {
     );
 }
 
-ManageViewWrapper.propTypes = {};
-export default withRouter(withStyles(styles)(ManageViewWrapper));
+ManagementViewRouter.propTypes = {};
+export default withRouter(withStyles(styles)(ManagementViewRouter));

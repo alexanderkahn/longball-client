@@ -1,13 +1,17 @@
-import {SET_FETCHING} from "../../actions/currentView";
+import {RESET_VIEW, SET_FETCHING} from "../../actions/currentView";
 
 const initialState = {
     isFetching: false,
     lastUpdated: null
 };
 
-//TODO: resetView should be a separate action that nulls out lastUpdated
 export const currentView = (state = initialState, action) => {
     switch (action.type) {
+        case RESET_VIEW:
+            return {
+                isFetching: false,
+                lastUpdated: null
+            };
         case SET_FETCHING:
             return {
                 isFetching: action.isFetching,

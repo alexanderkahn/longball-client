@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import PlayerDetail from "../presenters/PlayerDetail";
 import {fetchPlayerDetail} from "../../../../actions/rosterpositions";
-import {setCurrentViewFetching} from "../../../../actions/currentView";
+import {resetView, setCurrentViewFetching} from "../../../../actions/currentView";
 
 function mapStateToProps(state, ownProps) {
     const rosterPosition = state.data.rosterPositions[ownProps.match.params.playerId];
@@ -17,7 +17,7 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = dispatch => {
     return {
         resetView: function () {
-            dispatch(setCurrentViewFetching(false));
+            dispatch(resetView());
         },
         fetchPlayerDetail: function (playerId) {
             dispatch(fetchPlayerDetail(playerId));

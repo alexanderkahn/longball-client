@@ -5,7 +5,9 @@ export function fetchJson(resourceUrl) {
         .then(token => fetch(resourceUrl, getHeaders(token)))
         .then(
             response => response,
-            error => console.log('An error occurred.', error) //TODO this is obviously not good enough
+
+            //TODO this is obviously not good enough. push to an error page or something, or the app breaks on error
+            error => console.log('An error occurred.', error)
         )
         .then(response => response.json());
 }
