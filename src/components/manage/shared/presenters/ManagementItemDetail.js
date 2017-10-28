@@ -10,6 +10,7 @@ class ManagementItemDetail extends Component {
     }
 
     componentDidUpdate() {
+        //TODO FIXME: this will always fetch the item, even if it's already cached.
         const props = this.props;
         if (!props.currentView.isFetching && !props.currentView.lastUpdated) {
             props.fetchItemDetail();
@@ -24,14 +25,13 @@ class ManagementItemDetail extends Component {
             );
         } else {
             return (
-                props.itemDetailForm
+                props.children
             );
         }
     }
 }
 
 ManagementItemDetail.propTypes = {
-    itemDetailForm: PropTypes.node.isRequired,
     currentView: currentViewProp.isRequired,
     resetView: PropTypes.func.isRequired,
     fetchItemDetail: PropTypes.func.isRequired,

@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {TextField} from "material-ui";
 import {withStyles} from 'material-ui/styles';
-import LoadingProgressIndicator from "../../../shared/presenters/LoadingProgressIndicator";
 import {currentViewProp, teamProp} from "../../../../models/models";
+import ManagementItemDetail from "../../shared/presenters/ManagementItemDetail";
 
 const styles = theme => ({
     root: {
@@ -16,7 +16,15 @@ const styles = theme => ({
 
 class TeamDetailForm extends Component {
     render() {
-        const {team, classes} = this.props;
+        const {team, currentView, resetView, fetchItemDetail, classes} = this.props;
+        return (
+            <ManagementItemDetail currentView={ currentView} resetView={resetView} fetchItemDetail={fetchItemDetail}>
+                {this.getForm(team, classes)}
+            </ManagementItemDetail>
+        )
+    }
+
+    getForm(team, classes) {
         if (!team) {
             return <div>I can't find the requested team</div>
         } else {
@@ -45,6 +53,9 @@ class TeamDetailForm extends Component {
 
 TeamDetailForm.propTypes = {
     team: teamProp,
+    currentView: currentViewProp.isRequired,
+    resetView: PropTypes.func.isRequired,
+    fetchItemDetail: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(TeamDetailForm);

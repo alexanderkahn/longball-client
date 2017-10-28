@@ -12,3 +12,10 @@ export function setCurrentViewFetching(isFetching) {
         isFetching
     }
 }
+
+export const SET_EDIT = 'SET_EDIT';
+export function toggleCurrentViewEdit() {
+    return {
+        type: SET_EDIT
+    }
+}
