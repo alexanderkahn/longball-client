@@ -1,11 +1,8 @@
 import React from 'react';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
-import {withStyles} from 'material-ui/styles';
 import {Icon} from "material-ui";
 import {Link} from "react-router-dom";
 import {teamProp} from "../../../../models/models";
-
-const styles = theme => ({});
 
 function TeamListItem(props) {
     const team = props.team;
@@ -22,4 +19,4 @@ TeamListItem.propTypes = {
     team: teamProp.isRequired,
 };
 
-export default withStyles(styles)(TeamListItem);
+export default TeamListItem;

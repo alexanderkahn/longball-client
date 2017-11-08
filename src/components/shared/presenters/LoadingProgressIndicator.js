@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from 'material-ui/styles';
 import {CircularProgress} from "material-ui/Progress";
 
-const styles = theme => ({
+const styles = {
     root: {
         display: 'block',
         width: '100%',
@@ -11,12 +10,11 @@ const styles = theme => ({
         paddingTop: 10,
         paddingBottom: 10,
     }
-});
+};
 
 function LoadingProgressIndicator(props) {
-    const classes = props.classes;
     if (props.enabled) {
-        return <CircularProgress className={classes.root}/>
+        return <CircularProgress style={styles.root}/>
     } else {
         return <span/>
     }
@@ -26,4 +24,4 @@ LoadingProgressIndicator.propTypes = {
     enabled: PropTypes.bool.isRequired
 };
 
-export default withStyles(styles)(LoadingProgressIndicator);
+export default LoadingProgressIndicator;

@@ -1,11 +1,8 @@
 import React from 'react';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
-import {withStyles} from 'material-ui/styles';
 import {Avatar} from "material-ui";
 import {Link} from "react-router-dom";
 import {personProp, rosterPositionProp} from "../../../../models/models";
-
-const styles = theme => ({});
 
 function PlayerListItem(props) {
     const rosterPosition = props.rosterPosition;
@@ -24,4 +21,4 @@ PlayerListItem.propTypes = {
     person: personProp.isRequired,
 };
 
-export default withStyles(styles)(PlayerListItem);
+export default PlayerListItem;

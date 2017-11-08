@@ -1,41 +1,40 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {TextField} from "material-ui";
-import {withStyles} from 'material-ui/styles';
 import {personProp, rosterPositionProp, currentViewProp} from "../../../../models/models";
 import ManagementItemDetail from "../../shared/presenters/ManagementItemDetail";
 
-const styles = theme => ({
+const styles = {
     root: {
         padding: 10,
     },
     input: {
         display: 'block',
     }
-});
+};
 
 class PlayerDetailForm extends Component {
     render() {
-        const {rosterPosition, person, currentView, resetView, fetchItemDetail, classes} = this.props;
+        const {rosterPosition, person, currentView, resetView, fetchItemDetail} = this.props;
         return (
             <ManagementItemDetail currentView={currentView} resetView={resetView} fetchItemDetail={fetchItemDetail}>
-                {this.getForm(rosterPosition, person, classes)}
+                {PlayerDetailForm.getForm(rosterPosition, person)}
             </ManagementItemDetail>
         );
     }
 
-    getForm(rosterPosition, person, classes) {
+    static getForm(rosterPosition, person) {
         if (!rosterPosition) {
             return <div>I can't find the selected player</div>
         } else {
             return (
-                <form className={classes.root}>
-                    <TextField className={classes.input}
+                <form style={styles.root}>
+                    <TextField style={styles.input}
                                disabled={true}
                                id="first"
                                label="First Name"
                                value={person.attributes.first}/>
-                    <TextField className={classes.input}
+                    <TextField style={styles.input}
                                disabled={true}
                                id="last"
                                label="Last Name"
@@ -55,4 +54,4 @@ PlayerDetailForm.propTypes = {
     fetchItemDetail: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(PlayerDetailForm);
+export default PlayerDetailForm;

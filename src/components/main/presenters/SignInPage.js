@@ -1,5 +1,4 @@
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
@@ -27,9 +26,9 @@ function SignInPage(props) {
     const classes = props.classes;
     return (
         <div>
-            <Card className={classes.card}>
+            <Card style={styles.card}>
                 <CardContent>
-                    <Typography type="body1" className={classes.title}>
+                    <Typography type="body1" style={styles.title}>
                         Dingerz!
                     </Typography>
                     <Typography component="p">
@@ -48,4 +47,4 @@ SignInPage.propTypes = {
     startSignInFlow: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(SignInPage);
+export default SignInPage;

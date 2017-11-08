@@ -1,10 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import {userProp} from "../../../models/models";
-
-const styles = theme => ({});
 
 function UserLogControl(props) {
     if (props.user) {
@@ -20,4 +17,4 @@ UserLogControl.propTypes = {
     user: userProp,
 };
 
-export default withStyles(styles)(UserLogControl);
+export default UserLogControl;
