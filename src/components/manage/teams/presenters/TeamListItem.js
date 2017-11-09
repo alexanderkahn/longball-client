@@ -1,10 +1,16 @@
+// @flow
+
 import React from 'react';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
 import {Icon} from "material-ui";
 import {Link} from "react-router-dom";
-import {teamProp} from "../../../../models/models";
+import {Team} from "../../../../models/models";
 
-function TeamListItem(props) {
+interface TeamListItemProps {
+    team: Team,
+}
+
+export default function TeamListItem(props: TeamListItemProps) {
     const team = props.team;
     const teamDetailRoute = `/manage/teams/${props.team.id}`;
     return (
@@ -14,9 +20,3 @@ function TeamListItem(props) {
         </ListItem>
     );
 }
-
-TeamListItem.propTypes = {
-    team: teamProp.isRequired,
-};
-
-export default TeamListItem;

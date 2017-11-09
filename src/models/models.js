@@ -1,37 +1,40 @@
-import PropTypes from 'prop-types';
+// @flow
 
-export const userProp = PropTypes.shape({
-    name: PropTypes.string.isRequired,
-});
+//TODO: get this from the server, not directly from firebase. Will look like the other models
+export interface User {
+    name: string
+}
 
-export const currentViewProp = PropTypes.shape({
-    isFetching: PropTypes.bool.isRequired,
-    lastUpdated: PropTypes.number,
-});
+export interface CurrentView {
+    isFetching: boolean,
+    isEdit: boolean,
+    lastUpdated: number
+}
 
-export const leagueProp = PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    attributes: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-    }).isRequired,
-});
+export interface League {
+    id: string,
+    attributes: {
+        name: string
+    }
+}
 
-export const teamProp = PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    attributes: PropTypes.shape({
-        abbreviation: PropTypes.string.isRequired,
-        location: PropTypes.string.isRequired,
-        nickname: PropTypes.string.isRequired,
-    }).isRequired,
-});
+export interface Team {
+    id: string,
+    attributes: {
+        abbreviation: string,
+        location: string,
+        nickname: string
+    }
+}
 
-export const personProp = PropTypes.shape({
-    attributes: PropTypes.shape({
-        first: PropTypes.string.isRequired,
-        last: PropTypes.string.isRequired,
-    }).isRequired,
-});
+export interface Person {
+    id: string,
+    attributes: {
+        first: string,
+        last: string
+    }
+}
 
-export const rosterPositionProp = PropTypes.shape({
-    id: PropTypes.string.isRequired,
-});
+export interface RosterPosition {
+    id: string
+}

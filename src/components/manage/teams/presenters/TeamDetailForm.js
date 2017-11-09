@@ -1,7 +1,8 @@
+// @flow
+
 import React, {Component} from "react";
-import PropTypes from 'prop-types';
 import {TextField} from "material-ui";
-import {currentViewProp, teamProp} from "../../../../models/models";
+import {CurrentView, Team} from "../../../../models/models";
 import ManagementItemDetail from "../../shared/presenters/ManagementItemDetail";
 
 const styles = {
@@ -13,7 +14,14 @@ const styles = {
     }
 };
 
-class TeamDetailForm extends Component {
+interface TeamDetailFormProps {
+    team: ?Team,
+    currentView: CurrentView,
+    resetView(): void,
+    fetchItemDetail(): void,
+}
+
+export default class TeamDetailForm extends Component<TeamDetailFormProps> {
     render() {
         const {team, currentView, resetView, fetchItemDetail} = this.props;
         return (
@@ -23,7 +31,7 @@ class TeamDetailForm extends Component {
         )
     }
 
-    getForm(team) {
+    getForm(team: ?Team) {
         if (!team) {
             return <div>I can't find the requested team</div>
         } else {
@@ -49,12 +57,3 @@ class TeamDetailForm extends Component {
         }
     }
 }
-
-TeamDetailForm.propTypes = {
-    team: teamProp,
-    currentView: currentViewProp.isRequired,
-    resetView: PropTypes.func.isRequired,
-    fetchItemDetail: PropTypes.func.isRequired,
-};
-
-export default TeamDetailForm;

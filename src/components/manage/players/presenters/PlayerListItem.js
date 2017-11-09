@@ -1,10 +1,17 @@
+// @flow
+
 import React from 'react';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
 import {Avatar} from "material-ui";
 import {Link} from "react-router-dom";
-import {personProp, rosterPositionProp} from "../../../../models/models";
+import {Person, RosterPosition} from "../../../../models/models";
 
-function PlayerListItem(props) {
+interface PlayerListItemProps {
+    rosterPosition: RosterPosition,
+    person: Person,
+}
+
+export default function PlayerListItem(props: PlayerListItemProps) {
     const rosterPosition = props.rosterPosition;
     const person = props.person;
     const playerDetailRoute = `/manage/players/${rosterPosition.id}`;
@@ -15,10 +22,3 @@ function PlayerListItem(props) {
         </ListItem>
     );
 }
-
-PlayerListItem.propTypes = {
-    rosterPosition: rosterPositionProp.isRequired,
-    person: personProp.isRequired,
-};
-
-export default PlayerListItem;

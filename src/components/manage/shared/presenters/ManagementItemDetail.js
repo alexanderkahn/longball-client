@@ -1,9 +1,18 @@
+// @flow
+
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import LoadingProgressIndicator from "../../../shared/presenters/LoadingProgressIndicator";
-import {currentViewProp} from "../../../../models/models";
+import type {CurrentView} from "../../../../models/models";
 
-class ManagementItemDetail extends Component {
+interface ManagementItemDetailProps {
+    currentView: CurrentView,
+    resetView(): void,
+    fetchItemDetail(): void,
+    children: any //TODO: come back to this and figure out how it's supposed to look
+};
+
+export default class ManagementItemDetail extends Component<ManagementItemDetailProps> {
 
     componentDidMount() {
         this.props.resetView();
@@ -30,11 +39,3 @@ class ManagementItemDetail extends Component {
         }
     }
 }
-
-ManagementItemDetail.propTypes = {
-    currentView: currentViewProp.isRequired,
-    resetView: PropTypes.func.isRequired,
-    fetchItemDetail: PropTypes.func.isRequired,
-};
-
-export default ManagementItemDetail;

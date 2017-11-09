@@ -1,7 +1,8 @@
+// @flow
+
 import React, {Component} from "react";
-import PropTypes from 'prop-types';
 import {TextField} from "material-ui";
-import {personProp, rosterPositionProp, currentViewProp} from "../../../../models/models";
+import {Person, RosterPosition, CurrentView} from "../../../../models/models";
 import ManagementItemDetail from "../../shared/presenters/ManagementItemDetail";
 
 const styles = {
@@ -13,7 +14,15 @@ const styles = {
     }
 };
 
-class PlayerDetailForm extends Component {
+interface PlayerDetailFormProps {
+    rosterPosition: RosterPosition,
+    person: Person,
+    currentView: CurrentView,
+    resetView(): void,
+    fetchItemDetail(): void
+}
+
+export default class PlayerDetailForm extends Component<PlayerDetailFormProps> {
     render() {
         const {rosterPosition, person, currentView, resetView, fetchItemDetail} = this.props;
         return (
@@ -45,13 +54,3 @@ class PlayerDetailForm extends Component {
     }
 
 }
-
-PlayerDetailForm.propTypes = {
-    rosterPosition: rosterPositionProp,
-    person: personProp,
-    currentView: currentViewProp.isRequired,
-    resetView: PropTypes.func.isRequired,
-    fetchItemDetail: PropTypes.func.isRequired,
-};
-
-export default PlayerDetailForm;

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
-import {userProp} from "../../../models/models";
+import {User} from "../../../models/models";
 
 function UserLogControl(props) {
     if (props.user) {
@@ -14,7 +14,7 @@ function UserLogControl(props) {
 
 UserLogControl.propTypes = {
     onLogIn: PropTypes.func.isRequired,
-    user: userProp,
+    user: User,
 };
 
 export default UserLogControl;

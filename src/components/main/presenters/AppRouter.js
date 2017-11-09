@@ -6,7 +6,7 @@ import ManageViewWrapper from "../../manage/shared/presenters/ManagementViewRout
 import {Component} from "react";
 import HeaderContainer from "../containers/HeaderContainer";
 import LoadingUserPage from "./LoadingUserPage";
-import {userProp} from "../../../models/models";
+import {User} from "../../../models/models";
 
 class AppRouter extends Component {
     render() {
@@ -37,7 +37,7 @@ function Main(props) {
 }
 
 AppRouter.propTypes = {
-    user: userProp,
+    user: User,
     isFetching: PropTypes.bool.isRequired,
 };
 
