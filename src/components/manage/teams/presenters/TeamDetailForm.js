@@ -2,7 +2,7 @@
 
 import React, {Component} from "react";
 import {TextField} from "material-ui";
-import {CurrentView, Team} from "../../../../models/models";
+import type {CurrentView, Team} from "../../../../models/models";
 import ManagementItemDetail from "../../shared/presenters/ManagementItemDetail";
 
 const styles = {
@@ -14,7 +14,7 @@ const styles = {
     }
 };
 
-interface TeamDetailFormProps {
+type TeamDetailFormProps = {
     team: ?Team,
     currentView: CurrentView,
     resetView(): void,

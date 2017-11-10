@@ -1,9 +1,14 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import * as React from 'react';
+import {Component} from 'react';
 import List, {ListSubheader} from 'material-ui/List';
 import {Button} from "material-ui";
 import AddIcon from 'material-ui-icons/Add'
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator'
+import LeagueListItem from "../../leagues/presenters/LeagueListItem";
+import TeamListItem from "../../teams/presenters/TeamListItem";
+import PlayerListItem from "../../players/presenters/PlayerListItem";
 
 
 const styles = {
@@ -13,12 +18,19 @@ const styles = {
     },
 };
 
-class ManagementList extends Component {
+type ManagementListProps = {
+    title:string,
+    isFetching: boolean,
+    lastFetched: number,
+    fetchListItems(): void,
+    children: Array<LeagueListItem|TeamListItem|PlayerListItem>,
+}
+
+export default class ManagementList extends Component<ManagementListProps> {
 
     componentDidMount() {
-        const props = this.props;
-        if (!props.lastFetched && !props.isFetching) {
-            props.fetchListItems();
+        if (!this.props.lastFetched && !this.props.isFetching) {
+            this.props.fetchListItems();
         }
     }
 
@@ -28,8 +40,8 @@ class ManagementList extends Component {
 
         return (
             <div>
-                <List subheader={<ListSubheader style={styles.default}>{props.title}</ListSubheader>}>
-                    {props.listItems}
+                <List subheader={<ListSubheader>{props.title}</ListSubheader>}>
+                    {props.children}
                 </List>
                 <LoadingProgressIndicator enabled={props.isFetching}/>
                 <Button fab color="accent" aria-label="add" style={styles.button} disabled>
@@ -39,12 +51,3 @@ class ManagementList extends Component {
         )
     }
 }
-
-ManagementList.propTypes = {
-    title: PropTypes.string.isRequired,
-    listItems: PropTypes.node.isRequired,
-    isFetching: PropTypes.bool.isRequired,
-    lastFetched: PropTypes.number,
-    fetchListItems: PropTypes.func.isRequired,
-};
-export default ManagementList;

@@ -14,7 +14,7 @@ const styles = {
     }
 };
 
-interface LeagueDetailFormProps {
+type LeagueDetailFormProps = {
     league: ?League,
     currentView: CurrentView,
     resetView(): void,

@@ -13,7 +13,7 @@ const styles = {
     }
 };
 
-interface LoadingProgressIndicatorProps {
+type LoadingProgressIndicatorProps = {
     enabled: boolean
 }
 

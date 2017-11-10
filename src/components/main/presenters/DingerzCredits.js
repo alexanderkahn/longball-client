@@ -6,7 +6,7 @@ import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle,} f
 import Slide from 'material-ui/transitions/Slide';
 
 
-interface DingerzCreditsProps {
+type DingerzCreditsProps = {
     resetCounter(): void,
 }
 

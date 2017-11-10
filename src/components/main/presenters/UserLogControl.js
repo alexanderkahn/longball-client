@@ -2,9 +2,9 @@
 
 import React from "react";
 import Button from 'material-ui/Button';
-import {User} from "../../../models/models";
+import type {User} from "../../../models/models";
 
-interface UserLogControlProps {
+type UserLogControlProps = {
     user: ?User,
     onLogIn(): void
 }

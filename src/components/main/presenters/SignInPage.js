@@ -23,7 +23,7 @@ const styles = theme => ({
     },
 });
 
-interface SignInPageProps {
+type SignInPageProps = {
     startSignInFlow(): void,
 }
 

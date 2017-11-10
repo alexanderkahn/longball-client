@@ -4,16 +4,15 @@ import React from 'react';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
 import {Avatar} from "material-ui";
 import {Link} from "react-router-dom";
-import {Person, RosterPosition} from "../../../../models/models";
+import type {Player} from "../../../../models/models";
 
-interface PlayerListItemProps {
-    rosterPosition: RosterPosition,
-    person: Person,
+type PlayerListItemProps = {
+    player: Player
 }
 
 export default function PlayerListItem(props: PlayerListItemProps) {
-    const rosterPosition = props.rosterPosition;
-    const person = props.person;
+    const rosterPosition = props.player.rosterPosition;
+    const person = props.player.person;
     const playerDetailRoute = `/manage/players/${rosterPosition.id}`;
     return (
         <ListItem button component={Link} to={playerDetailRoute}>

@@ -2,7 +2,7 @@
 
 import React, {Component} from "react";
 import {TextField} from "material-ui";
-import {Person, RosterPosition, CurrentView} from "../../../../models/models";
+import type {Person, RosterPosition, CurrentView} from "../../../../models/models";
 import ManagementItemDetail from "../../shared/presenters/ManagementItemDetail";
 
 const styles = {
@@ -14,7 +14,7 @@ const styles = {
     }
 };
 
-interface PlayerDetailFormProps {
+type PlayerDetailFormProps = {
     rosterPosition: RosterPosition,
     person: Person,
     currentView: CurrentView,

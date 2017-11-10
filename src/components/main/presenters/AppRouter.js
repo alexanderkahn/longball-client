@@ -7,9 +7,9 @@ import ManageViewWrapper from "../../manage/shared/presenters/ManagementViewRout
 import {Component} from "react";
 import HeaderContainer from "../containers/HeaderContainer";
 import LoadingUserPage from "./LoadingUserPage";
-import {User} from "../../../models/models";
+import type {User} from "../../../models/models";
 
-interface AppRouterProps {
+type AppRouterProps = {
     user: ?User,
     isFetching: boolean,
 }

@@ -19,7 +19,7 @@ const styles = {
     },
 };
 
-interface HeaderProps {
+type HeaderProps = {
     showCredits: boolean,
     incrementCounter(): void,
     resetCounter(): void

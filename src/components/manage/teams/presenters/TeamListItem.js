@@ -4,9 +4,9 @@ import React from 'react';
 import {ListItem, ListItemIcon, ListItemText} from 'material-ui/List'
 import {Icon} from "material-ui";
 import {Link} from "react-router-dom";
-import {Team} from "../../../../models/models";
+import type {Team} from "../../../../models/models";
 
-interface TeamListItemProps {
+type TeamListItemProps = {
     team: Team,
 }
 

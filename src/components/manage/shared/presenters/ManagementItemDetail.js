@@ -1,7 +1,6 @@
 // @flow
 
 import React, {Component} from "react";
-import PropTypes from 'prop-types';
 import LoadingProgressIndicator from "../../../shared/presenters/LoadingProgressIndicator";
 import type {CurrentView} from "../../../../models/models";
 

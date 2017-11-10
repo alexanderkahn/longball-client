@@ -1,24 +1,24 @@
 // @flow
 
 //TODO: get this from the server, not directly from firebase. Will look like the other models
-export interface User {
+export type User = {
     name: string
 }
 
-export interface CurrentView {
+export type CurrentView = {
     isFetching: boolean,
     isEdit: boolean,
     lastUpdated: number
 }
 
-export interface League {
+export type League = {
     id: string,
     attributes: {
         name: string
     }
 }
 
-export interface Team {
+export type Team = {
     id: string,
     attributes: {
         abbreviation: string,
@@ -27,7 +27,7 @@ export interface Team {
     }
 }
 
-export interface Person {
+export type Person = {
     id: string,
     attributes: {
         first: string,
@@ -35,6 +35,11 @@ export interface Person {
     }
 }
 
-export interface RosterPosition {
+export type RosterPosition = {
     id: string
+}
+
+export type Player = {
+    rosterPosition: RosterPosition,
+    person: Person
 }

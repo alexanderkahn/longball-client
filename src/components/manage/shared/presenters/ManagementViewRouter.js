@@ -19,7 +19,7 @@ const styles = {
     }
 };
 
-interface ManagementViewRouterProps {
+type ManagementViewRouterProps = {
     match: any //TODO: this should be an actual type
 }
 

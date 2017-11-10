@@ -1,21 +1,19 @@
-import React from 'react'
 import {connect} from 'react-redux'
-import ManagementList from '../../shared/presenters/ManagementList'
-import PlayerListItem from "../presenters/PlayerListItem";
 import {fetchPlayers} from "../../../../actions/rosterpositions";
+import ManagePlayersForm from "../presenters/ManagePlayersForm";
 
-//TODO: no presentation components in state containers?
-const getChildListItems = (rosterPositions, people) => {
+function getPlayers(rosterPositions, people) {
+    let getPlayer = function (rosterPosition) {
+        return {rosterPosition, person: people[rosterPosition.relationships.player.data.id]};
+    };
     return Object.values(rosterPositions)
-        .map(rosterPosition => <PlayerListItem key={rosterPosition.id}
-                                               rosterPosition={rosterPosition}
-                                               person={people[rosterPosition.relationships.player.data.id]}/>);
-};
+        .map(rosterPosition => getPlayer(rosterPosition));
+}
 
 const mapStateToProps = state => {
     return {
         title: 'Players',
-        listItems: getChildListItems(state.data.rosterPositions, state.data.people),
+        players: getPlayers(state.data.rosterPositions, state.data.people),
         isFetching: state.currentView.isFetching,
 
     }
@@ -32,6 +30,6 @@ const mapDispatchToProps = dispatch => {
 const ManagePlayersContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(ManagementList);
+)(ManagePlayersForm);
 
 export default ManagePlayersContainer
