@@ -1,14 +1,20 @@
+// @flow
+
 import React from "react";
 import SignInContainer from "../containers/SignInContainer";
 import {Redirect, Route, Switch} from "react-router-dom";
-import PropTypes from 'prop-types';
 import ManageViewWrapper from "../../manage/shared/presenters/ManagementViewRouter";
 import {Component} from "react";
 import HeaderContainer from "../containers/HeaderContainer";
 import LoadingUserPage from "./LoadingUserPage";
 import {User} from "../../../models/models";
 
-class AppRouter extends Component {
+interface AppRouterProps {
+    user: ?User,
+    isFetching: boolean,
+}
+
+export default class AppRouter extends Component<AppRouterProps> {
     render() {
         if (!this.props.user) {
             if (this.props.isFetching) {
@@ -27,7 +33,7 @@ class AppRouter extends Component {
     }
 }
 
-function Main(props) {
+function Main() {
     return (
         <Switch>
             <Route path="/manage" component={ManageViewWrapper}/>
@@ -35,10 +41,3 @@ function Main(props) {
         </Switch>
     );
 }
-
-AppRouter.propTypes = {
-    user: User,
-    isFetching: PropTypes.bool.isRequired,
-};
-
-export default AppRouter

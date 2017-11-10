@@ -1,3 +1,5 @@
+// @flow
+
 import React from "react";
 import {NavLink, Route, Switch, withRouter} from "react-router-dom";
 import {Paper, Button} from "material-ui";
@@ -17,7 +19,11 @@ const styles = {
     }
 };
 
-function ManagementViewRouter(props) {
+interface ManagementViewRouterProps {
+    match: any //TODO: this should be an actual type
+}
+
+function ManagementViewRouter(props: ManagementViewRouterProps) {
     const match = props.match;
     return (
         <Paper style={styles.root}>
@@ -39,6 +45,4 @@ function ManagementViewRouter(props) {
         </Paper>
     );
 }
-
-ManagementViewRouter.propTypes = {};
 export default withRouter(ManagementViewRouter);

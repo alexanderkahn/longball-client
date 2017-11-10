@@ -1,5 +1,6 @@
+// @flow
+
 import React from 'react';
-import PropTypes from 'prop-types';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
@@ -22,8 +23,11 @@ const styles = theme => ({
     },
 });
 
-function SignInPage(props) {
-    const classes = props.classes;
+interface SignInPageProps {
+    startSignInFlow(): void,
+}
+
+export default function SignInPage(props: SignInPageProps) {
     return (
         <div>
             <Card style={styles.card}>
@@ -42,9 +46,3 @@ function SignInPage(props) {
         </div>
     );
 }
-
-SignInPage.propTypes = {
-    startSignInFlow: PropTypes.func.isRequired,
-};
-
-export default SignInPage;

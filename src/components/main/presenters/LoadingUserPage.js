@@ -1,8 +1,10 @@
+// @flow
+
 import React from 'react';
 import Card, {CardContent} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import 'typeface-faster-one';
-import {CircularProgress} from "material-ui/Progress";
+import LoadingProgressIndicator from "../../shared/presenters/LoadingProgressIndicator";
 
 const styles = {
     root: {
@@ -41,7 +43,7 @@ function LoadingUserPage() {
                     </Typography>
                     <br/>
                     <div style={styles.progressWrapper}>
-                        <CircularProgress/>
+                        <LoadingProgressIndicator enabled={true}/>
                     </div>
                 </CardContent>
             </Card>

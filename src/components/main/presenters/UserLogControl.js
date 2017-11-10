@@ -1,20 +1,21 @@
+// @flow
+
 import React from "react";
-import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 import {User} from "../../../models/models";
 
-function UserLogControl(props) {
+interface UserLogControlProps {
+    user: ?User,
+    onLogIn(): void
+}
+
+
+function UserLogControl(props: UserLogControlProps) {
     if (props.user) {
             return <span>{props.user.name}<Button color="contrast">Log out</Button></span>;
         } else {
             return <Button color="contrast" onClick={props.onLogIn}>Log in</Button>;
         }
 }
-
-
-UserLogControl.propTypes = {
-    onLogIn: PropTypes.func.isRequired,
-    user: User,
-};
 
 export default UserLogControl;

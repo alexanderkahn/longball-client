@@ -8,7 +8,7 @@ import {League} from "../../../../models/models";
 
 interface LeagueListItemProps {
     league: League,
-};
+}
 
 export default function LeagueListItem(props: LeagueListItemProps) {
     const league = props.league;

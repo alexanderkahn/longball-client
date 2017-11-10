@@ -1,5 +1,6 @@
+// @flow
+
 import React, {Component} from "react";
-import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
@@ -18,7 +19,13 @@ const styles = {
     },
 };
 
-class Header extends Component {
+interface HeaderProps {
+    showCredits: boolean,
+    incrementCounter(): void,
+    resetCounter(): void
+}
+
+export default class Header extends Component<HeaderProps> {
     render() {
         const showCredits = this.props.showCredits;
         const onClick = showCredits ? this.props.resetCounter : this.props.incrementCounter;
@@ -41,12 +48,3 @@ class Header extends Component {
         );
     }
 }
-
-
-Header.propTypes = {
-    showCredits: PropTypes.bool.isRequired,
-    incrementCounter: PropTypes.func.isRequired,
-    resetCounter: PropTypes.func.isRequired
-};
-
-export default Header;
