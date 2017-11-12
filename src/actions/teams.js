@@ -1,4 +1,3 @@
-
 import {fetchJson} from "./rest";
 import {setCurrentViewFetching} from "./currentView";
 
