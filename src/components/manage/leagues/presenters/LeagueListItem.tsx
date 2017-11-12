@@ -5,7 +5,7 @@ import {Icon} from "material-ui";
 import {League} from "../../../../models/models";
 import {Component} from "react";
 
-type LeagueListItemProps = {
+interface LeagueListItemProps {
     league: League,
 }
 

@@ -3,11 +3,11 @@ import ManagementList from "../../shared/presenters/ManagementList";
 import {League} from "../../../../models/models";
 import LeagueListItem from "./LeagueListItem";
 
-type ManageLeaguesFormProps = {
+interface ManageLeaguesFormProps {
     leagues: Array<League>,
     isFetching: boolean,
     lastFetched: number,
-    fetchListItems(): void,
+    fetchListItems: Function,
 }
 
 export default function ManageLeaguesForm(props: ManageLeaguesFormProps) {

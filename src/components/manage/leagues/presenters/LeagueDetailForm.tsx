@@ -13,12 +13,12 @@ const styles = {
     }
 };
 
-type LeagueDetailFormProps = {
+interface LeagueDetailFormProps {
     league?: League,
     currentView: CurrentView,
-    resetView(): void,
-    fetchItemDetail(): void,
-    toggleEdit(): void,
+    resetView: Function,
+    fetchItemDetail: Function,
+    toggleEdit: Function,
 }
 
 export default class LeagueDetailForm extends Component<LeagueDetailFormProps> {
@@ -31,7 +31,7 @@ export default class LeagueDetailForm extends Component<LeagueDetailFormProps> {
         );
     }
 
-    getForm(isEdit: boolean, toggleEdit: () => void, league?: League) {
+    getForm(isEdit: boolean, toggleEdit: Function, league?: League) {
         if (!league) {
             return <div>I can't find the league you requested!</div>
         } else {
@@ -49,18 +49,18 @@ export default class LeagueDetailForm extends Component<LeagueDetailFormProps> {
     }
 }
 
-function EditSaveToggle(props: {isEdit: boolean, toggleEdit: () => void}) {
+function EditSaveToggle(props: {isEdit: boolean, toggleEdit: Function}) {
     if (props.isEdit) {
         return (
             <div>
-                <Button onClick={props.toggleEdit}>Cancel</Button>
+                <Button onClick={props.toggleEdit()}>Cancel</Button>
                 <Button>Save</Button>
             </div>
         )
     } else {
         return (
             <div>
-                <Button onClick={props.toggleEdit}>Edit</Button>
+                <Button onClick={props.toggleEdit()}>Edit</Button>
             </div>
         );
     }

@@ -3,11 +3,11 @@ import ManagementList from "../../shared/presenters/ManagementList";
 import {Team} from "../../../../models/models";
 import TeamListItem from "./TeamListItem";
 
-type ManageTeamsFormProps = {
+interface ManageTeamsFormProps {
     teams: Array<Team>,
     isFetching: boolean,
     lastFetched: number,
-    fetchListItems(): void,
+    fetchListItems: Function,
 }
 
 export default function ManageTeamsForm(props: ManageTeamsFormProps) {

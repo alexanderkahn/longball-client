@@ -13,11 +13,11 @@ import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgress
 //     },
 // };
 
-type ManagementListProps = {
+interface ManagementListProps {
     title:string,
     isFetching: boolean,
     lastFetched: number,
-    fetchListItems(): void,
+    fetchListItems: Function,
     children: Array<JSX.Element>,
 }
 

@@ -2,9 +2,9 @@ import * as React from "react";
 import Button from 'material-ui/Button';
 import {User} from "../../../models/models";
 
-type UserLogControlProps = {
+interface UserLogControlProps {
     user?: User,
-    onLogIn(): void
+    onLogIn: Function
 }
 
 
@@ -12,7 +12,7 @@ function UserLogControl(props: UserLogControlProps) {
     if (props.user) {
             return <span>{props.user.name}<Button color="contrast">Log out</Button></span>;
         } else {
-            return <Button color="contrast" onClick={props.onLogIn}>Log in</Button>;
+            return <Button color="contrast" onClick={props.onLogIn()}>Log in</Button>;
         }
 }
 

@@ -4,7 +4,7 @@ import {Icon} from "material-ui";
 import {Team} from "../../../../models/models";
 import {Component} from "react";
 
-type TeamListItemProps = {
+interface TeamListItemProps {
     team: Team,
 }
 

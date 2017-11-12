@@ -1,22 +1,22 @@
 //TODO: get this from the server, not directly from firebase. Will look like the other models
-export type User = {
+export interface User {
     name: string
 }
 
-export type CurrentView = {
+export interface CurrentView {
     isFetching: boolean,
     isEdit: boolean,
     lastUpdated: number
 }
 
-export type League = {
+export interface League {
     id: string,
     attributes: {
         name: string
     }
 }
 
-export type Team = {
+export interface Team {
     id: string,
     attributes: {
         abbreviation: string,
@@ -25,7 +25,7 @@ export type Team = {
     }
 }
 
-export type Person = {
+export interface Person {
     id: string,
     attributes: {
         first: string,
@@ -33,11 +33,11 @@ export type Person = {
     }
 }
 
-export type RosterPosition = {
+export interface RosterPosition {
     id: string
 }
 
-export type Player = {
+export interface Player {
     rosterPosition: RosterPosition,
     person: Person
 }
