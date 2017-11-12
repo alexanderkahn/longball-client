@@ -2,11 +2,11 @@ import {connect} from "react-redux";
 import {resetCreditsClick} from "../../../actions/easteregg";
 import DingerzCredits from "../presenters/DingerzCredits";
 
-const mapStateToProps = state => {
+const mapStateToProps = () => {
     return {}
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
     return {
         resetCounter: function() {
             dispatch(resetCreditsClick())

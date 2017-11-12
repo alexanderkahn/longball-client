@@ -17,8 +17,8 @@ interface PlayerDetailFormProps {
     rosterPosition: RosterPosition,
     person: Person,
     currentView: CurrentView,
-    resetView: Function,
-    fetchItemDetail: Function
+    resetView: () => void,
+    fetchItemDetail: () => void
 }
 
 export default class PlayerDetailForm extends Component<PlayerDetailFormProps> {

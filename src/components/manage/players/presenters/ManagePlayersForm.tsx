@@ -7,7 +7,7 @@ interface ManagePlayersFormProps {
     players: Array<Player>,
     isFetching: boolean,
     lastFetched: number,
-    fetchListItems: Function,
+    fetchListItems: () => void,
 }
 
 export default function ManagePlayersForm(props: ManagePlayersFormProps) {

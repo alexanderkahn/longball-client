@@ -5,8 +5,8 @@ import {CurrentView} from "../../../../models/models";
 
 interface ManagementItemDetailProps {
     currentView: CurrentView,
-    resetView: Function,
-    fetchItemDetail: Function,
+    resetView: () => void,
+    fetchItemDetail: () => void,
     children: any //TODO: come back to this and figure out how it's supposed to look
 }
 

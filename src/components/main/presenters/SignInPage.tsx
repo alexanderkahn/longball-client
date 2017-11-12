@@ -22,7 +22,7 @@ const styles = {
 };
 
 interface SignInPageProps {
-    startSignInFlow: Function,
+    startSignInFlow: () => void,
 }
 
 export default function SignInPage(props: SignInPageProps) {
@@ -38,7 +38,7 @@ export default function SignInPage(props: SignInPageProps) {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button onClick={props.startSignInFlow()}>Log in</Button>
+                    <Button onClick={props.startSignInFlow}>Log in</Button>
                 </CardActions>
             </Card>
         </div>

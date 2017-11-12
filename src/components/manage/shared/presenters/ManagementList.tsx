@@ -17,7 +17,7 @@ interface ManagementListProps {
     title:string,
     isFetching: boolean,
     lastFetched: number,
-    fetchListItems: Function,
+    fetchListItems: () => void,
     children: Array<JSX.Element>,
 }
 

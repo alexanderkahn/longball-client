@@ -7,7 +7,7 @@ interface ManageTeamsFormProps {
     teams: Array<Team>,
     isFetching: boolean,
     lastFetched: number,
-    fetchListItems: Function,
+    fetchListItems: () => void,
 }
 
 export default function ManageTeamsForm(props: ManageTeamsFormProps) {

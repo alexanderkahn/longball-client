@@ -20,8 +20,8 @@ const styles = {
 
 interface HeaderProps {
     showCredits: boolean,
-    incrementCounter: Function,
-    resetCounter: Function
+    incrementCounter: () => void,
+    resetCounter: () => void
 }
 
 export default class Header extends Component<HeaderProps> {
@@ -37,7 +37,7 @@ export default class Header extends Component<HeaderProps> {
                             <MenuIcon/>
                         </IconButton>
                         <Typography type="title" color="inherit" style={styles.flex}>
-                            Dinger<span onClick={onClick()}>z</span>!
+                            Dinger<span onClick={onClick}>z</span>!
                         </Typography>
                         <UserControlContainer />
                     </Toolbar>

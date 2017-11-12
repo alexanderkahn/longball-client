@@ -2,11 +2,11 @@ import SignInPage from "../presenters/SignInPage";
 import {connect} from "react-redux";
 import {redirectToAuthenticationProvider} from "../../../actions/session";
 
-const mapStateToProps = dispatch => {
+const mapStateToProps = () => {
   return {}
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
     return {
         startSignInFlow: function () {
             dispatch(redirectToAuthenticationProvider());

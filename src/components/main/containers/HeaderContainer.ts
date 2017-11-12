@@ -2,13 +2,13 @@ import {connect} from "react-redux";
 import Header from "../presenters/Header";
 import {incrementCreditsClick, resetCreditsClick} from "../../../actions/easteregg";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any) => {
     return {
         showCredits: state.easterEgg.creditsCount === 9
     }
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
     return {
         incrementCounter: () => {
             dispatch(incrementCreditsClick())

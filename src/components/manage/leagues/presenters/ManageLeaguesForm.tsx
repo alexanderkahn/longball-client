@@ -7,7 +7,7 @@ interface ManageLeaguesFormProps {
     leagues: Array<League>,
     isFetching: boolean,
     lastFetched: number,
-    fetchListItems: Function,
+    fetchListItems: () => void,
 }
 
 export default function ManageLeaguesForm(props: ManageLeaguesFormProps) {

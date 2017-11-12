@@ -6,12 +6,12 @@ import Slide from 'material-ui/transitions/Slide';
 
 
 interface DingerzCreditsProps {
-    resetCounter: Function,
+    resetCounter: () => void,
 }
 
 export default function DingerzCredits(props: DingerzCreditsProps) {
     return (
-        <Dialog open={true} transition={Slide} onRequestClose={props.resetCounter()}>
+        <Dialog open={true} transition={Slide} onRequestClose={props.resetCounter}>
             <DialogTitle>{"Dingerz! was made with love"}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
@@ -19,7 +19,7 @@ export default function DingerzCredits(props: DingerzCreditsProps) {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.resetCounter()} color="primary">
+                <Button onClick={props.resetCounter} color="primary">
                     OK...?
                 </Button>
             </DialogActions>

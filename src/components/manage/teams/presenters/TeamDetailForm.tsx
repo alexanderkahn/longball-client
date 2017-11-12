@@ -16,8 +16,8 @@ const styles = {
 interface TeamDetailFormProps {
     team?: Team,
     currentView: CurrentView,
-    resetView: Function,
-    fetchItemDetail: Function,
+    resetView: () => void,
+    fetchItemDetail: () => void,
 }
 
 export default class TeamDetailForm extends Component<TeamDetailFormProps> {
