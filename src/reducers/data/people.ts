@@ -1,7 +1,7 @@
 import {keyBy} from "lodash";
 import {RECEIVE_PEOPLE} from "../../actions/rosterpositions";
 
-export const people = (state = {}, action: any) => {
+export const people = (state = {}, action: any): any => {
     switch (action.type) {
         case RECEIVE_PEOPLE:
             return {

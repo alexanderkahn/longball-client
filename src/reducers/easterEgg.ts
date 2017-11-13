@@ -1,15 +1,19 @@
-import {INCREMENT_CREDITS_CLICK, RESET_CREDITS_CLICK} from "../actions/easteregg";
+import {EasterEggActions, EasterEggActionTypeKeys} from "../actions/easteregg";
+
+interface EasterEggState {
+    creditsCount: number
+}
 
 const initialState = {creditsCount: 0};
 
-export const easterEgg = (state = initialState, action: any) => {
+export const easterEgg = (state: EasterEggState = initialState, action: EasterEggActions): any => {
     switch (action.type) {
-        case INCREMENT_CREDITS_CLICK:
+        case EasterEggActionTypeKeys.INCREMENT_CREDITS:
             return {
                 ...state,
                 creditsCount: state.creditsCount + 1
             };
-        case RESET_CREDITS_CLICK:
+        case EasterEggActionTypeKeys.RESET_CREDITS:
             return {
                 ...state,
                 creditsCount: 0

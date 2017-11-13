@@ -2,7 +2,7 @@ import {fetchJson} from "./rest";
 import {setCurrentViewFetching} from "./currentView";
 
 export const RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS';
-function receivePlayers(jsonRosterPositions) {
+function receiveRosterPositions(jsonRosterPositions: any) {
     return {
         type: RECEIVE_ROSTER_POSITIONS,
         data: jsonRosterPositions,
@@ -11,7 +11,7 @@ function receivePlayers(jsonRosterPositions) {
 }
 
 export const RECEIVE_PEOPLE = 'RECEIVE_PEOPLE';
-function receivePeople(jsonPeople) {
+function receivePeople(jsonPeople: any) {
     return {
         type: RECEIVE_PEOPLE,
         data: jsonPeople,
@@ -19,26 +19,26 @@ function receivePeople(jsonPeople) {
     }
 }
 
-export function fetchPlayers(page) {
-    return function (dispatch) {
+export function fetchPlayers(page: number) {
+    return function (dispatch: any) {
         dispatch(setCurrentViewFetching(true));
 
         return fetchJson(`/rest/rosterpositions?include=player&page=${page}`)
-            .then(json => {
+            .then((json: any) => {
                 dispatch(receivePeople(json.included));
-                dispatch(receivePlayers(json.data));
+                dispatch(receiveRosterPositions(json.data));
                 dispatch(setCurrentViewFetching(false));
             })
     }
 }
 
-export function fetchPlayerDetail(playerId) {
-    return function (dispatch) {
+export function fetchPlayerDetail(playerId: string) {
+    return function (dispatch: any) {
         dispatch(setCurrentViewFetching(true));
         return fetchJson(`/rest/rosterpositions/${playerId}?include=player`)
-            .then(json => {
+            .then((json: any) => {
                 dispatch(receivePeople(json.included));
-                dispatch(receivePlayers([json.data]));
+                dispatch(receiveRosterPositions([json.data]));
                 dispatch(setCurrentViewFetching(false)) ;
             })
     }

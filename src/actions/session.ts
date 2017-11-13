@@ -17,7 +17,7 @@ firebase.initializeApp(config);
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.addScope('https://www.googleapis.com/auth/plus.login');
 
-export function watchForAuthChanges() {
+export function watchForAuthChanges(): any {
     return function (dispatch: Dispatch<any>) {
         dispatch(attemptVerifyAuthentication()); //TODO: this should not happen on every request
         firebase.auth().onAuthStateChanged(function(user: User) {
@@ -30,13 +30,13 @@ export function watchForAuthChanges() {
     }
 }
 
-export function redirectToAuthenticationProvider() {
+export function redirectToAuthenticationProvider(): any {
     return function () {
         return firebase.auth().signInWithRedirect(provider)
     }
 }
 
-export function attemptVerifyAuthentication() {
+export function attemptVerifyAuthentication(): any {
     return function (dispatch: Dispatch<any>) {
         if (!firebase.auth().currentUser) {
             dispatch(tryResolveAuthentication());
@@ -46,10 +46,10 @@ export function attemptVerifyAuthentication() {
     }
 }
 
-export function getIdTokenPromise(): Promise<any> | null {
+export function getIdTokenPromise(): Promise<any> {
     let currentUser = firebase.auth().currentUser;
     if (currentUser == null) {
-        return null;
+        return Promise.resolve();
     }
     return currentUser.getIdToken();
 }

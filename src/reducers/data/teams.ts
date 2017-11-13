@@ -1,9 +1,9 @@
-import {RECEIVE_TEAMS} from "../../actions/teams";
+import {TeamAction, TeamActionTypeKeys} from "../../actions/teams";
 import {keyBy} from "lodash";
 
-export const teams = (state = {}, action: any) => {
+export const teams = (state = {}, action: TeamAction): any => {
     switch (action.type) {
-        case RECEIVE_TEAMS:
+        case TeamActionTypeKeys.RECEIVE_TEAMS:
             return {
                 ...state,
                 ...keyBy(action.data, team => team.id)
