@@ -1,4 +1,4 @@
-import {getIdTokenPromise} from "./session";
+import { getIdTokenPromise } from './session';
 
 export function fetchJson(resourceUrl: string): any {
     return getIdTokenPromise()
@@ -9,7 +9,7 @@ export function fetchJson(resourceUrl: string): any {
 function getHeaders(authToken: string) {
     return {
         headers: {
-            Authorization: "Bearer " + authToken,
+            Authorization: 'Bearer ' + authToken,
         }
     };
 }

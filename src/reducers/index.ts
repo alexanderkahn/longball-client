@@ -1,8 +1,8 @@
-import {auth} from "./auth";
-import {data} from "./data/index";
-import {currentView} from "./views/currentView";
-import {combineReducers} from "redux";
-import {easterEgg} from "./easterEgg";
+import { auth } from './auth';
+import { data } from './data/index';
+import { currentView } from './views/currentView';
+import { combineReducers } from 'redux';
+import { easterEgg } from './easterEgg';
 
 const reducers = combineReducers({
     auth,
@@ -11,4 +11,4 @@ const reducers = combineReducers({
     easterEgg,
 });
 
-export default reducers
+export default reducers;

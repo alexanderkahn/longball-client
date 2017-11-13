@@ -1,11 +1,10 @@
 import * as React from 'react';
-import {Component} from 'react';
-import List, {ListSubheader} from 'material-ui/List';
-import {Button} from "material-ui";
-import AddIcon from 'material-ui-icons/Add'
-import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator'
-import {CurrentView} from "../../../../models/models";
-
+import { Component } from 'react';
+import List, { ListSubheader } from 'material-ui/List';
+import { Button } from 'material-ui';
+import AddIcon from 'material-ui-icons/Add';
+import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
+import { CurrentView } from '../../../../models/models';
 
 // const styles = {
 //     button: {
@@ -15,11 +14,11 @@ import {CurrentView} from "../../../../models/models";
 // };
 
 interface ManagementListProps {
-    title:string,
-    currentView: CurrentView,
-    children: Array<JSX.Element>,
-    resetView: () => void,
-    fetchListItems: () => void,
+    title: string;
+    currentView: CurrentView;
+    children: Array<JSX.Element>;
+    resetView: () => void;
+    fetchListItems: () => void;
 }
 
 export default class ManagementList extends Component<ManagementListProps> {
@@ -30,7 +29,7 @@ export default class ManagementList extends Component<ManagementListProps> {
 
     componentDidUpdate() {
         const props = this.props;
-        if (!props.currentView.isFetching && !props.currentView.lastUpdated && props.children.length == 0) {
+        if (!props.currentView.isFetching && !props.currentView.lastUpdated && props.children.length === 0) {
             this.props.fetchListItems();
         }
     }
@@ -45,10 +44,10 @@ export default class ManagementList extends Component<ManagementListProps> {
                 </List>
                 <LoadingProgressIndicator enabled={props.currentView.isFetching}/>
                 {/*<Button fab color="accent" aria-label="add" style={styles.button} disabled>*/}
-                <Button fab disabled>
+                <Button fab={true} disabled={true}>
                     <AddIcon/>
                 </Button>
             </div>
-        )
+        );
     }
 }

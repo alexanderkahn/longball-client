@@ -1,22 +1,22 @@
-import {connect} from "react-redux";
-import Header from "../presenters/Header";
-import {incrementCreditsClick, resetCreditsClick} from "../../../actions/easteregg";
+import { connect } from 'react-redux';
+import Header from '../presenters/Header';
+import { incrementCreditsClick, resetCreditsClick } from '../../../actions/easteregg';
 
 const mapStateToProps = (state: any) => {
     return {
         showCredits: state.easterEgg.creditsCount === 9
-    }
+    };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
         incrementCounter: () => {
-            dispatch(incrementCreditsClick())
+            dispatch(incrementCreditsClick());
         },
         resetCounter: () => {
-            dispatch(resetCreditsClick())
+            dispatch(resetCreditsClick());
         }
-    }
+    };
 };
 
 const HeaderContainer = connect(
@@ -24,4 +24,4 @@ const HeaderContainer = connect(
     mapDispatchToProps
 )(Header);
 
-export default HeaderContainer
+export default HeaderContainer;

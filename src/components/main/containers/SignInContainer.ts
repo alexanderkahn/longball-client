@@ -1,9 +1,9 @@
-import SignInPage from "../presenters/SignInPage";
-import {connect} from "react-redux";
-import {redirectToAuthenticationProvider} from "../../../actions/session";
+import SignInPage from '../presenters/SignInPage';
+import { connect } from 'react-redux';
+import { redirectToAuthenticationProvider } from '../../../actions/session';
 
 const mapStateToProps = () => {
-  return {}
+  return {};
 };
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -11,7 +11,7 @@ const mapDispatchToProps = (dispatch: any) => {
         startSignInFlow: function () {
             dispatch(redirectToAuthenticationProvider());
         },
-    }
+    };
 };
 
 const SignInContainer = connect(
@@ -19,4 +19,4 @@ const SignInContainer = connect(
     mapDispatchToProps
 )(SignInPage);
 
-export default SignInContainer
+export default SignInContainer;

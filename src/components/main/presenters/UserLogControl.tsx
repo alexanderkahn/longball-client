@@ -1,15 +1,14 @@
-import * as React from "react";
+import * as React from 'react';
 import Button from 'material-ui/Button';
-import {User} from "../../../models/models";
+import { User } from '../../../models/models';
 
 export interface UserLogControlProps {
-    user?: User,
+    user?: User;
 }
 
 export interface UserLogControlActions {
-    onLogIn: () => void
+    onLogIn: () => void;
 }
-
 
 function UserLogControl(props: UserLogControlProps & UserLogControlActions) {
     if (props.user) {

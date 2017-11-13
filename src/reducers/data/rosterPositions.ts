@@ -1,7 +1,7 @@
-import {keyBy} from "lodash";
-import {RECEIVE_ROSTER_POSITIONS} from "../../actions/rosterpositions";
+import { keyBy } from 'lodash';
+import { RECEIVE_ROSTER_POSITIONS } from '../../actions/rosterpositions';
 
-export const rosterPositions = (state = {}, action: any): any => {
+export const rosterPositions = (state: any = {}, action: any): any => {
     switch (action.type) {
         case RECEIVE_ROSTER_POSITIONS:
             return {

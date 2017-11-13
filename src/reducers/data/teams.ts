@@ -1,5 +1,5 @@
-import {TeamAction, TeamActionTypeKeys} from "../../actions/teams";
-import {keyBy} from "lodash";
+import { TeamAction, TeamActionTypeKeys } from '../../actions/teams';
+import { keyBy } from 'lodash';
 
 export const teams = (state = {}, action: TeamAction): any => {
     switch (action.type) {

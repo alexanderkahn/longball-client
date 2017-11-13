@@ -5,26 +5,26 @@ export enum AuthActionTypeKeys {
 
 export type AuthAction =
     | ReceiveAuthenticationAction
-    | TryResolveAuthenticationAction
+    | TryResolveAuthenticationAction;
 
 interface ReceiveAuthenticationAction {
-    type: AuthActionTypeKeys.RECEIVE_AUTHENTICATION,
-    user: any
+    type: AuthActionTypeKeys.RECEIVE_AUTHENTICATION;
+    user: any;
 }
 
 export function receiveAuthentication(user: any): ReceiveAuthenticationAction {
     return {
         type: AuthActionTypeKeys.RECEIVE_AUTHENTICATION,
         user
-    }
+    };
 }
 
 interface TryResolveAuthenticationAction {
-    type: AuthActionTypeKeys.TRY_RESOLVE_AUTHENTICATION
+    type: AuthActionTypeKeys.TRY_RESOLVE_AUTHENTICATION;
 }
 
 export function tryResolveAuthentication(): TryResolveAuthenticationAction {
     return {
         type: AuthActionTypeKeys.TRY_RESOLVE_AUTHENTICATION
-    }
+    };
 }

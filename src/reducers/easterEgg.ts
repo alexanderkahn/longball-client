@@ -1,7 +1,7 @@
-import {EasterEggActions, EasterEggActionTypeKeys} from "../actions/easteregg";
+import { EasterEggActions, EasterEggActionTypeKeys } from '../actions/easteregg';
 
 interface EasterEggState {
-    creditsCount: number
+    creditsCount: number;
 }
 
 const initialState = {creditsCount: 0};

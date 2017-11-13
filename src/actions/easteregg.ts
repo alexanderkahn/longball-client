@@ -3,24 +3,24 @@ export enum EasterEggActionTypeKeys {
     RESET_CREDITS = 'RESET_CREDITS'
 }
 
-export type EasterEggActions = | IncrementCreditsAction | ResetCreditsAction
+export type EasterEggActions = | IncrementCreditsAction | ResetCreditsAction;
 
 interface IncrementCreditsAction {
-    type: EasterEggActionTypeKeys.INCREMENT_CREDITS
+    type: EasterEggActionTypeKeys.INCREMENT_CREDITS;
 }
 
 export function incrementCreditsClick(): IncrementCreditsAction {
     return {
         type: EasterEggActionTypeKeys.INCREMENT_CREDITS,
-    }
+    };
 }
 
 interface ResetCreditsAction {
-    type: EasterEggActionTypeKeys.RESET_CREDITS,
+    type: EasterEggActionTypeKeys.RESET_CREDITS;
 }
 
 export function resetCreditsClick(): ResetCreditsAction {
     return {
         type: EasterEggActionTypeKeys.RESET_CREDITS,
-    }
+    };
 }

@@ -22,7 +22,7 @@ const styles = {
 };
 
 interface SignInPageProps {
-    startSignInFlow: () => void,
+    startSignInFlow: () => void;
 }
 
 export default function SignInPage(props: SignInPageProps) {

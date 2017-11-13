@@ -1,5 +1,5 @@
-import {fetchJson} from "./rest";
-import {setCurrentViewFetching} from "./currentView";
+import { fetchJson } from './rest';
+import { setCurrentViewFetching } from './currentView';
 
 export enum TeamActionTypeKeys {
     RECEIVE_TEAMS = 'RECEIVE_TEAMS'
@@ -8,9 +8,9 @@ export enum TeamActionTypeKeys {
 export type TeamAction = | ReceiveTeamsAction;
 
 interface ReceiveTeamsAction {
-    type: TeamActionTypeKeys.RECEIVE_TEAMS,
-    data: any,
-    receivedAt: number
+    type: TeamActionTypeKeys.RECEIVE_TEAMS;
+    data: any;
+    receivedAt: number;
 }
 
 function receiveTeams(jsonTeams: any): ReceiveTeamsAction {
@@ -18,7 +18,7 @@ function receiveTeams(jsonTeams: any): ReceiveTeamsAction {
         type: TeamActionTypeKeys.RECEIVE_TEAMS,
         data: jsonTeams,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchTeams(page: number): any {
@@ -30,7 +30,7 @@ export function fetchTeams(page: number): any {
                 dispatch(receiveTeams(json.data));
                 dispatch(setCurrentViewFetching(false));
             });
-    }
+    };
 }
 
 export function fetchTeamDetail(teamId: string): any {
@@ -39,7 +39,7 @@ export function fetchTeamDetail(teamId: string): any {
         return fetchJson(`/rest/teams/${teamId}`)
             .then((json: any) => {
                 dispatch(receiveTeams([json.data]));
-               dispatch(setCurrentViewFetching(false));
-            })
-    }
+                dispatch(setCurrentViewFetching(false));
+            });
+    };
 }

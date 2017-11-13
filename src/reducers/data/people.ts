@@ -1,5 +1,5 @@
-import {keyBy} from "lodash";
-import {RECEIVE_PEOPLE} from "../../actions/rosterpositions";
+import { keyBy } from 'lodash';
+import { RECEIVE_PEOPLE } from '../../actions/rosterpositions';
 
 export const people = (state = {}, action: any): any => {
     switch (action.type) {

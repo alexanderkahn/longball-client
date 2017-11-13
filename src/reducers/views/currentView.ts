@@ -1,5 +1,5 @@
-import {CurrentViewAction, CurrentViewActionTypeKeys} from "../../actions/currentView";
-import {CurrentView} from "../../models/models";
+import { CurrentViewAction, CurrentViewActionTypeKeys } from '../../actions/currentView';
+import { CurrentView } from '../../models/models';
 
 const initialState = {
     isFetching: false,

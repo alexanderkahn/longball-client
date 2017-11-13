@@ -1,5 +1,5 @@
-import {keyBy} from "lodash";
-import {LeagueAction, LeagueActionTypeKeys} from "../../actions/leagues";
+import { keyBy } from 'lodash';
+import { LeagueAction, LeagueActionTypeKeys } from '../../actions/leagues';
 
 export const leagues = (state: any = {}, action: LeagueAction): any => {
     switch (action.type) {

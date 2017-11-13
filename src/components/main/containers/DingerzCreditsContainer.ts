@@ -1,17 +1,17 @@
-import {connect} from "react-redux";
-import {resetCreditsClick} from "../../../actions/easteregg";
-import DingerzCredits from "../presenters/DingerzCredits";
+import { connect } from 'react-redux';
+import { resetCreditsClick } from '../../../actions/easteregg';
+import DingerzCredits from '../presenters/DingerzCredits';
 
 const mapStateToProps = () => {
-    return {}
+    return {};
 };
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
         resetCounter: function() {
-            dispatch(resetCreditsClick())
+            dispatch(resetCreditsClick());
         }
-    }
+    };
 };
 
 const DingerzCreditsContainer = connect(
@@ -19,4 +19,4 @@ const DingerzCreditsContainer = connect(
     mapDispatchToProps
 )(DingerzCredits);
 
-export default DingerzCreditsContainer
+export default DingerzCreditsContainer;

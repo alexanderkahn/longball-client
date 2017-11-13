@@ -1,4 +1,4 @@
-import {AuthAction, AuthActionTypeKeys} from "../actions/auth";
+import { AuthAction, AuthActionTypeKeys } from '../actions/auth';
 
 const initialState = { isFetching: false};
 

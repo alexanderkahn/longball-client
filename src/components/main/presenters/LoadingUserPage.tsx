@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Card, {CardContent} from 'material-ui/Card';
+import Card, { CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import 'typeface-faster-one';
-import LoadingProgressIndicator from "../../shared/presenters/LoadingProgressIndicator";
+import LoadingProgressIndicator from '../../shared/presenters/LoadingProgressIndicator';
 
 const styles: any = {
     root: {

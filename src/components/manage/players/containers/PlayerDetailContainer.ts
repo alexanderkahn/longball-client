@@ -1,7 +1,7 @@
-import {connect} from 'react-redux'
-import {fetchPlayerDetail} from "../../../../actions/rosterpositions";
-import {resetView} from "../../../../actions/currentView";
-import PlayerDetailForm, {PlayerDetailFormActions, PlayerDetailFormProps} from "../presenters/PlayerDetailForm";
+import { connect } from 'react-redux';
+import { fetchPlayerDetail } from '../../../../actions/rosterpositions';
+import { resetView } from '../../../../actions/currentView';
+import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailFormProps } from '../presenters/PlayerDetailForm';
 
 function mapStateToProps(state: any, ownProps: any): PlayerDetailFormProps {
     const rosterPosition = state.data.rosterPositions[ownProps.match.params.playerId];
@@ -10,7 +10,7 @@ function mapStateToProps(state: any, ownProps: any): PlayerDetailFormProps {
         rosterPosition,
         person,
         currentView: state.currentView
-    }
+    };
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): PlayerDetailFormActions => {
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): PlayerDetailFormActio
         fetchItemDetail: function () {
             dispatch(fetchPlayerDetail(playerId));
         }
-    }
+    };
 };
 
 const PlayerDetailContainer = connect(
@@ -30,4 +30,4 @@ const PlayerDetailContainer = connect(
     mapDispatchToProps
 )(PlayerDetailForm);
 
-export default PlayerDetailContainer
+export default PlayerDetailContainer;

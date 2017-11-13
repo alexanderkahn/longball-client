@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {CircularProgress} from "material-ui/Progress";
+import { CircularProgress } from 'material-ui/Progress';
 
 const styles = {
     root: {
@@ -12,13 +12,13 @@ const styles = {
 };
 
 interface LoadingProgressIndicatorProps {
-    enabled: boolean
+    enabled: boolean;
 }
 
 export default function LoadingProgressIndicator(props: LoadingProgressIndicatorProps) {
     if (props.enabled) {
-        return <CircularProgress style={styles.root}/>
+        return <CircularProgress style={styles.root}/>;
     } else {
-        return <span/>
+        return <span/>;
     }
 }

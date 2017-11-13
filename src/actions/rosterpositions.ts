@@ -1,5 +1,5 @@
-import {fetchJson} from "./rest";
-import {setCurrentViewFetching} from "./currentView";
+import { fetchJson } from './rest';
+import { setCurrentViewFetching } from './currentView';
 
 export const RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS';
 function receiveRosterPositions(jsonRosterPositions: any) {
@@ -7,7 +7,7 @@ function receiveRosterPositions(jsonRosterPositions: any) {
         type: RECEIVE_ROSTER_POSITIONS,
         data: jsonRosterPositions,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export const RECEIVE_PEOPLE = 'RECEIVE_PEOPLE';
@@ -16,7 +16,7 @@ function receivePeople(jsonPeople: any) {
         type: RECEIVE_PEOPLE,
         data: jsonPeople,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchPlayers(page: number) {
@@ -28,8 +28,8 @@ export function fetchPlayers(page: number) {
                 dispatch(receivePeople(json.included));
                 dispatch(receiveRosterPositions(json.data));
                 dispatch(setCurrentViewFetching(false));
-            })
-    }
+            });
+    };
 }
 
 export function fetchPlayerDetail(playerId: string) {
@@ -40,6 +40,6 @@ export function fetchPlayerDetail(playerId: string) {
                 dispatch(receivePeople(json.included));
                 dispatch(receiveRosterPositions([json.data]));
                 dispatch(setCurrentViewFetching(false)) ;
-            })
-    }
+            });
+    };
 }

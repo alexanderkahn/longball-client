@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Component} from "react";
-import {Button, TextField} from "material-ui";
-import ManagementItemDetail from "../../shared/presenters/ManagementItemDetail";
-import {CurrentView, League} from "../../../../models/models";
+import { Component } from 'react';
+import { Button, TextField } from 'material-ui';
+import ManagementItemDetail from '../../shared/presenters/ManagementItemDetail';
+import { CurrentView, League } from '../../../../models/models';
 
 const styles = {
     root: {
@@ -14,14 +14,14 @@ const styles = {
 };
 
 export interface LeagueDetailFormProps {
-    league?: League,
-    currentView: CurrentView,
+    league?: League;
+    currentView: CurrentView;
 }
 
 export interface LeagueDetailFormActions {
-    resetView: () => void,
-    fetchItemDetail: () => void,
-    toggleCurrentViewEdit: () => void,
+    resetView: () => void;
+    fetchItemDetail: () => void;
+    toggleCurrentViewEdit: () => void;
 }
 
 export default class LeagueDetailForm extends Component<LeagueDetailFormProps & LeagueDetailFormActions> {
@@ -36,15 +36,17 @@ export default class LeagueDetailForm extends Component<LeagueDetailFormProps & 
 
     getForm(isEdit: boolean, toggleEdit: () => void, league?: League) {
         if (!league) {
-            return <div>I can't find the league you requested!</div>
+            return <div>I can't find the league you requested!</div>;
         } else {
             return (
                 <form style={styles.root}>
-                    <TextField style={styles.input}
-                               disabled={true}
-                               id="name"
-                               label="Name"
-                               value={league.attributes.name}/>
+                    <TextField
+                        style={styles.input}
+                        disabled={true}
+                        id="name"
+                        label="Name"
+                        value={league.attributes.name}
+                    />
                     <EditSaveToggle isEdit={isEdit} toggleEdit={toggleEdit}/>
                 </form>
             );
@@ -52,14 +54,14 @@ export default class LeagueDetailForm extends Component<LeagueDetailFormProps & 
     }
 }
 
-function EditSaveToggle(props: {isEdit: boolean, toggleEdit: () => void}) {
+function EditSaveToggle(props: { isEdit: boolean, toggleEdit: () => void }) {
     if (props.isEdit) {
         return (
             <div>
                 <Button onClick={props.toggleEdit}>Cancel</Button>
                 <Button>Save</Button>
             </div>
-        )
+        );
     } else {
         return (
             <div>

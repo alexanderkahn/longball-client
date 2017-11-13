@@ -1,22 +1,26 @@
-import * as React from "react";
-import ManagementList from "../../shared/presenters/ManagementList";
-import {CurrentView, Player} from "../../../../models/models";
-import PlayerListItem from "./PlayerListItem";
+import * as React from 'react';
+import ManagementList from '../../shared/presenters/ManagementList';
+import { CurrentView, Player } from '../../../../models/models';
+import PlayerListItem from './PlayerListItem';
 
 export interface ManagePlayersFormProps {
-    players: Array<Player>,
-    currentView: CurrentView,
+    players: Array<Player>;
+    currentView: CurrentView;
 }
 
 export interface ManagePlayersFormActions {
-    resetView: () => void,
-    fetchListItems: () => void,
+    resetView: () => void;
+    fetchListItems: () => void;
 }
 
 export default function ManagePlayersForm(props: ManagePlayersFormProps & ManagePlayersFormActions) {
     return (
-        <ManagementList title="Players" currentView={props.currentView}
-                        resetView={props.resetView} fetchListItems={props.fetchListItems}>
+        <ManagementList
+            title="Players"
+            currentView={props.currentView}
+            resetView={props.resetView}
+            fetchListItems={props.fetchListItems}
+        >
             {getChildListItems(props.players)}
         </ManagementList>
     );
