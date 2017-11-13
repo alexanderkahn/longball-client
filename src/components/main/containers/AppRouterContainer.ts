@@ -1,21 +1,16 @@
 import {connect} from "react-redux";
-import AppRouter from "../presenters/AppRouter";
+import AppRouter, {AppRouterProps} from "../presenters/AppRouter";
 import {withRouter} from "react-router-dom";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any): AppRouterProps => {
     return {
         user: state.auth.user,
         isFetching: state.auth.isFetching
     }
 };
 
-const mapDispatchToProps = dispatch => {
-    return {}
-};
-
 const AppRouterContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
 )(AppRouter);
 
 export default withRouter(AppRouterContainer)

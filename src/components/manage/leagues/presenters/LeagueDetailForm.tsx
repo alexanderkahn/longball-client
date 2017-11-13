@@ -13,20 +13,23 @@ const styles = {
     }
 };
 
-interface LeagueDetailFormProps {
+export interface LeagueDetailFormProps {
     league?: League,
     currentView: CurrentView,
-    resetView: () => void,
-    fetchItemDetail: () => void,
-    toggleEdit: () => void,
 }
 
-export default class LeagueDetailForm extends Component<LeagueDetailFormProps> {
+export interface LeagueDetailFormActions {
+    resetView: () => void,
+    fetchItemDetail: () => void,
+    toggleCurrentViewEdit: () => void,
+}
+
+export default class LeagueDetailForm extends Component<LeagueDetailFormProps & LeagueDetailFormActions> {
     render() {
-        const {currentView, resetView, league, fetchItemDetail, toggleEdit} = this.props;
+        const {currentView, resetView, league, fetchItemDetail, toggleCurrentViewEdit} = this.props;
         return (
             <ManagementItemDetail currentView={currentView} resetView={resetView} fetchItemDetail={fetchItemDetail}>
-                {this.getForm(currentView.isEdit, toggleEdit, league)}
+                {this.getForm(currentView.isEdit, toggleCurrentViewEdit, league)}
             </ManagementItemDetail>
         );
     }

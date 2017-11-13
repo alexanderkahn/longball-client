@@ -3,14 +3,17 @@ import ManagementList from "../../shared/presenters/ManagementList";
 import {Player} from "../../../../models/models";
 import PlayerListItem from "./PlayerListItem";
 
-interface ManagePlayersFormProps {
+export interface ManagePlayersFormProps {
     players: Array<Player>,
     isFetching: boolean,
     lastFetched: number,
+}
+
+export interface ManagePlayersFormActions {
     fetchListItems: () => void,
 }
 
-export default function ManagePlayersForm(props: ManagePlayersFormProps) {
+export default function ManagePlayersForm(props: ManagePlayersFormProps & ManagePlayersFormActions) {
     return (
         <ManagementList title="Players" isFetching={props.isFetching}
                         lastFetched={props.lastFetched} fetchListItems={props.fetchListItems}>

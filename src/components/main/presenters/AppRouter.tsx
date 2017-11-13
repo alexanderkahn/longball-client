@@ -7,7 +7,7 @@ import HeaderContainer from "../containers/HeaderContainer";
 import LoadingUserPage from "./LoadingUserPage";
 import {User} from "../../../models/models";
 
-interface AppRouterProps {
+export interface AppRouterProps {
     user?: User,
     isFetching: boolean,
 }

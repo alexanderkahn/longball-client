@@ -1,9 +1,9 @@
 import {connect} from 'react-redux'
 import {fetchLeagueDetail} from "../../../../actions/leagues";
 import {resetView, toggleCurrentViewEdit} from "../../../../actions/currentView";
-import LeagueDetailForm from "../presenters/LeagueDetailForm";
+import LeagueDetailForm, {LeagueDetailFormActions, LeagueDetailFormProps} from "../presenters/LeagueDetailForm";
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: any, ownProps: any): LeagueDetailFormProps => {
     const leagueId = ownProps.match.params.leagueId;
     return {
         league: state.data.leagues[leagueId],
@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
     }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: any, ownProps: any): LeagueDetailFormActions => {
     const leagueId = ownProps.match.params.leagueId;
     return {
         resetView: function() {
@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         fetchItemDetail: function() {
             dispatch(fetchLeagueDetail(leagueId));
         },
-        toggleEdit: function() {
+        toggleCurrentViewEdit: function() {
             dispatch(toggleCurrentViewEdit());
         }
     }

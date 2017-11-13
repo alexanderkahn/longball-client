@@ -34,10 +34,19 @@ export interface Person {
 }
 
 export interface RosterPosition {
-    id: string
+    id: string,
+    relationships: {
+        player: RelationshipResource
+    }
 }
 
 export interface Player {
     rosterPosition: RosterPosition,
     person: Person
+}
+
+interface RelationshipResource {
+    data: {
+        id: string
+    }
 }

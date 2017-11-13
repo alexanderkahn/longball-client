@@ -16,7 +16,7 @@ import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgress
 interface ManagementListProps {
     title:string,
     isFetching: boolean,
-    lastFetched: number,
+    lastFetched?: number,
     fetchListItems: () => void,
     children: Array<JSX.Element>,
 }

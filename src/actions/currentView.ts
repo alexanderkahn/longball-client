@@ -33,12 +33,10 @@ export function setCurrentViewFetching(isFetching: boolean): SetCurrentViewFetch
 
 interface ToggleCurrentViewEditAction {
     type: CurrentViewActionTypeKeys.SET_EDIT,
-    isEdit: boolean
 }
 
-export function toggleCurrentViewEdit(isEdit: boolean): ToggleCurrentViewEditAction {
+export function toggleCurrentViewEdit(): ToggleCurrentViewEditAction {
     return {
         type: CurrentViewActionTypeKeys.SET_EDIT,
-        isEdit: isEdit
     }
 }

@@ -13,15 +13,18 @@ const styles = {
     }
 };
 
-interface PlayerDetailFormProps {
+export interface PlayerDetailFormProps {
     rosterPosition: RosterPosition,
     person: Person,
     currentView: CurrentView,
+}
+
+export interface PlayerDetailFormActions {
     resetView: () => void,
     fetchItemDetail: () => void
 }
 
-export default class PlayerDetailForm extends Component<PlayerDetailFormProps> {
+export default class PlayerDetailForm extends Component<PlayerDetailFormProps & PlayerDetailFormActions> {
     render() {
         const {rosterPosition, person, currentView, resetView, fetchItemDetail} = this.props;
         return (

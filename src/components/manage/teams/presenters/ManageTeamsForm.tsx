@@ -3,14 +3,17 @@ import ManagementList from "../../shared/presenters/ManagementList";
 import {Team} from "../../../../models/models";
 import TeamListItem from "./TeamListItem";
 
-interface ManageTeamsFormProps {
+export interface ManageTeamsFormProps {
     teams: Array<Team>,
     isFetching: boolean,
     lastFetched: number,
+}
+
+export interface ManageTeamsFormActions {
     fetchListItems: () => void,
 }
 
-export default function ManageTeamsForm(props: ManageTeamsFormProps) {
+export default function ManageTeamsForm(props: ManageTeamsFormProps & ManageTeamsFormActions) {
     return (
         <ManagementList
             title="Teams"

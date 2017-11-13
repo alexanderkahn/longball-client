@@ -1,9 +1,9 @@
 import {connect} from 'react-redux'
 import {fetchTeamDetail} from "../../../../actions/teams";
 import {resetView} from "../../../../actions/currentView";
-import TeamDetailForm from "../presenters/TeamDetailForm";
+import TeamDetailForm, {TeamDetailFormActions, TeamDetailFormProps} from "../presenters/TeamDetailForm";
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: any, ownProps: any): TeamDetailFormProps => {
     const teamId = ownProps.match.params.teamId;
     return {
         team: state.data.teams[teamId],
@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
     }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: any, ownProps: any): TeamDetailFormActions => {
     const teamId = ownProps.match.params.teamId;
     return {
         resetView: function() {

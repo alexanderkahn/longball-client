@@ -1,16 +1,16 @@
 import {connect} from 'react-redux'
 import {fetchTeams} from "../../../../actions/teams";
-import ManageTeamsForm from "../presenters/ManageTeamsForm";
+import ManageTeamsForm, {ManageTeamsFormActions, ManageTeamsFormProps} from "../presenters/ManageTeamsForm";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any): ManageTeamsFormProps => {
     return {
-        title: 'Teams',
         teams: Object.values(state.data.teams),
         isFetching: state.currentView.isFetching,
+        lastFetched: state.currentView.lastUpdated
     }
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any): ManageTeamsFormActions => {
     return {
         fetchListItems: function () {
             dispatch(fetchTeams(0));

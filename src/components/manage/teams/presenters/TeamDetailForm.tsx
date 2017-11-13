@@ -13,14 +13,17 @@ const styles = {
     }
 };
 
-interface TeamDetailFormProps {
+export interface TeamDetailFormProps {
     team?: Team,
     currentView: CurrentView,
+}
+
+export interface TeamDetailFormActions {
     resetView: () => void,
     fetchItemDetail: () => void,
 }
 
-export default class TeamDetailForm extends Component<TeamDetailFormProps> {
+export default class TeamDetailForm extends Component<TeamDetailFormProps & TeamDetailFormActions> {
     render() {
         const {team, currentView, resetView, fetchItemDetail} = this.props;
         return (
