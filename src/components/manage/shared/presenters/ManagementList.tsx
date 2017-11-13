@@ -4,6 +4,7 @@ import List, {ListSubheader} from 'material-ui/List';
 import {Button} from "material-ui";
 import AddIcon from 'material-ui-icons/Add'
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator'
+import {CurrentView} from "../../../../models/models";
 
 
 // const styles = {
@@ -15,20 +16,24 @@ import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgress
 
 interface ManagementListProps {
     title:string,
-    isFetching: boolean,
-    lastFetched?: number,
-    fetchListItems: () => void,
+    currentView: CurrentView,
     children: Array<JSX.Element>,
+    resetView: () => void,
+    fetchListItems: () => void,
 }
 
 export default class ManagementList extends Component<ManagementListProps> {
 
     componentDidMount() {
-        if (!this.props.lastFetched && !this.props.isFetching) {
+        this.props.resetView();
+    }
+
+    componentDidUpdate() {
+        const props = this.props;
+        if (!props.currentView.isFetching && !props.currentView.lastUpdated && props.children.length == 0) {
             this.props.fetchListItems();
         }
     }
-
 
     render() {
         const props = this.props;
@@ -38,7 +43,7 @@ export default class ManagementList extends Component<ManagementListProps> {
                 <List subheader={<ListSubheader>{props.title}</ListSubheader>}>
                     {props.children}
                 </List>
-                <LoadingProgressIndicator enabled={props.isFetching}/>
+                <LoadingProgressIndicator enabled={props.currentView.isFetching}/>
                 {/*<Button fab color="accent" aria-label="add" style={styles.button} disabled>*/}
                 <Button fab disabled>
                     <AddIcon/>

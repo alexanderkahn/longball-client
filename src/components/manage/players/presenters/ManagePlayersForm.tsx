@@ -1,22 +1,22 @@
 import * as React from "react";
 import ManagementList from "../../shared/presenters/ManagementList";
-import {Player} from "../../../../models/models";
+import {CurrentView, Player} from "../../../../models/models";
 import PlayerListItem from "./PlayerListItem";
 
 export interface ManagePlayersFormProps {
     players: Array<Player>,
-    isFetching: boolean,
-    lastFetched: number,
+    currentView: CurrentView,
 }
 
 export interface ManagePlayersFormActions {
+    resetView: () => void,
     fetchListItems: () => void,
 }
 
 export default function ManagePlayersForm(props: ManagePlayersFormProps & ManagePlayersFormActions) {
     return (
-        <ManagementList title="Players" isFetching={props.isFetching}
-                        lastFetched={props.lastFetched} fetchListItems={props.fetchListItems}>
+        <ManagementList title="Players" currentView={props.currentView}
+                        resetView={props.resetView} fetchListItems={props.fetchListItems}>
             {getChildListItems(props.players)}
         </ManagementList>
     );

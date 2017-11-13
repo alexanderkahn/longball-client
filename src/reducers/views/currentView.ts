@@ -1,17 +1,12 @@
 import {CurrentViewAction, CurrentViewActionTypeKeys} from "../../actions/currentView";
-
-export interface CurrentViewState {
-    isFetching: boolean,
-    isEdit: boolean,
-    lastUpdated?: number
-}
+import {CurrentView} from "../../models/models";
 
 const initialState = {
     isFetching: false,
     isEdit: false,
 };
 
-export const currentView = (state: CurrentViewState = initialState, action: CurrentViewAction): CurrentViewState => {
+export const currentView = (state: CurrentView = initialState, action: CurrentViewAction): CurrentView => {
     switch (action.type) {
         case CurrentViewActionTypeKeys.RESET_VIEW:
             return {

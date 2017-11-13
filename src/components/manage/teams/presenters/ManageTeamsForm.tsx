@@ -1,25 +1,22 @@
 import * as React from "react";
 import ManagementList from "../../shared/presenters/ManagementList";
-import {Team} from "../../../../models/models";
+import {CurrentView, Team} from "../../../../models/models";
 import TeamListItem from "./TeamListItem";
 
 export interface ManageTeamsFormProps {
     teams: Array<Team>,
-    isFetching: boolean,
-    lastFetched: number,
+    currentView: CurrentView,
 }
 
 export interface ManageTeamsFormActions {
+    resetView: () => void,
     fetchListItems: () => void,
 }
 
 export default function ManageTeamsForm(props: ManageTeamsFormProps & ManageTeamsFormActions) {
     return (
-        <ManagementList
-            title="Teams"
-            isFetching={props.isFetching}
-            lastFetched={props.lastFetched}
-            fetchListItems={props.fetchListItems}>
+        <ManagementList title="Teams" currentView={props.currentView}
+                        resetView={props.resetView} fetchListItems={props.fetchListItems}>
             {getChildListItems(props.teams)}
         </ManagementList>
     );

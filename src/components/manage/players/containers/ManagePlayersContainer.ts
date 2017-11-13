@@ -2,6 +2,7 @@ import {connect} from 'react-redux'
 import {fetchPlayers} from "../../../../actions/rosterpositions";
 import ManagePlayersForm, {ManagePlayersFormActions, ManagePlayersFormProps} from "../presenters/ManagePlayersForm";
 import {RosterPosition} from "../../../../models/models";
+import {resetView} from "../../../../actions/currentView";
 
 function getPlayers(rosterPositions: any, people: any) {
     let getPlayer = function (rosterPosition: RosterPosition) {
@@ -14,16 +15,14 @@ function getPlayers(rosterPositions: any, people: any) {
 const mapStateToProps = (state: any): ManagePlayersFormProps => {
     return {
         players: getPlayers(state.data.rosterPositions, state.data.people),
-        isFetching: state.currentView.isFetching,
-        lastFetched: state.currentView.lastUpdated,
+        currentView: state.currentView
     }
 };
 
 const mapDispatchToProps = (dispatch: any): ManagePlayersFormActions => {
     return {
-        fetchListItems: function () {
-            dispatch(fetchPlayers(0));
-        },
+        resetView: () => dispatch(resetView()),
+        fetchListItems: () => dispatch(fetchPlayers(0))
     }
 };
 

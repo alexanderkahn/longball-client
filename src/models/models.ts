@@ -6,7 +6,7 @@ export interface User {
 export interface CurrentView {
     isFetching: boolean,
     isEdit: boolean,
-    lastUpdated: number
+    lastUpdated?: number
 }
 
 export interface League {
