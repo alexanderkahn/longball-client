@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { CircularProgress } from 'material-ui/Progress';
+import { CSSProperties } from 'react';
 
-const styles = {
+const styles: CSSProperties = {
     root: {
         display: 'block',
         width: '100%',

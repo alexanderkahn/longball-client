@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Component } from 'react';
+import { Component, CSSProperties } from 'react';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
@@ -8,12 +8,12 @@ import MenuIcon from 'material-ui-icons/Menu';
 import UserControlContainer from '../containers/UserLogControlContainer';
 import DingerzCreditsContainer from '../containers/DingerzCreditsContainer';
 
-const styles = {
+const styles: CSSProperties = {
     root: {
         width: '100%',
         marginBottom: 30,
     },
-    flex: {
+    title: {
         flex: 1,
     },
 };
@@ -36,7 +36,7 @@ export default class Header extends Component<HeaderProps> {
                         <IconButton color="contrast" aria-label="Menu">
                             <MenuIcon/>
                         </IconButton>
-                        <Typography type="title" color="inherit" style={styles.flex}>
+                        <Typography type="title" color="inherit" style={styles.title}>
                             Dinger<span onClick={onClick}>z</span>!
                         </Typography>
                         <UserControlContainer />

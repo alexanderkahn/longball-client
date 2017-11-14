@@ -1,17 +1,16 @@
 import * as React from 'react';
-import { Component } from 'react';
+import { Component, CSSProperties } from 'react';
 import List, { ListSubheader } from 'material-ui/List';
 import { Button } from 'material-ui';
 import AddIcon from 'material-ui-icons/Add';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
 import { CurrentView } from '../../../../models/models';
 
-// const styles = {
-//     button: {
-//         margin: 10,
-//         alignSelf: 'right',
-//     },
-// };
+const styles: CSSProperties = {
+    button: {
+        margin: 10,
+    },
+};
 
 interface ManagementListProps {
     title: string;
@@ -44,7 +43,7 @@ export default class ManagementList extends Component<ManagementListProps> {
                 </List>
                 <LoadingProgressIndicator enabled={props.currentView.isFetching}/>
                 {/*<Button fab color="accent" aria-label="add" style={styles.button} disabled>*/}
-                <Button fab={true} disabled={true}>
+                <Button fab={true} disabled={true} style={styles.button}>
                     <AddIcon/>
                 </Button>
             </div>

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Component } from 'react';
+import { Component, CSSProperties } from 'react';
 import { Button, TextField } from 'material-ui';
 import ManagementItemDetail from '../../shared/presenters/ManagementItemDetail';
 import { CurrentView, League } from '../../../../models/models';
 
-const styles = {
+const styles: CSSProperties = {
     root: {
         padding: 10,
     },

@@ -8,8 +8,9 @@ import PlayerDetailContainer from '../../players/containers/PlayerDetailContaine
 import ManageLeaguesContainer from '../../leagues/containers/ManageLeaguesContainer';
 import LeagueDetailContainer from '../../leagues/containers/LeagueDetailContainer';
 import { match } from 'react-router';
+import { CSSProperties } from 'react';
 
-const styles = {
+const styles: CSSProperties = {
     root: {
         width: '100%',
         maxWidth: 720,

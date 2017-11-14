@@ -2,8 +2,9 @@ import * as React from 'react';
 import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import { CSSProperties } from 'react';
 
-const styles = {
+const styles: CSSProperties = {
     card: {
         minWidth: 275,
         maxWidth: 500,

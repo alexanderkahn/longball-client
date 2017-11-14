@@ -3,8 +3,9 @@ import Card, { CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import 'typeface-faster-one';
 import LoadingProgressIndicator from '../../shared/presenters/LoadingProgressIndicator';
+import { CSSProperties } from 'react';
 
-const styles: any = {
+const styles: CSSProperties = {
     root: {
         width: '100%',
         height: '100%',
