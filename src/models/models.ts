@@ -2,7 +2,7 @@
 // TODO: get this from the server, not directly from firebase. Will look like the other models
 
 export interface ResourceObject {
-    id: string
+    id: string;
 }
 
 export interface User {

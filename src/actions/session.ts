@@ -22,7 +22,7 @@ export function watchForAuthChanges(): Dispatch<RootState> {
     return function (dispatch: Dispatch<{}>) {
         dispatch(attemptVerifyAuthentication()); // TODO: this should not happen on every request
         firebase.auth().onAuthStateChanged(function(user: User) {
-            if (user) {
+            if (user && user.displayName) {
                 dispatch(receiveAuthentication({name: user.displayName}));
             } else {
                 dispatch(receiveAuthentication(null));

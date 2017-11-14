@@ -8,7 +8,7 @@ import LoadingUserPage from './LoadingUserPage';
 import { User } from '../../../models/models';
 
 export interface AppRouterProps {
-    user?: User;
+    user: User | null;
     isFetching: boolean;
 }
 

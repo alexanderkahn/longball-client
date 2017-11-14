@@ -3,7 +3,7 @@ import Button from 'material-ui/Button';
 import { User } from '../../../models/models';
 
 export interface UserLogControlProps {
-    user?: User;
+    user: User | null;
 }
 
 export interface UserLogControlActions {

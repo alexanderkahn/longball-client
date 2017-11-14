@@ -1,11 +1,12 @@
 import { AuthAction, AuthActionTypeKeys } from '../actions/auth';
+import { User } from '../models/models';
 
 export interface AuthState {
     isFetching: boolean;
-    user?: any;
+    user: User | null;
 }
 
-const initialState = { isFetching: false};
+const initialState = { isFetching: false, user: null};
 
 export const auth = (state: AuthState = initialState, action: AuthAction): AuthState => {
     switch (action.type) {
