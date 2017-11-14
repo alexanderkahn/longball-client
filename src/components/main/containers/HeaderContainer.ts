@@ -3,7 +3,7 @@ import Header from '../presenters/Header';
 import { incrementCreditsClick, resetCreditsClick } from '../../../actions/easteregg';
 import { RootState } from '../../../reducers/index';
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
     return {
         showCredits: state.easterEgg.creditsCount === 9
     };

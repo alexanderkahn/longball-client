@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import AppRouter, { AppRouterProps } from '../presenters/AppRouter';
 import { withRouter } from 'react-router-dom';
+import { RootState } from '../../../reducers/index';
 
-const mapStateToProps = (state: any): AppRouterProps => {
+const mapStateToProps = (state: RootState): AppRouterProps => {
     return {
         user: state.auth.user,
         isFetching: state.auth.isFetching

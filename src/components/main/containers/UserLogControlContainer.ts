@@ -3,7 +3,7 @@ import { connect, Dispatch } from 'react-redux';
 import { redirectToAuthenticationProvider } from '../../../actions/session';
 import { RootState } from '../../../reducers/index';
 
-const mapStateToProps = (state: any): UserLogControlProps => {
+const mapStateToProps = (state: RootState): UserLogControlProps => {
     return {
         user: state.auth.user
     };

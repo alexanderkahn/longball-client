@@ -14,8 +14,8 @@ const styles = {
 };
 
 export interface PlayerDetailFormProps {
-    rosterPosition: RosterPosition;
-    person: Person;
+    rosterPosition: RosterPosition | null;
+    person: Person | null;
     currentView: CurrentView;
 }
 
@@ -25,8 +25,8 @@ export interface PlayerDetailFormActions {
 }
 
 export default class PlayerDetailForm extends Component<PlayerDetailFormProps & PlayerDetailFormActions> {
-    static getForm(rosterPosition: RosterPosition, person: Person) {
-        if (!rosterPosition) {
+    static getForm(rosterPosition: RosterPosition | null, person: Person | null) {
+        if (!rosterPosition || !person) {
             return <div>I can't find the selected player</div>;
         } else {
             return (

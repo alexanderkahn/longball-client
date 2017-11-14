@@ -4,7 +4,7 @@ import { resetView, toggleCurrentViewEdit } from '../../../../actions/currentVie
 import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailFormProps } from '../presenters/LeagueDetailForm';
 import { RootState } from '../../../../reducers/index';
 
-const mapStateToProps = (state: any, ownProps: any): LeagueDetailFormProps => {
+const mapStateToProps = (state: RootState, ownProps: any): LeagueDetailFormProps => {
     const leagueId = ownProps.match.params.leagueId;
     return {
         league: state.data.leagues.get(leagueId),

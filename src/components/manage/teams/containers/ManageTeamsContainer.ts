@@ -4,7 +4,7 @@ import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '.
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 
-const mapStateToProps = (state: any): ManageTeamsFormProps => {
+const mapStateToProps = (state: RootState): ManageTeamsFormProps => {
     return {
         teams: Array.from(state.data.teams.values()),
         currentView: state.currentView

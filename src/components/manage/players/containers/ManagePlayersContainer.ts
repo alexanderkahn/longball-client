@@ -16,7 +16,7 @@ function getPlayers(rosterPositions: Map<string, RosterPosition>, people: Map<st
     return players;
 }
 
-const mapStateToProps = (state: any): ManagePlayersFormProps => {
+const mapStateToProps = (state: RootState): ManagePlayersFormProps => {
     return {
         players: getPlayers(state.data.rosterPositions, state.data.people),
         currentView: state.currentView

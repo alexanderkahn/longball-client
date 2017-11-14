@@ -4,7 +4,7 @@ import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 
-const mapStateToProps = (state: any): ManageLeaguesProps => {
+const mapStateToProps = (state: RootState): ManageLeaguesProps => {
     return {
         leagues: Array.from(state.data.leagues.values()),
         currentView: state.currentView
