@@ -1,6 +1,8 @@
 import { DataResponse, fetchCollection, fetchObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { Team } from '../models/models';
+import { RootState } from '../reducers/index';
+import { Dispatch } from 'redux';
 
 export enum TeamActionTypeKeys {
     RECEIVE_TEAMS = 'RECEIVE_TEAMS'
@@ -24,7 +26,7 @@ function receiveTeams(jsonTeams: any): ReceiveTeamsAction {
 
 export function fetchTeams(page: number): any {
 
-    return function (dispatch: any) {
+    return function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         return fetchCollection<Team>('teams', page)
             .then((json: any) => {
@@ -35,7 +37,7 @@ export function fetchTeams(page: number): any {
 }
 
 export function fetchTeamDetail(teamId: string): any {
-    return function (dispatch: any) {
+    return function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         return fetchObject<Team>('teams', teamId)
             .then((json: DataResponse<Team>) => {

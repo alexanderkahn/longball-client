@@ -1,7 +1,8 @@
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { fetchLeagues } from '../../../../actions/leagues';
 import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../presenters/ManageLeaguesForm';
 import { resetView } from '../../../../actions/currentView';
+import { RootState } from '../../../../reducers/index';
 
 const mapStateToProps = (state: any): ManageLeaguesProps => {
     return {
@@ -10,7 +11,7 @@ const mapStateToProps = (state: any): ManageLeaguesProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: any): ManageLeaguesActions => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageLeaguesActions => {
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchLeagues(0))

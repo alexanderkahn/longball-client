@@ -2,9 +2,17 @@ import { teams } from './teams';
 import { people } from './people';
 import { rosterPositions } from './rosterPositions';
 import { leagues } from './leagues';
-import { combineReducers } from 'redux';
+import { combineReducers, Reducer } from 'redux';
+import { League, Person, RosterPosition, Team } from '../../models/models';
 
-export const data = combineReducers({
+export interface DataState {
+    leagues: Map<string, League>;
+    teams: Map<string, Team>;
+    people: Map<string, Person>;
+    rosterPositions: Map<string, RosterPosition>;
+}
+
+export const data: Reducer<DataState> = combineReducers<DataState>({
     leagues,
     teams,
     people,

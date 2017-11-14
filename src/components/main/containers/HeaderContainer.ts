@@ -1,6 +1,7 @@
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import Header from '../presenters/Header';
 import { incrementCreditsClick, resetCreditsClick } from '../../../actions/easteregg';
+import { RootState } from '../../../reducers/index';
 
 const mapStateToProps = (state: any) => {
     return {
@@ -8,7 +9,7 @@ const mapStateToProps = (state: any) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     return {
         incrementCounter: () => {
             dispatch(incrementCreditsClick());

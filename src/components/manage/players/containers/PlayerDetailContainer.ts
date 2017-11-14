@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { fetchPlayerDetail } from '../../../../actions/rosterpositions';
 import { resetView } from '../../../../actions/currentView';
 import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailFormProps } from '../presenters/PlayerDetailForm';
+import { Dispatch } from 'redux';
 
 function mapStateToProps(state: any, ownProps: any): PlayerDetailFormProps {
     const rosterPosition = state.data.rosterPositions.get(ownProps.match.params.playerId);
@@ -13,7 +14,7 @@ function mapStateToProps(state: any, ownProps: any): PlayerDetailFormProps {
     };
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: any): PlayerDetailFormActions => {
+const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: any): PlayerDetailFormActions => {
     const playerId = ownProps.match.params.playerId;
     return {
         resetView: function () {

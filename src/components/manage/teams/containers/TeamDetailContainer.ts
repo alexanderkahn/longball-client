@@ -1,7 +1,8 @@
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { fetchTeamDetail } from '../../../../actions/teams';
 import { resetView } from '../../../../actions/currentView';
 import TeamDetailForm, { TeamDetailFormActions, TeamDetailFormProps } from '../presenters/TeamDetailForm';
+import { RootState } from '../../../../reducers/index';
 
 const mapStateToProps = (state: any, ownProps: any): TeamDetailFormProps => {
     const teamId = ownProps.match.params.teamId;
@@ -11,7 +12,7 @@ const mapStateToProps = (state: any, ownProps: any): TeamDetailFormProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: any, ownProps: any): TeamDetailFormActions => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: any): TeamDetailFormActions => {
     const teamId = ownProps.match.params.teamId;
     return {
         resetView: function() {

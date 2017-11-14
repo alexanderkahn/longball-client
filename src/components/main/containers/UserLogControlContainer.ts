@@ -1,6 +1,7 @@
 import UserLogControl, { UserLogControlActions, UserLogControlProps } from '../presenters/UserLogControl';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { redirectToAuthenticationProvider } from '../../../actions/session';
+import { RootState } from '../../../reducers/index';
 
 const mapStateToProps = (state: any): UserLogControlProps => {
     return {
@@ -8,7 +9,7 @@ const mapStateToProps = (state: any): UserLogControlProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: any): UserLogControlActions => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>): UserLogControlActions => {
     return {
         onLogIn: function () {
             dispatch(redirectToAuthenticationProvider());

@@ -1,8 +1,9 @@
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { fetchPlayers } from '../../../../actions/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
 import { Person, Player, RosterPosition } from '../../../../models/models';
 import { resetView } from '../../../../actions/currentView';
+import { RootState } from '../../../../reducers/index';
 
 function getPlayers(rosterPositions: Map<string, RosterPosition>, people: Map<string, Person>): Array<Player> {
     let players: Array<Player> = [];
@@ -22,7 +23,7 @@ const mapStateToProps = (state: any): ManagePlayersFormProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: any): ManagePlayersFormActions => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManagePlayersFormActions => {
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchPlayers(0))

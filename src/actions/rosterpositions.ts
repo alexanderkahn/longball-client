@@ -2,6 +2,8 @@ import { fetchCollection, fetchObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { RosterPosition } from '../models/models';
 import { receivePeople } from './people';
+import { Dispatch } from 'redux';
+import { RootState } from '../reducers/index';
 
 export enum RosterPositionActionTypeKeys {
     RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS'
@@ -24,7 +26,7 @@ function receiveRosterPositions(jsonRosterPositions: Map<string, RosterPosition>
 }
 
 export function fetchPlayers(page: number) {
-    return function (dispatch: any) {
+    return function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
 
         return fetchCollection('rosterpositions', page, ['player'])
@@ -37,7 +39,7 @@ export function fetchPlayers(page: number) {
 }
 
 export function fetchPlayerDetail(playerId: string) {
-    return function (dispatch: any) {
+    return function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         return fetchObject('rosterpositions', playerId, ['player'])
             .then((json: any) => {

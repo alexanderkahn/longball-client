@@ -1,10 +1,18 @@
-import { auth } from './auth';
-import { data } from './data/index';
+import { auth, AuthState } from './auth';
+import { data, DataState } from './data/index';
 import { currentView } from './views/currentView';
-import { combineReducers } from 'redux';
-import { easterEgg } from './easterEgg';
+import { combineReducers, Reducer } from 'redux';
+import { easterEgg, EasterEggState } from './easterEgg';
+import { CurrentView } from '../models/models';
 
-const reducers = combineReducers({
+export interface RootState {
+    auth: AuthState;
+    data: DataState;
+    currentView: CurrentView;
+    easterEgg: EasterEggState;
+}
+
+const reducers: Reducer<RootState> = combineReducers({
     auth,
     data,
     currentView,
