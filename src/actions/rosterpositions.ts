@@ -1,4 +1,4 @@
-import { fetchJson } from './rest';
+import { fetchCollection, fetchObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 
 export const RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS';
@@ -23,7 +23,7 @@ export function fetchPlayers(page: number) {
     return function (dispatch: any) {
         dispatch(setCurrentViewFetching(true));
 
-        return fetchJson(`/rest/rosterpositions?include=player&page=${page}`)
+        return fetchCollection('rosterpositions', page, ['player'])
             .then((json: any) => {
                 dispatch(receivePeople(json.included));
                 dispatch(receiveRosterPositions(json.data));
@@ -35,7 +35,7 @@ export function fetchPlayers(page: number) {
 export function fetchPlayerDetail(playerId: string) {
     return function (dispatch: any) {
         dispatch(setCurrentViewFetching(true));
-        return fetchJson(`/rest/rosterpositions/${playerId}?include=player`)
+        return fetchObject('rosterpositions', playerId, ['player'])
             .then((json: any) => {
                 dispatch(receivePeople(json.included));
                 dispatch(receiveRosterPositions([json.data]));

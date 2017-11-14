@@ -1,5 +1,10 @@
 // TODO probably move all of these into their respective state reducers
 // TODO: get this from the server, not directly from firebase. Will look like the other models
+
+export interface ResourceObject {
+    id: string
+}
+
 export interface User {
     name: string;
 }
@@ -10,14 +15,14 @@ export interface CurrentView {
     lastUpdated?: number;
 }
 
-export interface League {
+export interface League extends ResourceObject {
     id: string;
     attributes: {
         name: string
     };
 }
 
-export interface Team {
+export interface Team extends ResourceObject {
     id: string;
     attributes: {
         abbreviation: string,
@@ -26,7 +31,7 @@ export interface Team {
     };
 }
 
-export interface Person {
+export interface Person extends ResourceObject {
     id: string;
     attributes: {
         first: string,
@@ -34,7 +39,7 @@ export interface Person {
     };
 }
 
-export interface RosterPosition {
+export interface RosterPosition extends ResourceObject {
     id: string;
     relationships: {
         player: RelationshipResource
