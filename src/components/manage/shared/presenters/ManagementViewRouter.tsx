@@ -7,6 +7,7 @@ import ManagePlayersContainer from '../../players/containers/ManagePlayersContai
 import PlayerDetailContainer from '../../players/containers/PlayerDetailContainer';
 import ManageLeaguesContainer from '../../leagues/containers/ManageLeaguesContainer';
 import LeagueDetailContainer from '../../leagues/containers/LeagueDetailContainer';
+import { match } from 'react-router';
 
 const styles = {
     root: {
@@ -17,12 +18,16 @@ const styles = {
     }
 };
 
+export interface ManageItemRouteProps {
+    itemId: string;
+}
+
 interface ManagementViewRouterProps {
-    match: any; // TODO: this should be an actual type
+    match: match<ManageItemRouteProps>;
 }
 
 function ManagementViewRouter(props: ManagementViewRouterProps) {
-    const match = props.match;
+    const matchProp = props.match;
     return (
         <Paper style={styles.root}>
             <div color="primary">
@@ -31,14 +36,14 @@ function ManagementViewRouter(props: ManagementViewRouterProps) {
                 <NavLink to="/manage/players"><Button>Players</Button></NavLink>
             </div>
             <Switch>
-                <Route exact={true} path={`${match.url}/leagues`} component={ManageLeaguesContainer}/>
-                <Route path={`${match.url}/leagues/:leagueId`} component={LeagueDetailContainer}/>
+                <Route exact={true} path={`${matchProp.url}/leagues`} component={ManageLeaguesContainer}/>
+                <Route path={`${matchProp.url}/leagues/:itemId`} component={LeagueDetailContainer}/>
 
-                <Route exact={true} path={`${match.url}/teams`} component={ManageTeamsContainer}/>
-                <Route path={`${match.url}/teams/:teamId`} component={TeamDetailContainer}/>
+                <Route exact={true} path={`${matchProp.url}/teams`} component={ManageTeamsContainer}/>
+                <Route path={`${matchProp.url}/teams/:itemId`} component={TeamDetailContainer}/>
 
-                <Route exact={true} path={`${match.url}/players`} component={ManagePlayersContainer}/>
-                <Route path={`${match.url}/players/:playerId`} component={PlayerDetailContainer}/>
+                <Route exact={true} path={`${matchProp.url}/players`} component={ManagePlayersContainer}/>
+                <Route path={`${matchProp.url}/players/:itemId`} component={PlayerDetailContainer}/>
             </Switch>
         </Paper>
     );
