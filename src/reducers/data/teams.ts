@@ -1,13 +1,10 @@
 import { TeamAction, TeamActionTypeKeys } from '../../actions/teams';
-import { keyBy } from 'lodash';
+import { Team } from '../../models/models';
 
-export const teams = (state = {}, action: TeamAction): any => {
+export const teams = (state: Map<string, Team> = new Map(), action: TeamAction): Map<string, Team> => {
     switch (action.type) {
         case TeamActionTypeKeys.RECEIVE_TEAMS:
-            return {
-                ...state,
-                ...keyBy(action.data, team => team.id)
-            };
+            return new Map([...state, ...action.data]);
         default:
             return state;
     }

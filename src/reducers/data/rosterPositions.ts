@@ -1,13 +1,11 @@
-import { keyBy } from 'lodash';
-import { RECEIVE_ROSTER_POSITIONS } from '../../actions/rosterpositions';
+import { RosterPositionAction, RosterPositionActionTypeKeys } from '../../actions/rosterpositions';
+import { RosterPosition } from '../../models/models';
 
-export const rosterPositions = (state: any = {}, action: any): any => {
+export const rosterPositions = (state: Map<string, RosterPosition> = new Map(), action: RosterPositionAction):
+    Map<string, RosterPosition> => {
     switch (action.type) {
-        case RECEIVE_ROSTER_POSITIONS:
-            return {
-                ...state,
-                ...keyBy(action.data, rosterPosition => rosterPosition.id)
-            };
+        case RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS:
+            return new Map([...state, ...action.data]);
         default:
             return state;
     }

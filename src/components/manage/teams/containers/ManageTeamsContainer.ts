@@ -5,7 +5,7 @@ import { resetView } from '../../../../actions/currentView';
 
 const mapStateToProps = (state: any): ManageTeamsFormProps => {
     return {
-        teams: Object.values(state.data.teams),
+        teams: Array.from(state.data.teams.values()),
         currentView: state.currentView
     };
 };

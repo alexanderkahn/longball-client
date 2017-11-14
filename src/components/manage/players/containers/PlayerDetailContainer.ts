@@ -4,8 +4,8 @@ import { resetView } from '../../../../actions/currentView';
 import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailFormProps } from '../presenters/PlayerDetailForm';
 
 function mapStateToProps(state: any, ownProps: any): PlayerDetailFormProps {
-    const rosterPosition = state.data.rosterPositions[ownProps.match.params.playerId];
-    const person = !rosterPosition ? null : state.data.people[rosterPosition.relationships.player.data.id];
+    const rosterPosition = state.data.rosterPositions.get(ownProps.match.params.playerId);
+    const person = !rosterPosition ? null : state.data.people.get(rosterPosition.relationships.player.data.id);
     return {
         rosterPosition,
         person,

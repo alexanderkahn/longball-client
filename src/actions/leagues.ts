@@ -11,11 +11,11 @@ export type LeagueAction =
 
 interface ReceiveLeaguesAction {
     type: LeagueActionTypeKeys.RECEIVE_LEAGUES;
-    data: Array<League>;
+    data: Map<string, League>;
     receivedAt: number;
 }
 
-function receiveLeagues(leagues: Array<League>): ReceiveLeaguesAction {
+function receiveLeagues(leagues: Map<string, League>): ReceiveLeaguesAction {
     return {
         type: LeagueActionTypeKeys.RECEIVE_LEAGUES,
         data: leagues,

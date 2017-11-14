@@ -1,20 +1,24 @@
 import { fetchCollection, fetchObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
+import { RosterPosition } from '../models/models';
+import { receivePeople } from './people';
 
-export const RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS';
-function receiveRosterPositions(jsonRosterPositions: any) {
-    return {
-        type: RECEIVE_ROSTER_POSITIONS,
-        data: jsonRosterPositions,
-        receivedAt: Date.now()
-    };
+export enum RosterPositionActionTypeKeys {
+    RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS'
 }
 
-export const RECEIVE_PEOPLE = 'RECEIVE_PEOPLE';
-function receivePeople(jsonPeople: any) {
+export type RosterPositionAction = | ReceiveRosterPositionsAction;
+
+interface ReceiveRosterPositionsAction {
+    type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS;
+    data: Map<string, RosterPosition>;
+    receivedAt: number;
+}
+
+function receiveRosterPositions(jsonRosterPositions: Map<string, RosterPosition>): ReceiveRosterPositionsAction {
     return {
-        type: RECEIVE_PEOPLE,
-        data: jsonPeople,
+        type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS,
+        data: jsonRosterPositions,
         receivedAt: Date.now()
     };
 }
@@ -38,7 +42,7 @@ export function fetchPlayerDetail(playerId: string) {
         return fetchObject('rosterpositions', playerId, ['player'])
             .then((json: any) => {
                 dispatch(receivePeople(json.included));
-                dispatch(receiveRosterPositions([json.data]));
+                dispatch(receiveRosterPositions(json.data));
                 dispatch(setCurrentViewFetching(false)) ;
             });
     };

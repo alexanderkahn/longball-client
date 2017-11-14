@@ -1,15 +1,18 @@
 import { connect } from 'react-redux';
 import { fetchPlayers } from '../../../../actions/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
-import { RosterPosition } from '../../../../models/models';
+import { Person, Player, RosterPosition } from '../../../../models/models';
 import { resetView } from '../../../../actions/currentView';
 
-function getPlayers(rosterPositions: any, people: any) {
-    let getPlayer = function (rosterPosition: RosterPosition) {
-        return {rosterPosition, person: people[rosterPosition.relationships.player.data.id]};
-    };
-    return Object.values(rosterPositions)
-        .map(rosterPosition => getPlayer(rosterPosition));
+function getPlayers(rosterPositions: Map<string, RosterPosition>, people: Map<string, Person>): Array<Player> {
+    let players: Array<Player> = [];
+    Array.from(rosterPositions.values()).forEach( (rosterPosition) => {
+        const person = people.get(rosterPosition.relationships.player.data.id);
+        if (person) {
+            players.push({rosterPosition, person});
+        }
+    });
+    return players;
 }
 
 const mapStateToProps = (state: any): ManagePlayersFormProps => {

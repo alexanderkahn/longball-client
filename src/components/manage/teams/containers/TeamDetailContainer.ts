@@ -6,7 +6,7 @@ import TeamDetailForm, { TeamDetailFormActions, TeamDetailFormProps } from '../p
 const mapStateToProps = (state: any, ownProps: any): TeamDetailFormProps => {
     const teamId = ownProps.match.params.teamId;
     return {
-        team: state.data.teams[teamId],
+        team: state.data.teams.get(teamId),
         currentView: state.currentView
     };
 };

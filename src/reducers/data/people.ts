@@ -1,13 +1,10 @@
-import { keyBy } from 'lodash';
-import { RECEIVE_PEOPLE } from '../../actions/rosterpositions';
+import { Person } from '../../models/models';
+import { PeopleAction, PeopleActionTypeKeys } from '../../actions/people';
 
-export const people = (state = {}, action: any): any => {
+export const people = (state: Map<string, Person> = new Map(), action: PeopleAction): Map<string, Person> => {
     switch (action.type) {
-        case RECEIVE_PEOPLE:
-            return {
-                ...state,
-                ...keyBy(action.data, person => person.id)
-            };
+        case PeopleActionTypeKeys.RECEIVE_PEOPLE:
+            return new Map([...state, ...action.data]);
         default:
             return state;
     }

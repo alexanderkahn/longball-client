@@ -5,7 +5,7 @@ import { resetView } from '../../../../actions/currentView';
 
 const mapStateToProps = (state: any): ManageLeaguesProps => {
     return {
-        leagues: Object.values(state.data.leagues),
+        leagues: Array.from(state.data.leagues.values()),
         currentView: state.currentView
     };
 };

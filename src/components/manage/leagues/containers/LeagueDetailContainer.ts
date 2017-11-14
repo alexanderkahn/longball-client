@@ -6,7 +6,7 @@ import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailFormProps } from
 const mapStateToProps = (state: any, ownProps: any): LeagueDetailFormProps => {
     const leagueId = ownProps.match.params.leagueId;
     return {
-        league: state.data.leagues[leagueId],
+        league: state.data.leagues.get(leagueId),
         currentView: state.currentView
     };
 };
