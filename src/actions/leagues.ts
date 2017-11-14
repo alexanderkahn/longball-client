@@ -28,7 +28,7 @@ function receiveLeagues(leagues: Map<string, League>): ReceiveLeaguesAction {
 export function fetchLeagues(page: number) {
     return function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
-        return fetchCollection<League>('leagues', 0)
+        return fetchCollection<League>('leagues', page)
             .then((json: DataResponse<League>) => {
                 dispatch(receiveLeagues(json.data));
                 dispatch(setCurrentViewFetching(false));
@@ -36,7 +36,7 @@ export function fetchLeagues(page: number) {
     };
 }
 
-export function fetchLeagueDetail(leagueId: string): any {
+export function fetchLeagueDetail(leagueId: string): Dispatch<RootState> {
     return function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         return fetchObject('leagues', leagueId)

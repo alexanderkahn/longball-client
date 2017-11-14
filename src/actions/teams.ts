@@ -12,31 +12,31 @@ export type TeamAction = | ReceiveTeamsAction;
 
 interface ReceiveTeamsAction {
     type: TeamActionTypeKeys.RECEIVE_TEAMS;
-    data: any;
+    data: Map<string, Team>;
     receivedAt: number;
 }
 
-function receiveTeams(jsonTeams: any): ReceiveTeamsAction {
+function receiveTeams(teams: Map<string, Team>): ReceiveTeamsAction {
     return {
         type: TeamActionTypeKeys.RECEIVE_TEAMS,
-        data: jsonTeams,
+        data: teams,
         receivedAt: Date.now()
     };
 }
 
-export function fetchTeams(page: number): any {
+export function fetchTeams(page: number): Dispatch<RootState> {
 
     return function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         return fetchCollection<Team>('teams', page)
-            .then((json: any) => {
+            .then((json: DataResponse<Team>) => {
                 dispatch(receiveTeams(json.data));
                 dispatch(setCurrentViewFetching(false));
             });
     };
 }
 
-export function fetchTeamDetail(teamId: string): any {
+export function fetchTeamDetail(teamId: string): Dispatch<RootState> {
     return function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         return fetchObject<Team>('teams', teamId)

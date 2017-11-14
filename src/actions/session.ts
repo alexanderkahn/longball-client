@@ -2,6 +2,7 @@ import { receiveAuthentication, tryResolveAuthentication } from './auth';
 import { Dispatch } from 'react-redux';
 import * as firebase from 'firebase';
 import { User } from 'firebase';
+import { RootState } from '../reducers/index';
 
 const config = {
     apiKey: 'AIzaSyDKd4LVFbOySsyC3a4fyps7klanKMH34jc',
@@ -17,7 +18,7 @@ firebase.initializeApp(config);
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.addScope('https://www.googleapis.com/auth/plus.login');
 
-export function watchForAuthChanges(): any {
+export function watchForAuthChanges(): Dispatch<RootState> {
     return function (dispatch: Dispatch<{}>) {
         dispatch(attemptVerifyAuthentication()); // TODO: this should not happen on every request
         firebase.auth().onAuthStateChanged(function(user: User) {
@@ -30,13 +31,13 @@ export function watchForAuthChanges(): any {
     };
 }
 
-export function redirectToAuthenticationProvider(): any {
+export function redirectToAuthenticationProvider(): Dispatch<RootState> {
     return function () {
         return firebase.auth().signInWithRedirect(provider);
     };
 }
 
-export function attemptVerifyAuthentication(): any {
+export function attemptVerifyAuthentication(): Dispatch<RootState> {
     return function (dispatch: Dispatch<{}>) {
         if (!firebase.auth().currentUser) {
             dispatch(tryResolveAuthentication());
