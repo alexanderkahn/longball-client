@@ -5,7 +5,6 @@ import { CSSProperties } from 'react';
 const styles: CSSProperties = {
     root: {
         display: 'block',
-        width: '100%',
         margin: '0 auto',
         paddingTop: 10,
         paddingBottom: 10,
