@@ -7,7 +7,7 @@ interface ManagementItemDetailProps {
     currentView: CurrentView;
     resetView: () => void;
     fetchItemDetail: () => void;
-    children: any; // TODO: come back to this and figure out how it's supposed to look
+    children: React.ReactNode;
 }
 
 export default class ManagementItemDetail extends Component<ManagementItemDetailProps> {

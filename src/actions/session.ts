@@ -47,10 +47,10 @@ export function attemptVerifyAuthentication(): Dispatch<RootState> {
     };
 }
 
-export function getIdTokenPromise(): Promise<any> {
+export async function getIdTokenPromise(): Promise<string> {
     let currentUser = firebase.auth().currentUser;
     if (currentUser == null) {
-        return Promise.resolve();
+        throw new Error('Unable to get idToken from firebase user');
     }
     return currentUser.getIdToken();
 }
