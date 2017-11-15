@@ -1,4 +1,4 @@
-import { DataResponse, fetchCollection, fetchObject } from './rest';
+import { fetchCollection, fetchObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { Person, RosterPosition } from '../models/models';
 import { receivePeople } from './people';
@@ -26,27 +26,22 @@ function receiveRosterPositions(jsonRosterPositions: Map<string, RosterPosition>
 }
 
 export function fetchPlayers(page: number) {
-    return function (dispatch: Dispatch<RootState>) {
+    return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
-
-        return fetchCollection<RosterPosition>('rosterpositions', page, ['player'])
-            .then((json: DataResponse<RosterPosition>) => {
-                // TODO: this will break if any other types are included
-                dispatch(receivePeople(json.included as Map<string, Person>));
-                dispatch(receiveRosterPositions(json.data));
-                dispatch(setCurrentViewFetching(false));
-            });
+        const collection = await fetchCollection<RosterPosition>('rosterpositions', page, ['player']);
+        // TODO: this will break if any other types are included
+        dispatch(receivePeople(collection.included as Map<string, Person>));
+        dispatch(receiveRosterPositions(collection.data));
+        dispatch(setCurrentViewFetching(false));
     };
 }
 
 export function fetchPlayerDetail(playerId: string) {
-    return function (dispatch: Dispatch<RootState>) {
+    return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
-        return fetchObject<RosterPosition>('rosterpositions', playerId, ['player'])
-            .then((json: DataResponse<RosterPosition>) => {
-                dispatch(receivePeople(json.included as Map<string, Person>));
-                dispatch(receiveRosterPositions(json.data));
-                dispatch(setCurrentViewFetching(false)) ;
-            });
+        const object = await fetchObject<RosterPosition>('rosterpositions', playerId, ['player']);
+        dispatch(receivePeople(object.included as Map<string, Person>));
+        dispatch(receiveRosterPositions(object.data));
+        dispatch(setCurrentViewFetching(false));
     };
 }

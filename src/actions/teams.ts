@@ -1,4 +1,4 @@
-import { DataResponse, fetchCollection, fetchObject } from './rest';
+import { fetchCollection, fetchObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { Team } from '../models/models';
 import { RootState } from '../reducers/index';
@@ -25,24 +25,19 @@ function receiveTeams(teams: Map<string, Team>): ReceiveTeamsAction {
 }
 
 export function fetchTeams(page: number): Dispatch<RootState> {
-
-    return function (dispatch: Dispatch<RootState>) {
+    return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
-        return fetchCollection<Team>('teams', page)
-            .then((json: DataResponse<Team>) => {
-                dispatch(receiveTeams(json.data));
-                dispatch(setCurrentViewFetching(false));
-            });
+        const collection = await fetchCollection<Team>('teams', page);
+        dispatch(receiveTeams(collection.data));
+        dispatch(setCurrentViewFetching(false));
     };
 }
 
 export function fetchTeamDetail(teamId: string): Dispatch<RootState> {
-    return function (dispatch: Dispatch<RootState>) {
+    return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
-        return fetchObject<Team>('teams', teamId)
-            .then((json: DataResponse<Team>) => {
-                dispatch(receiveTeams(json.data));
-                dispatch(setCurrentViewFetching(false));
-            });
+        const object = await fetchObject<Team>('teams', teamId);
+        dispatch(receiveTeams(object.data));
+        dispatch(setCurrentViewFetching(false));
     };
 }

@@ -1,4 +1,4 @@
-import { fetchCollection, DataResponse, fetchObject } from './rest';
+import { fetchCollection, fetchObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { League } from '../models/models';
 import { Dispatch } from 'redux';
@@ -26,23 +26,19 @@ function receiveLeagues(leagues: Map<string, League>): ReceiveLeaguesAction {
 }
 
 export function fetchLeagues(page: number) {
-    return function (dispatch: Dispatch<RootState>) {
+    return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
-        return fetchCollection<League>('leagues', page)
-            .then((json: DataResponse<League>) => {
-                dispatch(receiveLeagues(json.data));
-                dispatch(setCurrentViewFetching(false));
-            });
+        const collection = await fetchCollection<League>('leagues', page);
+        dispatch(receiveLeagues(collection.data));
+        dispatch(setCurrentViewFetching(false));
     };
 }
 
 export function fetchLeagueDetail(leagueId: string): Dispatch<RootState> {
-    return function (dispatch: Dispatch<RootState>) {
+    return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
-        return fetchObject('leagues', leagueId)
-            .then((json: DataResponse<League>) => {
-                dispatch(receiveLeagues(json.data));
-                dispatch(setCurrentViewFetching(false));
-            });
+        const object = await fetchObject<League>('leagues', leagueId);
+        dispatch(receiveLeagues(object.data));
+        dispatch(setCurrentViewFetching(false));
     };
 }
