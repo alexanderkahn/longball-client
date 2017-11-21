@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import { CurrentView, Team } from '../../../../models/models';
-import ManagementItemDetail from '../../shared/presenters/ManagementItemDetail';
+import FetchableAsset from '../../shared/presenters/FetchableAsset';
+import { isNullOrUndefined } from 'util';
 
 const styles: CSSProperties = {
     root: {
@@ -56,12 +57,23 @@ export default class TeamDetailForm extends Component<TeamDetailFormProps & Team
         }
     }
 
+    componentDidMount() {
+        this.props.resetView();
+    }
+
+    componentDidUpdate() {
+        const {currentView, team, fetchItemDetail} = this.props;
+        if (!currentView.isFetching && !currentView.lastUpdated && isNullOrUndefined(team)) {
+            fetchItemDetail();
+        }
+    }
+
     render() {
-        const {team, currentView, resetView, fetchItemDetail} = this.props;
+        const {team} = this.props;
         return (
-            <ManagementItemDetail currentView={currentView} resetView={resetView} fetchItemDetail={fetchItemDetail}>
+            <FetchableAsset isFetching={isNullOrUndefined(team)}>
                 {TeamDetailForm.getForm(team)}
-            </ManagementItemDetail>
+            </FetchableAsset>
         );
     }
 }

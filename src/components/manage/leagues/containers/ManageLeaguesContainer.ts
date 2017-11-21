@@ -7,7 +7,8 @@ import { RootState } from '../../../../reducers/index';
 const mapStateToProps = (state: RootState): ManageLeaguesProps => {
     return {
         leagues: Array.from(state.data.leagues.values()),
-        currentView: state.currentView
+        currentView: state.currentView,
+        addOneUrl: '/manage/leagues/add'
     };
 };
 

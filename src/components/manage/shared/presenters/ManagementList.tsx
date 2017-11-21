@@ -5,6 +5,7 @@ import { Button } from 'material-ui';
 import AddIcon from 'material-ui-icons/Add';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
 import { CurrentView } from '../../../../models/models';
+import { isNullOrUndefined } from 'util';
 
 const styles: CSSProperties = {
     button: {
@@ -16,6 +17,7 @@ interface ManagementListProps {
     title: string;
     currentView: CurrentView;
     children: Array<JSX.Element>;
+    addOneUrl?: string;
     resetView: () => void;
     fetchListItems: () => void;
 }
@@ -34,16 +36,22 @@ export default class ManagementList extends Component<ManagementListProps> {
     }
 
     render() {
-        const props = this.props;
+        const {title, currentView, children, addOneUrl} = this.props;
 
         return (
             <div>
-                <List subheader={<ListSubheader>{props.title}</ListSubheader>}>
-                    {props.children}
+                <List subheader={<ListSubheader>{title}</ListSubheader>}>
+                    {children}
                 </List>
-                <LoadingProgressIndicator enabled={props.currentView.isFetching}/>
-                {/*<Button fab color="accent" aria-label="add" style={styles.button} disabled>*/}
-                <Button fab={true} disabled={true} style={styles.button}>
+                <LoadingProgressIndicator enabled={currentView.isFetching}/>
+                <Button
+                    fab={true}
+                    color="accent"
+                    aria-label="add"
+                    style={styles.button}
+                    disabled={isNullOrUndefined(addOneUrl)}
+                    href={addOneUrl}
+                >
                     <AddIcon/>
                 </Button>
             </div>

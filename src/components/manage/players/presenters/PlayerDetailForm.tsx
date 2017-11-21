@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import { Person, RosterPosition, CurrentView } from '../../../../models/models';
-import ManagementItemDetail from '../../shared/presenters/ManagementItemDetail';
+import FetchableAsset from '../../shared/presenters/FetchableAsset';
+import { isNullOrUndefined } from 'util';
 
 const styles: CSSProperties = {
     root: {
@@ -50,12 +51,25 @@ export default class PlayerDetailForm extends Component<PlayerDetailFormProps & 
         }
     }
 
+    componentDidMount() {
+        this.props.resetView();
+    }
+
+    componentDidUpdate() {
+        const {currentView, person, rosterPosition, fetchItemDetail} = this.props;
+        if (!currentView.isFetching
+            && !currentView.lastUpdated
+            && (isNullOrUndefined(person) || isNullOrUndefined(rosterPosition))) {
+            fetchItemDetail();
+        }
+    }
+
     render() {
-        const {rosterPosition, person, currentView, resetView, fetchItemDetail} = this.props;
+        const {rosterPosition, person} = this.props;
         return (
-            <ManagementItemDetail currentView={currentView} resetView={resetView} fetchItemDetail={fetchItemDetail}>
+            <FetchableAsset isFetching={isNullOrUndefined(person) || isNullOrUndefined(rosterPosition)}>
                 {PlayerDetailForm.getForm(rosterPosition, person)}
-            </ManagementItemDetail>
+            </FetchableAsset>
         );
     }
 

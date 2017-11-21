@@ -6,6 +6,7 @@ import LeagueListItem from './LeagueListItem';
 export interface ManageLeaguesProps {
     leagues: Array<League>;
     currentView: CurrentView;
+    addOneUrl: string;
 }
 
 export interface ManageLeaguesActions {
@@ -18,6 +19,7 @@ export default function ManageLeaguesForm(props: ManageLeaguesProps & ManageLeag
         <ManagementList
             title="Leagues"
             currentView={props.currentView}
+            addOneUrl={props.addOneUrl}
             resetView={props.resetView}
             fetchListItems={props.fetchListItems}
         >

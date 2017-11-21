@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { Button, TextField } from 'material-ui';
-import ManagementItemDetail from '../../shared/presenters/ManagementItemDetail';
+import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { CurrentView, League } from '../../../../models/models';
+import { isNullOrUndefined } from 'util';
 
 const styles: CSSProperties = {
     root: {
@@ -25,16 +26,8 @@ export interface LeagueDetailFormActions {
 }
 
 export default class LeagueDetailForm extends Component<LeagueDetailFormProps & LeagueDetailFormActions> {
-    render() {
-        const {currentView, resetView, league, fetchItemDetail, toggleCurrentViewEdit} = this.props;
-        return (
-            <ManagementItemDetail currentView={currentView} resetView={resetView} fetchItemDetail={fetchItemDetail}>
-                {this.getForm(currentView.isEdit, toggleCurrentViewEdit, league)}
-            </ManagementItemDetail>
-        );
-    }
 
-    getForm(isEdit: boolean, toggleEdit: () => void, league?: League) {
+    static getForm(isEdit: boolean, toggleEdit: () => void, league?: League) {
         if (!league) {
             return <div>I can't find the league you requested!</div>;
         } else {
@@ -51,6 +44,26 @@ export default class LeagueDetailForm extends Component<LeagueDetailFormProps & 
                 </form>
             );
         }
+    }
+
+    componentDidMount() {
+        this.props.resetView();
+    }
+
+    componentDidUpdate() {
+        const {currentView, league, fetchItemDetail} = this.props;
+        if (!currentView.isFetching && !currentView.lastUpdated && isNullOrUndefined(league)) {
+            fetchItemDetail();
+        }
+    }
+
+    render() {
+        const {currentView, league, toggleCurrentViewEdit} = this.props;
+        return (
+            <FetchableAsset isFetching={isNullOrUndefined(league)}>
+                {LeagueDetailForm.getForm(currentView.isEdit, toggleCurrentViewEdit, league)}
+            </FetchableAsset>
+        );
     }
 }
 

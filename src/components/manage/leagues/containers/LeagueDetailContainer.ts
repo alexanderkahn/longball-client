@@ -5,12 +5,31 @@ import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailFormProps } from
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
+import { League } from '../../../../models/models';
+
+const deepCopy = <T>(o: T): T => {
+    return JSON.parse(JSON.stringify(o));
+};
+
+const emptyLeague = {
+    id: '',
+    attributes: {
+        name: ''
+    }
+};
+
+const getLeague = (id: string, storedLeagues: Map<string, League>): League | undefined => {
+    if (id === 'add') {
+        return deepCopy(emptyLeague);
+    }
+    return storedLeagues.get(id);
+};
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>):
     LeagueDetailFormProps => {
     const leagueId = ownProps.match.params.itemId;
     return {
-        league: state.data.leagues.get(leagueId),
+        league: getLeague(leagueId, state.data.leagues),
         currentView: state.currentView
     };
 };
