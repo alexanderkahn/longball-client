@@ -17,7 +17,7 @@ interface ManagementListProps {
     title: string;
     currentView: CurrentView;
     children: Array<JSX.Element>;
-    addOneUrl?: string;
+    onClickAdd?: () => void;
     resetView: () => void;
     fetchListItems: () => void;
 }
@@ -36,7 +36,7 @@ export default class ManagementList extends Component<ManagementListProps> {
     }
 
     render() {
-        const {title, currentView, children, addOneUrl} = this.props;
+        const {title, currentView, children, onClickAdd} = this.props;
 
         return (
             <div>
@@ -44,16 +44,17 @@ export default class ManagementList extends Component<ManagementListProps> {
                     {children}
                 </List>
                 <LoadingProgressIndicator enabled={currentView.isFetching}/>
+                {!isNullOrUndefined(onClickAdd) &&
                 <Button
                     fab={true}
                     color="accent"
                     aria-label="add"
                     style={styles.button}
-                    disabled={isNullOrUndefined(addOneUrl)}
-                    href={addOneUrl}
+                    onClick={onClickAdd}
                 >
                     <AddIcon/>
                 </Button>
+                }
             </div>
         );
     }
