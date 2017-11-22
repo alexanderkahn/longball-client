@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManagePlayersFormAct
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchPlayers(0)),
-        onClickListItemCreator: (id: string) => () => dispatch(push(`/manage/players/${id}`))
+        buildHandleSelectPlayerDetail: (id: string) => () => dispatch(push(`/manage/players/${id}`))
     };
 };
 

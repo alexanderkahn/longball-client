@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageTeamsFormActio
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchTeams(0)),
-        onClickListItemCreator: (id: string) => () => dispatch(push(`/manage/teams/${id}`))
+        buildHandleSelectTeamDetail: (id: string) => () => dispatch(push(`/manage/teams/${id}`))
     };
 };
 

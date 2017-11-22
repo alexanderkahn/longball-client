@@ -6,14 +6,14 @@ import { Component } from 'react';
 
 interface TeamListItemProps {
     team: Team;
-    onClickListItem: () => void;
+    handleSelectTeamDetail: () => void;
 }
 
 export default class TeamListItem extends Component<TeamListItemProps> {
     render() {
-        const {team, onClickListItem} = this.props;
+        const {team, handleSelectTeamDetail} = this.props;
         return (
-                <ListItem button={true} onClick={onClickListItem}>
+                <ListItem button={true} onClick={handleSelectTeamDetail}>
                     <ListItemIcon><Icon>{team.attributes.abbreviation}</Icon></ListItemIcon>
                     <ListItemText primary={team.attributes.location + ' ' + team.attributes.nickname}/>
                 </ListItem>

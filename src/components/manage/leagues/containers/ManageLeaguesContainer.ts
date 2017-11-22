@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageLeaguesActions
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchLeagues(0)),
-        onClickListItemCreator: (id: string) => () => dispatch(push(`/manage/leagues/${id}`)),
+        buildHandleSelectDetail: (id: string) => () => dispatch(push(`/manage/leagues/${id}`)),
         onClickAdd: () => dispatch(push('manage/leagues/add'))
     };
 };

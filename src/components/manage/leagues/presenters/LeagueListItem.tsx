@@ -8,15 +8,15 @@ import DeleteIcon from 'material-ui-icons/Delete';
 
 interface LeagueListItemProps {
     league: League;
-    onClickListItem: () => void;
+    handleSelectLeagueDetail: () => void;
 }
 
 export default class LeagueListItem extends Component<LeagueListItemProps> {
     render() {
-        const {league, onClickListItem} = this.props;
+        const {league, handleSelectLeagueDetail} = this.props;
 
         return (
-            <ListItem button={true} onClick={onClickListItem}>
+            <ListItem button={true} onClick={handleSelectLeagueDetail}>
                 <ListItemIcon><Icon>{league.attributes.name[0]}</Icon></ListItemIcon>
                 <ListItemText primary={league.attributes.name}/>
                 <ListItemSecondaryAction>

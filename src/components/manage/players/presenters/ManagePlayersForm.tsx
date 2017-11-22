@@ -12,7 +12,7 @@ export interface ManagePlayersFormProps {
 export interface ManagePlayersFormActions {
     resetView: () => void;
     fetchListItems: () => void;
-    onClickListItemCreator: (id: string) => () => void;
+    buildHandleSelectPlayerDetail: (id: string) => () => void;
 }
 
 export default class ManagePlayersForm extends Component<ManagePlayersFormProps & ManagePlayersFormActions> {
@@ -31,11 +31,11 @@ export default class ManagePlayersForm extends Component<ManagePlayersFormProps 
     }
 
     getChildListItems(): Array<JSX.Element> {
-        const {players, onClickListItemCreator} = this.props;
+        const {players, buildHandleSelectPlayerDetail} = this.props;
         return players.map(player => (
             <PlayerListItem
                 player={player}
-                onClickListItem={onClickListItemCreator(player.rosterPosition.id)}
+                handleSelectPlayerDetail={buildHandleSelectPlayerDetail(player.rosterPosition.id)}
                 key={player.rosterPosition.id}
             />
         ));

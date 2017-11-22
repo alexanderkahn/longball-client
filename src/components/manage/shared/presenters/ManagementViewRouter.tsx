@@ -30,8 +30,7 @@ interface ManagementViewRouterProps {
 }
 
 function ManagementViewRouter(props: ManagementViewRouterProps) {
-    const matchProp = props.match;
-    const history = props.history;
+    const { match: matchProp, history } = props;
     return (
         <Paper style={styles.root}>
             <div color="primary">
