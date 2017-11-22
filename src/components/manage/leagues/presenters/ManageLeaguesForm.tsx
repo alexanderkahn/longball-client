@@ -15,6 +15,7 @@ export interface ManageLeaguesActions {
     fetchListItems: () => void;
     onClickAdd: () => void;
     buildHandleSelectDetail: (id: string) => () => void;
+    buildHandleDeleteLeague: (league: League) => () => void;
 }
 
 export default class ManageLeaguesForm extends Component<ManageLeaguesProps & ManageLeaguesActions> {
@@ -35,11 +36,12 @@ export default class ManageLeaguesForm extends Component<ManageLeaguesProps & Ma
     }
 
     getChildListItems(): Array<JSX.Element> {
-        const {leagues, buildHandleSelectDetail} = this.props;
+        const {leagues, buildHandleSelectDetail, buildHandleDeleteLeague} = this.props;
         return leagues.map(league => (
             <LeagueListItem
                 league={league}
                 handleSelectLeagueDetail={buildHandleSelectDetail(league.id)}
+                handleDeleteLeague={buildHandleDeleteLeague(league)}
                 key={league.id}
             />
         ));

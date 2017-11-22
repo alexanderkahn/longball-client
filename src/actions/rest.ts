@@ -17,9 +17,18 @@ async function getJsonResponse(url: string): Promise<{ data: {}, included?: {} }
 async function getJsonPostResponse(url: string, body: ResourceObject): Promise<{ data: {} }> {
     const token = await getIdTokenPromise();
     const response = await fetch(url, {
+        headers: {...getHeaders(token), 'Content-Type': 'application/json'},
         method: 'POST',
-        body: JSON.stringify({data: body}),
-        headers: {...getHeaders(token), 'Content-Type': 'application/json'}
+        body: JSON.stringify({data: body})
+    });
+    return await response.json();
+}
+
+async function getJsonDeleteResponse(url: string): Promise<{ meta: { status: number }}> {
+    const token = await getIdTokenPromise();
+    const response = await fetch(url, {
+        headers: getHeaders(token),
+        method: 'DELETE'
     });
     return await response.json();
 }
@@ -69,6 +78,12 @@ export async function postObject<T extends ResourceObject>(object: T): Promise<T
     const url = `/rest/${object.type}`;
     const json = await getJsonPostResponse(url, object);
     return json.data as T;
+}
+
+export async function deleteObject<T extends ResourceObject>(object: T): Promise<number> {
+    const url = `/rest/${object.type}/${object.id}`;
+    const json = await getJsonDeleteResponse(url);
+    return json.meta.status;
 }
 
 function getHeaders(authToken: string) {

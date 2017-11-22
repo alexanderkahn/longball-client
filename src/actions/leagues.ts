@@ -1,4 +1,4 @@
-import { fetchCollection, fetchObject, postObject } from './rest';
+import { deleteObject, fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { League } from '../models/models';
 import { Dispatch } from 'redux';
@@ -7,10 +7,11 @@ import { replace } from 'react-router-redux';
 
 export enum LeagueActionTypeKeys {
     RECEIVE_LEAGUES = 'RECEIVE_LEAGUES',
+    REMOVE_LEAGUE = 'REMOVE_LEAGUE',
 }
 
 export type LeagueAction =
-    | ReceiveLeaguesAction;
+    | ReceiveLeaguesAction | RemoveLeagueAction;
 
 interface ReceiveLeaguesAction {
     type: LeagueActionTypeKeys.RECEIVE_LEAGUES;
@@ -18,11 +19,23 @@ interface ReceiveLeaguesAction {
     receivedAt: number;
 }
 
+interface RemoveLeagueAction {
+    type: LeagueActionTypeKeys.REMOVE_LEAGUE;
+    removed: string;
+}
+
 function receiveLeagues(leagues: Map<string, League>): ReceiveLeaguesAction {
     return {
         type: LeagueActionTypeKeys.RECEIVE_LEAGUES,
         data: leagues,
         receivedAt: Date.now()
+    };
+}
+
+function removeLeague(id: string): RemoveLeagueAction {
+    return {
+        type: LeagueActionTypeKeys.REMOVE_LEAGUE,
+        removed: id
     };
 }
 
@@ -49,5 +62,12 @@ export function saveLeague(league: League): Dispatch<RootState> {
         const saveResponse = await postObject(league);
         dispatch(receiveLeagues(new Map().set(saveResponse.id, saveResponse)));
         dispatch(replace(`/manage/leagues/${saveResponse.id}`));
+    };
+}
+
+export function deleteLeague(league: League): Dispatch<RootState> {
+    return async function  (dispatch: Dispatch<RootState>) {
+        await deleteObject(league);
+        dispatch(removeLeague(league.id));
     };
 }
