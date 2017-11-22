@@ -3,6 +3,7 @@ import { fetchTeams } from '../../../../actions/teams';
 import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '../presenters/ManageTeamsForm';
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
+import { push } from 'react-router-redux';
 
 const mapStateToProps = (state: RootState): ManageTeamsFormProps => {
     return {
@@ -14,7 +15,8 @@ const mapStateToProps = (state: RootState): ManageTeamsFormProps => {
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageTeamsFormActions => {
     return {
         resetView: () => dispatch(resetView()),
-        fetchListItems: () => dispatch(fetchTeams(0))
+        fetchListItems: () => dispatch(fetchTeams(0)),
+        onClickListItemCreator: (id: string) => () => dispatch(push(`/manage/teams/${id}`))
     };
 };
 
