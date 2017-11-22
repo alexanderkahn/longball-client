@@ -40,7 +40,7 @@ export default class ManagementList extends Component<ManagementListProps> {
 
         return (
             <div>
-                <List subheader={<ListSubheader>{title}</ListSubheader>}>
+                <List subheader={<ListSubheader disableSticky={true}>{title}</ListSubheader>}>
                     {children}
                 </List>
                 <LoadingProgressIndicator enabled={currentView.isFetching}/>

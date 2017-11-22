@@ -4,6 +4,7 @@ import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } f
 import { Person, Player, RosterPosition } from '../../../../models/models';
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
+import { push } from 'react-router-redux';
 
 function getPlayers(rosterPositions: Map<string, RosterPosition>, people: Map<string, Person>): Array<Player> {
     let players: Array<Player> = [];
@@ -26,7 +27,8 @@ const mapStateToProps = (state: RootState): ManagePlayersFormProps => {
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManagePlayersFormActions => {
     return {
         resetView: () => dispatch(resetView()),
-        fetchListItems: () => dispatch(fetchPlayers(0))
+        fetchListItems: () => dispatch(fetchPlayers(0)),
+        onClickListItemCreator: (id: string) => () => dispatch(push(`/manage/players/${id}`))
     };
 };
 
