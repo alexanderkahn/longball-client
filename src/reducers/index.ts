@@ -4,6 +4,7 @@ import { currentView } from './views/currentView';
 import { combineReducers, Reducer } from 'redux';
 import { easterEgg, EasterEggState } from './easterEgg';
 import { CurrentView } from '../models/models';
+import { routerReducer } from 'react-router-redux';
 
 export interface RootState {
     auth: AuthState;
@@ -17,6 +18,7 @@ const reducers: Reducer<RootState> = combineReducers({
     data,
     currentView,
     easterEgg,
+    routing: routerReducer,
 });
 
 export default reducers;

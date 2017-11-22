@@ -1,27 +1,30 @@
 import * as React from 'react';
 import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import { Icon } from 'material-ui';
-import { Link } from 'react-router-dom';
+import { Icon, ListItemSecondaryAction } from 'material-ui';
 import { League } from '../../../../models/models';
 import { Component } from 'react';
+import IconButton from 'material-ui/IconButton';
+import DeleteIcon from 'material-ui-icons/Delete';
 
 interface LeagueListItemProps {
     league: League;
+    onClickListItem: () => void;
 }
 
 export default class LeagueListItem extends Component<LeagueListItemProps> {
     render() {
-        const league = this.props.league;
-        const leagueDetailRoute = `/manage/leagues/${league.id}`;
-        // <ListItem button={true} component={Link} to={leagueDetailRoute}>
+        const {league, onClickListItem} = this.props;
 
         return (
-            <Link to={leagueDetailRoute}>
-                <ListItem button={true}>
-                    <ListItemIcon><Icon>{league.attributes.name[0]}</Icon></ListItemIcon>
-                    <ListItemText primary={league.attributes.name}/>
-                </ListItem>
-            </Link>
+            <ListItem button={true} onClick={onClickListItem}>
+                <ListItemIcon><Icon>{league.attributes.name[0]}</Icon></ListItemIcon>
+                <ListItemText primary={league.attributes.name}/>
+                <ListItemSecondaryAction>
+                    <IconButton aria-label="Delete">
+                        <DeleteIcon/>
+                    </IconButton>
+                </ListItemSecondaryAction>
+            </ListItem>
         );
     }
 

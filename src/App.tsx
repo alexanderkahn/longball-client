@@ -7,27 +7,26 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import AppRouterContainer from './components/main/containers/AppRouterContainer';
-import { BrowserRouter } from 'react-router-dom';
 import { watchForAuthChanges } from './actions/session';
-import { routerMiddleware } from 'react-router-redux';
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import createBrowserHistory from 'history/createBrowserHistory';
 
-let store = createStore(
+const history = createBrowserHistory();
+const store = createStore(
     reducers,
     applyMiddleware(
         thunkMiddleware,
-        routerMiddleware(createBrowserHistory()),
+        routerMiddleware(history),
     ));
-
 store.dispatch(watchForAuthChanges());
 
-class Root extends Component {
+class Root extends Component<{}> {
     render() {
         return (
             <Provider store={store}>
-                <BrowserRouter>
+                <ConnectedRouter history={history}>
                     <AppRouterContainer/>
-                </BrowserRouter>
+                </ConnectedRouter>
             </Provider>
         );
     }
