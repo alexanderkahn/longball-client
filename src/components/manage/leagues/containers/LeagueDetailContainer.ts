@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchLeagueDetail } from '../../../../actions/leagues';
+import { fetchLeagueDetail, saveLeague } from '../../../../actions/leagues';
 import { resetView, toggleCurrentViewEdit } from '../../../../actions/currentView';
 import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailFormProps } from '../presenters/LeagueDetailForm';
 import { RootState } from '../../../../reducers/index';
@@ -13,6 +13,7 @@ const deepCopy = <T>(o: T): T => {
 
 const emptyLeague = {
     id: '',
+    type: 'leagues',
     attributes: {
         name: ''
     }
@@ -46,6 +47,9 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         },
         toggleCurrentViewEdit: function() {
             dispatch(toggleCurrentViewEdit());
+        },
+        saveLeague: function (league: League) {
+            dispatch(saveLeague(league));
         }
     };
 };

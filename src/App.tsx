@@ -9,11 +9,14 @@ import thunkMiddleware from 'redux-thunk';
 import AppRouterContainer from './components/main/containers/AppRouterContainer';
 import { BrowserRouter } from 'react-router-dom';
 import { watchForAuthChanges } from './actions/session';
+import { routerMiddleware } from 'react-router-redux';
+import createBrowserHistory from 'history/createBrowserHistory';
 
 let store = createStore(
     reducers,
     applyMiddleware(
         thunkMiddleware,
+        routerMiddleware(createBrowserHistory()),
     ));
 
 store.dispatch(watchForAuthChanges());

@@ -1,8 +1,9 @@
-import { fetchCollection, fetchObject } from './rest';
+import { fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { League } from '../models/models';
 import { Dispatch } from 'redux';
 import { RootState } from '../reducers/index';
+import { replace } from 'react-router-redux';
 
 export enum LeagueActionTypeKeys {
     RECEIVE_LEAGUES = 'RECEIVE_LEAGUES',
@@ -40,5 +41,13 @@ export function fetchLeagueDetail(leagueId: string): Dispatch<RootState> {
         const object = await fetchObject<League>('leagues', leagueId);
         dispatch(receiveLeagues(object.data));
         dispatch(setCurrentViewFetching(false));
+    };
+}
+
+export function saveLeague(league: League): Dispatch<RootState> {
+    return async function (dispatch: Dispatch<RootState>) {
+        const saveResponse = await postObject(league);
+        dispatch(receiveLeagues(new Map().set(saveResponse.id, saveResponse)));
+        dispatch(replace(`/manage/leagues/${saveResponse.id}`));
     };
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Component, CSSProperties } from 'react';
+import { ChangeEvent, Component, CSSProperties } from 'react';
 import { Button, TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { CurrentView, League } from '../../../../models/models';
@@ -23,11 +23,22 @@ export interface LeagueDetailFormActions {
     resetView: () => void;
     fetchItemDetail: () => void;
     toggleCurrentViewEdit: () => void;
+    saveLeague: (league: League) => void;
 }
 
 export default class LeagueDetailForm extends Component<LeagueDetailFormProps & LeagueDetailFormActions> {
 
-    static getForm(isEdit: boolean, toggleEdit: () => void, league?: League) {
+    onLeagueNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (isNullOrUndefined(this.props.league)) {
+            return;
+        }
+
+        this.props.league.attributes.name = event.target.value;
+        this.forceUpdate();
+    }
+
+    getForm() {
+        const {currentView, toggleCurrentViewEdit, saveLeague, league} = this.props;
         if (!league) {
             return <div>I can't find the league you requested!</div>;
         } else {
@@ -35,12 +46,17 @@ export default class LeagueDetailForm extends Component<LeagueDetailFormProps & 
                 <form style={styles.root}>
                     <TextField
                         style={styles.input}
-                        disabled={true}
+                        disabled={!currentView.isEdit}
                         id="name"
                         label="Name"
                         value={league.attributes.name}
+                        onChange={this.onLeagueNameChange}
                     />
-                    <EditSaveToggle isEdit={isEdit} toggleEdit={toggleEdit}/>
+                    <EditSaveToggle
+                        isEdit={currentView.isEdit}
+                        toggleEdit={toggleCurrentViewEdit}
+                        onSave={() => saveLeague(league)}
+                    />
                 </form>
             );
         }
@@ -58,21 +74,20 @@ export default class LeagueDetailForm extends Component<LeagueDetailFormProps & 
     }
 
     render() {
-        const {currentView, league, toggleCurrentViewEdit} = this.props;
         return (
-            <FetchableAsset isFetching={isNullOrUndefined(league)}>
-                {LeagueDetailForm.getForm(currentView.isEdit, toggleCurrentViewEdit, league)}
+            <FetchableAsset isFetching={isNullOrUndefined(this.props.league)}>
+                {this.getForm()}
             </FetchableAsset>
         );
     }
 }
 
-function EditSaveToggle(props: { isEdit: boolean, toggleEdit: () => void }) {
+function EditSaveToggle(props: { isEdit: boolean, toggleEdit: () => void, onSave: () => void }) {
     if (props.isEdit) {
         return (
             <div>
                 <Button onClick={props.toggleEdit}>Cancel</Button>
-                <Button>Save</Button>
+                <Button onClick={props.onSave}>Save</Button>
             </div>
         );
     } else {

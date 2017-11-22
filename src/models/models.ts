@@ -3,6 +3,7 @@
 
 export interface ResourceObject {
     id: string;
+    type: string;
 }
 
 export interface User {
@@ -17,6 +18,7 @@ export interface CurrentView {
 
 export interface League extends ResourceObject {
     id: string;
+    type: string;
     attributes: {
         name: string
     };
@@ -24,6 +26,7 @@ export interface League extends ResourceObject {
 
 export interface Team extends ResourceObject {
     id: string;
+    type: string;
     attributes: {
         abbreviation: string,
         location: string,
@@ -33,6 +36,7 @@ export interface Team extends ResourceObject {
 
 export interface Person extends ResourceObject {
     id: string;
+    type: string;
     attributes: {
         first: string,
         last: string
@@ -41,6 +45,7 @@ export interface Person extends ResourceObject {
 
 export interface RosterPosition extends ResourceObject {
     id: string;
+    type: string;
     relationships: {
         player: RelationshipResource
     };
@@ -53,6 +58,7 @@ export interface Player {
 
 interface RelationshipResource {
     data: {
+        type: string;
         id: string
     };
 }
