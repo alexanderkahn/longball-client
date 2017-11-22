@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink, Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { Paper, Button } from 'material-ui';
 import ManageTeamsContainer from '../../teams/containers/ManageTeamsContainer';
 import TeamDetailContainer from '../../teams/containers/TeamDetailContainer';
@@ -9,6 +9,7 @@ import ManageLeaguesContainer from '../../leagues/containers/ManageLeaguesContai
 import LeagueDetailContainer from '../../leagues/containers/LeagueDetailContainer';
 import { match } from 'react-router';
 import { CSSProperties } from 'react';
+import { History } from 'history';
 
 const styles: CSSProperties = {
     root: {
@@ -25,16 +26,18 @@ export interface ManageItemRouteProps {
 
 interface ManagementViewRouterProps {
     match: match<ManageItemRouteProps>;
+    history: History;
 }
 
 function ManagementViewRouter(props: ManagementViewRouterProps) {
     const matchProp = props.match;
+    const history = props.history;
     return (
         <Paper style={styles.root}>
             <div color="primary">
-                <NavLink to="/manage/leagues"><Button>Leagues</Button></NavLink>
-                <NavLink to="/manage/teams"><Button>Teams</Button></NavLink>
-                <NavLink to="/manage/players"><Button>Players</Button></NavLink>
+                <Button onClick={() => history.push('/manage/leagues')}>Leagues</Button>
+                <Button onClick={() => history.push('/manage/teams')}>Teams</Button>
+                <Button onClick={() => history.push('/manage/players')}>Players</Button>
             </div>
             <Switch>
                 <Route exact={true} path={`${matchProp.url}/leagues`} component={ManageLeaguesContainer}/>
