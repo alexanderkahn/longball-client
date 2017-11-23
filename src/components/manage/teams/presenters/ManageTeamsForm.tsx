@@ -13,6 +13,7 @@ export interface ManageTeamsFormActions {
     resetView: () => void;
     fetchListItems: () => void;
     buildHandleSelectTeamDetail: (team: Team) => () => void;
+    buildHandleDeleteTeam: (team: Team) => () => void;
 }
 
 export default class ManageTeamsForm extends Component<ManageTeamsFormProps & ManageTeamsFormActions> {
@@ -32,12 +33,13 @@ export default class ManageTeamsForm extends Component<ManageTeamsFormProps & Ma
     }
 
     getChildListItems(): Array<JSX.Element> {
-        const {teams, buildHandleSelectTeamDetail} = this.props;
+        const {teams, buildHandleSelectTeamDetail, buildHandleDeleteTeam} = this.props;
         return teams.map(team => (
             <TeamListItem
                 team={team}
                 key={team.id}
                 handleSelectTeamDetail={buildHandleSelectTeamDetail(team)}
+                handleDeleteTeam={buildHandleDeleteTeam(team)}
             />
         ));
     }

@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchTeams } from '../../../../actions/teams';
+import { deleteTeam, fetchTeams } from '../../../../actions/teams';
 import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '../presenters/ManageTeamsForm';
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
@@ -17,7 +17,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageTeamsFormActio
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchTeams(0)),
-        buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`/manage/teams/${team.id}`))
+        buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`/manage/teams/${team.id}`)),
+        buildHandleDeleteTeam: (team: Team) => () => dispatch(deleteTeam(team))
     };
 };
 

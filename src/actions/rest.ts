@@ -11,6 +11,9 @@ async function getJsonResponse(url: string): Promise<{ data: {}, included?: {} }
     const response = await fetch(url, {
         headers: getHeaders(token)
     });
+    if (response.status !== 200) {
+        throw new Error(`Got an unexpected response [${response.status}] for GET ${url}`);
+    }
     return await response.json();
 }
 
@@ -21,6 +24,9 @@ async function getJsonPostResponse(url: string, body: ResourceObject): Promise<{
         method: 'POST',
         body: JSON.stringify({data: body})
     });
+    if (response.status !== 201) {
+        throw new Error(`Got an unexpected response [${response.status}] for POST ${url}`);
+    }
     return await response.json();
 }
 
@@ -30,6 +36,9 @@ async function getJsonDeleteResponse(url: string): Promise<{ meta: { status: num
         headers: getHeaders(token),
         method: 'DELETE'
     });
+    if (response.status !== 200) {
+        throw new Error(`Got an unexpected response [${response.status}] for DELETE ${url}`);
+    }
     return await response.json();
 }
 
