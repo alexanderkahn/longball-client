@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ManagementList from '../../shared/presenters/ManagementList';
-import { CurrentView, Player } from '../../../../models/models';
+import { CurrentView, Player, RosterPosition } from '../../../../models/models';
 import PlayerListItem from './PlayerListItem';
 import { Component } from 'react';
 
@@ -12,7 +12,7 @@ export interface ManagePlayersFormProps {
 export interface ManagePlayersFormActions {
     resetView: () => void;
     fetchListItems: () => void;
-    buildHandleSelectPlayerDetail: (id: string) => () => void;
+    buildHandleSelectPlayerDetail: (rosterPosition: RosterPosition) => () => void;
 }
 
 export default class ManagePlayersForm extends Component<ManagePlayersFormProps & ManagePlayersFormActions> {
@@ -35,7 +35,7 @@ export default class ManagePlayersForm extends Component<ManagePlayersFormProps 
         return players.map(player => (
             <PlayerListItem
                 player={player}
-                handleSelectPlayerDetail={buildHandleSelectPlayerDetail(player.rosterPosition.id)}
+                handleSelectPlayerDetail={buildHandleSelectPlayerDetail(player.rosterPosition)}
                 key={player.rosterPosition.id}
             />
         ));

@@ -12,7 +12,7 @@ export interface ManageTeamsFormProps {
 export interface ManageTeamsFormActions {
     resetView: () => void;
     fetchListItems: () => void;
-    buildHandleSelectTeamDetail: (id: string) => () => void;
+    buildHandleSelectTeamDetail: (team: Team) => () => void;
 }
 
 export default class ManageTeamsForm extends Component<ManageTeamsFormProps & ManageTeamsFormActions> {
@@ -37,7 +37,7 @@ export default class ManageTeamsForm extends Component<ManageTeamsFormProps & Ma
             <TeamListItem
                 team={team}
                 key={team.id}
-                handleSelectTeamDetail={buildHandleSelectTeamDetail(team.id)}
+                handleSelectTeamDetail={buildHandleSelectTeamDetail(team)}
             />
         ));
     }

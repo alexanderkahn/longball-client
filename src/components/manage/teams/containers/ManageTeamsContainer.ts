@@ -4,6 +4,7 @@ import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '.
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
+import { Team } from '../../../../models/models';
 
 const mapStateToProps = (state: RootState): ManageTeamsFormProps => {
     return {
@@ -16,7 +17,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageTeamsFormActio
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchTeams(0)),
-        buildHandleSelectTeamDetail: (id: string) => () => dispatch(push(`/manage/teams/${id}`))
+        buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`/manage/teams/${team.id}`))
     };
 };
 

@@ -8,7 +8,7 @@ import { push } from 'react-router-redux';
 
 function getPlayers(rosterPositions: Map<string, RosterPosition>, people: Map<string, Person>): Array<Player> {
     let players: Array<Player> = [];
-    Array.from(rosterPositions.values()).forEach( (rosterPosition) => {
+    Array.from(rosterPositions.values()).forEach((rosterPosition) => {
         const person = people.get(rosterPosition.relationships.player.data.id);
         if (person) {
             players.push({rosterPosition, person});
@@ -28,7 +28,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManagePlayersFormAct
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchPlayers(0)),
-        buildHandleSelectPlayerDetail: (id: string) => () => dispatch(push(`/manage/players/${id}`))
+        buildHandleSelectPlayerDetail: (rosterPosition: RosterPosition) => () =>
+            dispatch(push(`/manage/players/${rosterPosition.id}`))
     };
 };
 
