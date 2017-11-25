@@ -5,11 +5,7 @@ import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailFormProps } from
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { League } from '../../../../models/models';
-
-const deepCopy = <T>(o: T): T => {
-    return JSON.parse(JSON.stringify(o));
-};
+import { deepCopy, League } from '../../../../models/models';
 
 const emptyLeague = {
     id: '',

@@ -7,7 +7,6 @@ import { Component } from 'react';
 export interface ManageLeaguesProps {
     leagues: Array<League>;
     currentView: CurrentView;
-    addOneUrl: string;
 }
 
 export interface ManageLeaguesActions {

@@ -10,7 +10,6 @@ const mapStateToProps = (state: RootState): ManageLeaguesProps => {
     return {
         leagues: Array.from(state.data.leagues.values()),
         currentView: state.currentView,
-        addOneUrl: '/manage/leagues/add'
     };
 };
 
@@ -18,7 +17,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageLeaguesActions
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchLeagues(0)),
-        onClickAdd: () => dispatch(push('manage/leagues/add')),
+        onClickAdd: () => dispatch(push('/manage/leagues/add')),
         buildHandleSelectDetail: (id: string) => () => dispatch(push(`/manage/leagues/${id}`)),
         buildHandleDeleteLeague: (league: League) => () => dispatch(deleteLeague(league))
     };

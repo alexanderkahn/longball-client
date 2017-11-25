@@ -9,7 +9,7 @@ import { Team } from '../../../../models/models';
 const mapStateToProps = (state: RootState): ManageTeamsFormProps => {
     return {
         teams: Array.from(state.data.teams.values()),
-        currentView: state.currentView
+        currentView: state.currentView,
     };
 };
 
@@ -17,6 +17,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageTeamsFormActio
     return {
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchTeams(0)),
+        onClickAdd: () => dispatch(push('/manage/teams/add')),
         buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`/manage/teams/${team.id}`)),
         buildHandleDeleteTeam: (team: Team) => () => dispatch(deleteTeam(team))
     };

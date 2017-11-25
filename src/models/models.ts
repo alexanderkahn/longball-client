@@ -32,6 +32,9 @@ export interface Team extends ResourceObject {
         location: string,
         nickname: string
     };
+    relationships: {
+        league: RelationshipResource;
+    };
 }
 
 export interface Person extends ResourceObject {
@@ -62,3 +65,7 @@ interface RelationshipResource {
         id: string
     };
 }
+
+export const deepCopy = <T>(o: T): T => {
+    return JSON.parse(JSON.stringify(o));
+};

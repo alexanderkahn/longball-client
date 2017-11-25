@@ -5,24 +5,50 @@ import TeamDetailForm, { TeamDetailFormActions, TeamDetailFormProps } from '../p
 import { RootState } from '../../../../reducers/index';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
+import { deepCopy, Team } from '../../../../models/models';
 
-const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>):
-    TeamDetailFormProps => {
+const emptyTeam: Team = {
+    id: '',
+    type: 'teams',
+    attributes: {
+        abbreviation: '',
+        location: '',
+        nickname: ''
+    },
+    relationships: {
+        league: {
+            data: {
+                type: '',
+                id: ''
+            },
+        }
+    }
+};
+
+const getTeam = (id: string, storedTeams: Map<string, Team>): Team | undefined => {
+    if (id === 'add') {
+        return deepCopy(emptyTeam);
+    }
+    return storedTeams.get(id);
+};
+
+const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>)
+    : TeamDetailFormProps => {
     const teamId = ownProps.match.params.itemId;
     return {
-        team: state.data.teams.get(teamId),
+        team: getTeam(teamId, state.data.teams),
         currentView: state.currentView
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>):
-    TeamDetailFormActions => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>)
+    : TeamDetailFormActions => {
     const teamId = ownProps.match.params.itemId;
     return {
-        resetView: function() {
+        resetView: function () {
             dispatch(resetView());
         },
-        fetchItemDetail: function() {
+        fetchItemDetail: function () {
             dispatch(fetchTeamDetail(teamId));
         }
     };

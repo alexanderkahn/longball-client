@@ -12,6 +12,7 @@ export interface ManageTeamsFormProps {
 export interface ManageTeamsFormActions {
     resetView: () => void;
     fetchListItems: () => void;
+    onClickAdd: () => void;
     buildHandleSelectTeamDetail: (team: Team) => () => void;
     buildHandleDeleteTeam: (team: Team) => () => void;
 }
@@ -19,13 +20,14 @@ export interface ManageTeamsFormActions {
 export default class ManageTeamsForm extends Component<ManageTeamsFormProps & ManageTeamsFormActions> {
 
     render() {
-        const {currentView, resetView, fetchListItems} = this.props;
+        const {currentView, resetView, fetchListItems, onClickAdd} = this.props;
         return (
             <ManagementList
                 title="Teams"
                 currentView={currentView}
                 resetView={resetView}
                 fetchListItems={fetchListItems}
+                onClickAdd={onClickAdd}
             >
                 {this.getChildListItems()}
             </ManagementList>

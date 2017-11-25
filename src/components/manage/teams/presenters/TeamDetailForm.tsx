@@ -9,8 +9,8 @@ const styles: CSSProperties = {
     root: {
         padding: 10,
     },
-    input: {
-        display: 'block',
+    leagueSelector: {
+        paddingBottom: 30,
     }
 };
 
@@ -25,37 +25,6 @@ export interface TeamDetailFormActions {
 }
 
 export default class TeamDetailForm extends Component<TeamDetailFormProps & TeamDetailFormActions> {
-    static getForm(team?: Team) {
-        if (!team) {
-            return <div>I can't find the requested team</div>;
-        } else {
-            return (
-                <form style={styles.root}>
-                    <TextField
-                        style={styles.input}
-                        disabled={true}
-                        id="abbreviation"
-                        label="Abbreviation"
-                        value={team.attributes.abbreviation}
-                    />
-                    <TextField
-                        style={styles.input}
-                        disabled={true}
-                        id="location"
-                        label="Location"
-                        value={team.attributes.location}
-                    />
-                    <TextField
-                        style={styles.input}
-                        disabled={true}
-                        id="nickname"
-                        label="Nickname"
-                        value={team.attributes.nickname}
-                    />
-                </form>
-            );
-        }
-    }
 
     componentDidMount() {
         this.props.resetView();
@@ -72,8 +41,52 @@ export default class TeamDetailForm extends Component<TeamDetailFormProps & Team
         const {team} = this.props;
         return (
             <FetchableAsset isFetching={isNullOrUndefined(team)}>
-                {TeamDetailForm.getForm(team)}
+                {this.getForm()}
             </FetchableAsset>
         );
+    }
+
+    getForm() {
+        const {team} = this.props;
+        if (!team) {
+            return <div>I can't find the requested team</div>;
+        } else {
+            return (
+                <form style={styles.root}>
+                    <div style={styles.leagueSelector}>
+                        {/*<span>League: {team.relationships.league.data.id} </span>*/}
+                        {/*<Button disabled={true} dense={true}>Change selection</Button>*/}
+                        <TextField
+                            fullWidth={true}
+                            disabled={true}
+                            id="league"
+                            label="League"
+                            value={team.relationships.league.data.id}
+                        />
+                    </div>
+                    <TextField
+                        fullWidth={true}
+                        disabled={true}
+                        id="abbreviation"
+                        label="Abbreviation"
+                        value={team.attributes.abbreviation}
+                    />
+                    <TextField
+                        fullWidth={true}
+                        disabled={true}
+                        id="location"
+                        label="Location"
+                        value={team.attributes.location}
+                    />
+                    <TextField
+                        fullWidth={true}
+                        disabled={true}
+                        id="nickname"
+                        label="Nickname"
+                        value={team.attributes.nickname}
+                    />
+                </form>
+            );
+        }
     }
 }
