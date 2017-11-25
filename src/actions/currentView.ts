@@ -1,13 +1,11 @@
 export enum CurrentViewActionTypeKeys {
     RESET_VIEW = 'RESET_VIEW',
     SET_FETCHING = 'SET_FETCHING',
-    SET_EDIT = 'SET_EDIT'
 }
 
 export type CurrentViewAction =
     | ResetCurrentViewAction
-    | SetCurrentViewFetchingAction
-    | ToggleCurrentViewEditAction;
+    | SetCurrentViewFetchingAction;
 
 interface ResetCurrentViewAction {
     type: CurrentViewActionTypeKeys.RESET_VIEW;
@@ -28,15 +26,5 @@ export function setCurrentViewFetching(isFetching: boolean): SetCurrentViewFetch
     return {
         type: CurrentViewActionTypeKeys.SET_FETCHING,
         isFetching: isFetching
-    };
-}
-
-interface ToggleCurrentViewEditAction {
-    type: CurrentViewActionTypeKeys.SET_EDIT;
-}
-
-export function toggleCurrentViewEdit(): ToggleCurrentViewEditAction {
-    return {
-        type: CurrentViewActionTypeKeys.SET_EDIT,
     };
 }

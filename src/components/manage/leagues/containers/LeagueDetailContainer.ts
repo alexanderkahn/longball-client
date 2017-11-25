@@ -1,6 +1,6 @@
 import { connect, Dispatch } from 'react-redux';
 import { fetchLeagueDetail, saveLeague } from '../../../../actions/leagues';
-import { resetView, toggleCurrentViewEdit } from '../../../../actions/currentView';
+import { resetView } from '../../../../actions/currentView';
 import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailFormProps } from '../presenters/LeagueDetailForm';
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
@@ -15,20 +15,22 @@ const emptyLeague = {
     }
 };
 
-const getLeague = (id: string, storedLeagues: Map<string, League>): League | undefined => {
-    if (id === 'add') {
-        return deepCopy(emptyLeague);
-    }
-    return storedLeagues.get(id);
-};
-
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>):
     LeagueDetailFormProps => {
     const leagueId = ownProps.match.params.itemId;
-    return {
-        league: getLeague(leagueId, state.data.leagues),
-        currentView: state.currentView
-    };
+    if  (leagueId === 'add') {
+        return {
+            league: deepCopy(emptyLeague),
+            isEdit: true,
+            currentView: state.currentView
+        };
+    } else {
+        return {
+            league: state.data.leagues.get(leagueId),
+            isEdit: false,
+            currentView: state.currentView
+        };
+    }
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>):
@@ -40,9 +42,6 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         },
         fetchItemDetail: function() {
             dispatch(fetchLeagueDetail(leagueId));
-        },
-        toggleCurrentViewEdit: function() {
-            dispatch(toggleCurrentViewEdit());
         },
         saveLeague: function (league: League) {
             dispatch(saveLeague(league));
