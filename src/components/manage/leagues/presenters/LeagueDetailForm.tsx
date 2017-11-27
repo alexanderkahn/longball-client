@@ -29,39 +29,6 @@ export interface LeagueDetailFormActions {
 
 export default class LeagueDetailForm extends Component<LeagueDetailFormProps & LeagueDetailFormActions> {
 
-    onLeagueNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (isNullOrUndefined(this.props.league)) {
-            return;
-        }
-
-        this.props.league.attributes.name = event.target.value;
-        this.forceUpdate();
-    }
-
-    getForm() {
-        const {isEdit, saveLeague, league} = this.props;
-        if (!league) {
-            return <div>I can't find the league you requested!</div>;
-        } else {
-            return (
-                <form style={styles.root}>
-                    <TextField
-                        style={styles.input}
-                        disabled={!isEdit}
-                        id="name"
-                        label="Name"
-                        value={league.attributes.name}
-                        onChange={this.onLeagueNameChange}
-                    />
-                    <SaveDetailFooter
-                        isEdit={isEdit}
-                        onSave={() => saveLeague(league)}
-                    />
-                </form>
-            );
-        }
-    }
-
     componentDidMount() {
         this.props.resetView();
     }
@@ -80,4 +47,36 @@ export default class LeagueDetailForm extends Component<LeagueDetailFormProps & 
             </FetchableAsset>
         );
     }
+
+    getForm() {
+        const {isEdit, saveLeague, league} = this.props;
+        if (!league) {
+            return <div>I can't find the league you requested!</div>;
+        } else {
+            return (
+                <form style={styles.root}>
+                    <TextField
+                        style={styles.input}
+                        disabled={!isEdit}
+                        id="name"
+                        label="Name"
+                        value={league.attributes.name}
+                        onChange={this.onNameChange}
+                    />
+                    <SaveDetailFooter
+                        isEdit={isEdit}
+                        onSave={() => saveLeague(league)}
+                    />
+                </form>
+            );
+        }
+    }
+
+    onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!isNullOrUndefined(this.props.league)) {
+            this.props.league.attributes.name = event.target.value;
+            this.forceUpdate();
+        }
+    }
+
 }

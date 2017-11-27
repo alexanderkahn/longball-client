@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Component, CSSProperties } from 'react';
+import { ChangeEvent, Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import { CurrentView, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { isNullOrUndefined } from 'util';
+import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 
 const styles: CSSProperties = {
     root: {
@@ -16,12 +17,14 @@ const styles: CSSProperties = {
 
 export interface TeamDetailFormProps {
     team?: Team;
+    isEdit: boolean;
     currentView: CurrentView;
 }
 
 export interface TeamDetailFormActions {
     resetView: () => void;
     fetchItemDetail: () => void;
+    saveTeam: (team: Team) => void;
 }
 
 export default class TeamDetailForm extends Component<TeamDetailFormProps & TeamDetailFormActions> {
@@ -47,7 +50,7 @@ export default class TeamDetailForm extends Component<TeamDetailFormProps & Team
     }
 
     getForm() {
-        const {team} = this.props;
+        const {team, isEdit, saveTeam} = this.props;
         if (!team) {
             return <div>I can't find the requested team</div>;
         } else {
@@ -58,35 +61,71 @@ export default class TeamDetailForm extends Component<TeamDetailFormProps & Team
                         {/*<Button disabled={true} dense={true}>Change selection</Button>*/}
                         <TextField
                             fullWidth={true}
-                            disabled={true}
+                            disabled={!isEdit}
                             id="league"
                             label="League"
                             value={team.relationships.league.data.id}
+                            onChange={this.onLeagueChange}
                         />
                     </div>
                     <TextField
                         fullWidth={true}
-                        disabled={true}
+                        disabled={!isEdit}
                         id="abbreviation"
                         label="Abbreviation"
                         value={team.attributes.abbreviation}
+                        onChange={this.onAbbreviationChange}
                     />
                     <TextField
                         fullWidth={true}
-                        disabled={true}
+                        disabled={!isEdit}
                         id="location"
                         label="Location"
                         value={team.attributes.location}
+                        onChange={this.onLocationChange}
                     />
                     <TextField
                         fullWidth={true}
-                        disabled={true}
+                        disabled={!isEdit}
                         id="nickname"
                         label="Nickname"
                         value={team.attributes.nickname}
+                        onChange={this.onNicknameChange}
+                    />
+                    <SaveDetailFooter
+                        isEdit={isEdit}
+                        onSave={() => saveTeam(team)}
                     />
                 </form>
             );
+        }
+    }
+
+    onLeagueChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!isNullOrUndefined(this.props.team)) {
+            this.props.team.relationships.league.data.id = event.target.value;
+            this.forceUpdate();
+        }
+    }
+
+    onAbbreviationChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!isNullOrUndefined(this.props.team)) {
+            this.props.team.attributes.abbreviation = event.target.value;
+            this.forceUpdate();
+        }
+    }
+
+    onLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!isNullOrUndefined(this.props.team)) {
+            this.props.team.attributes.location = event.target.value;
+            this.forceUpdate();
+        }
+    }
+
+    onNicknameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!isNullOrUndefined(this.props.team)) {
+            this.props.team.attributes.nickname = event.target.value;
+            this.forceUpdate();
         }
     }
 }

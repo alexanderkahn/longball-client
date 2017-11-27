@@ -9,14 +9,14 @@ export type PeopleAction = | ReceivePeopleAction;
 
 interface ReceivePeopleAction {
     type: PeopleActionTypeKeys.RECEIVE_PEOPLE;
-    data: Map<string, Person>;
+    data: Array<Person>;
     receivedAt: number;
 }
 
-export function receivePeople(jsonPeople: Map<String, Person>) {
+export function receivePeople(people: Array<Person>) {
     return {
         type: PeopleActionTypeKeys.RECEIVE_PEOPLE,
-        data: jsonPeople,
+        data: people,
         receivedAt: Date.now()
     };
 }

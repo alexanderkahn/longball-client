@@ -1,8 +1,9 @@
-import { deleteObject, fetchCollection, fetchObject } from './rest';
+import { deleteObject, fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { Team } from '../models/models';
 import { RootState } from '../reducers/index';
 import { Dispatch } from 'redux';
+import { replace } from 'react-router-redux';
 
 export enum TeamActionTypeKeys {
     RECEIVE_TEAMS = 'RECEIVE_TEAMS',
@@ -13,7 +14,7 @@ export type TeamAction = | ReceiveTeamsAction | RemoveTeamAction;
 
 interface ReceiveTeamsAction {
     type: TeamActionTypeKeys.RECEIVE_TEAMS;
-    data: Map<string, Team>;
+    data: Array<Team>;
     receivedAt: number;
 }
 
@@ -22,7 +23,7 @@ interface RemoveTeamAction {
     removed: string;
 }
 
-function receiveTeams(teams: Map<string, Team>): ReceiveTeamsAction {
+function receiveTeams(teams: Array<Team>): ReceiveTeamsAction {
     return {
         type: TeamActionTypeKeys.RECEIVE_TEAMS,
         data: teams,
@@ -50,8 +51,16 @@ export function fetchTeamDetail(teamId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         const object = await fetchObject<Team>('teams', teamId);
-        dispatch(receiveTeams(object.data));
+        dispatch(receiveTeams([object.data]));
         dispatch(setCurrentViewFetching(false));
+    };
+}
+
+export function saveTeam(team: Team): Dispatch<RootState> {
+    return async function (dispatch: Dispatch<RootState>) {
+        const saveResponse = await postObject(team);
+        dispatch(receiveTeams([saveResponse]));
+        dispatch(replace(`/manage/teams/${saveResponse.id}`));
     };
 }
 

@@ -1,45 +1,85 @@
 import { getIdTokenPromise } from './session';
 import { ResourceObject } from '../models/models';
 
-export interface DataResponse<T extends ResourceObject> {
-    data: Map<string, T>;
-    included?: Map<string, ResourceObject>;
+export interface MetaResponse {
+    meta: {
+        status: number,
+    };
 }
 
-async function getJsonResponse(url: string): Promise<{ data: {}, included?: {} }> {
+export interface ObjectResponse<T extends ResourceObject> extends MetaResponse {
+    meta: {
+        status: number,
+    };
+    data: T;
+    included?: Array<ResourceObject>;
+}
+
+export interface CollectionResponse<T extends ResourceObject> extends MetaResponse {
+    meta: {
+        status: number,
+    };
+    data: Array<T>;
+    included?: Array<ResourceObject>;
+}
+
+interface RequestOptions {
+    method: string;
+    headers: { [header: string]: {} }; // TODO: can I change this to a map?
+    body?: {};
+}
+
+interface JsonResponse {
+    request: {
+        url: string;
+        options: RequestOptions;
+    };
+    status: number;
+    headers: Headers;
+    json: {};
+}
+
+async function fetchJson(url: string, options: RequestOptions): Promise<JsonResponse> {
     const token = await getIdTokenPromise();
-    const response = await fetch(url, {
-        headers: getHeaders(token)
+    options.headers.Authorization = 'Bearer ' + token;
+    const response = await fetch(url, options);
+    const json = await response.json();
+    return {request: {url, options}, status: response.status, headers: response.headers, json};
+}
+
+async function getJsonResponse<T>(url: string): Promise<T> {
+    const response = await fetchJson(url, {
+        method: 'GET',
+        headers: {}
     });
     if (response.status !== 200) {
-        throw new Error(`Got an unexpected response [${response.status}] for GET ${url}`);
+        throw formatResponseError(response);
     }
-    return await response.json();
+    return response.json as T;
 }
 
-async function getJsonPostResponse(url: string, body: ResourceObject): Promise<{ data: {} }> {
-    const token = await getIdTokenPromise();
-    const response = await fetch(url, {
-        headers: {...getHeaders(token), 'Content-Type': 'application/json'},
+async function getJsonPostResponse<T extends ResourceObject>(url: string, body: T): Promise<ObjectResponse<T>> {
+    const response = await fetchJson(url, {
+        headers: {'Content-Type': 'application/json'},
         method: 'POST',
         body: JSON.stringify({data: body})
     });
     if (response.status !== 201) {
-        throw new Error(`Got an unexpected response [${response.status}] for POST ${url}`);
+        throw formatResponseError(response);
+
     }
-    return await response.json();
+    return response.json as Promise<ObjectResponse<T>>;
 }
 
-async function getJsonDeleteResponse(url: string): Promise<{ meta: { status: number }}> {
-    const token = await getIdTokenPromise();
-    const response = await fetch(url, {
-        headers: getHeaders(token),
+async function getJsonDeleteResponse(url: string): Promise<{ meta: { status: number } }> {
+    const response = await fetchJson(url, {
+        headers: {},
         method: 'DELETE'
     });
     if (response.status !== 200) {
-        throw new Error(`Got an unexpected response [${response.status}] for DELETE ${url}`);
+        throw formatResponseError(response);
     }
-    return await response.json();
+    return response.json as ObjectResponse<ResourceObject>;
 }
 
 function getFormattedUrl(url: string, includes?: Array<string>) {
@@ -52,37 +92,20 @@ function getFormattedUrl(url: string, includes?: Array<string>) {
     return url;
 }
 
-function toMap<T extends ResourceObject>(objects: Array<T>): Map<string, T> {
-    let map: Map<string, T> = new Map();
-    objects.forEach(obj => map.set(obj.id, obj));
-    return map;
-}
-
 export async function fetchCollection<T extends ResourceObject>(type: string, page: number, includes?: Array<string>)
-: Promise<DataResponse<T>> {
+: Promise<CollectionResponse<T>> {
     const url = getFormattedUrl(`/rest/${type}?page=${page}`, includes);
-    const json = await getJsonResponse(url);
-    const data = json.data as Array<T>;
-
-    const included = json.included as Array<ResourceObject>;
-    if (included) {
-        return {data: toMap(data), included: toMap(included)};
-    }
-    return {data: toMap(data)};
+    return await getJsonResponse<CollectionResponse<T>>(url);
 }
 
 export async function fetchObject<T extends ResourceObject>(type: string, id: string, includes?: Array<string>)
-: Promise<DataResponse<T>> {
+: Promise<ObjectResponse<T>> {
     const url = getFormattedUrl(`/rest/${type}/${id}`, includes);
-    const json = await getJsonResponse(url);
-    const data = json.data as T;
-    const included = json.included as Array<ResourceObject>;
-    if (included) {
-        return {data: new Map().set(data.id, data), included: toMap(included)};
-    }
-    return {data: new Map().set(data.id, data)};
+    return await getJsonResponse<ObjectResponse<T>>(url);
+
 }
 
+// TODO: why not return ObjectResponse<T>?
 export async function postObject<T extends ResourceObject>(object: T): Promise<T> {
     const url = `/rest/${object.type}`;
     const json = await getJsonPostResponse(url, object);
@@ -92,11 +115,10 @@ export async function postObject<T extends ResourceObject>(object: T): Promise<T
 export async function deleteObject<T extends ResourceObject>(object: T): Promise<number> {
     const url = `/rest/${object.type}/${object.id}`;
     const json = await getJsonDeleteResponse(url);
-    return json.meta.status;
+    return json.meta.status; // TODO: is returning the number necessary here?
 }
 
-function getHeaders(authToken: string) {
-    return {
-        Authorization: 'Bearer ' + authToken,
-    };
+function formatResponseError(response: JsonResponse): Error {
+    return new Error(`Got an unexpected response [${response.status}] for ${response.request.options.method} `
+    + `${response.request.url}\n${JSON.stringify(response.json)}`);
 }

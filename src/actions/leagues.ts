@@ -15,7 +15,7 @@ export type LeagueAction =
 
 interface ReceiveLeaguesAction {
     type: LeagueActionTypeKeys.RECEIVE_LEAGUES;
-    data: Map<string, League>;
+    data: Array<League>;
     receivedAt: number;
 }
 
@@ -24,7 +24,7 @@ interface RemoveLeagueAction {
     removed: string;
 }
 
-function receiveLeagues(leagues: Map<string, League>): ReceiveLeaguesAction {
+function receiveLeagues(leagues: Array<League>): ReceiveLeaguesAction {
     return {
         type: LeagueActionTypeKeys.RECEIVE_LEAGUES,
         data: leagues,
@@ -52,7 +52,7 @@ export function fetchLeagueDetail(leagueId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         const object = await fetchObject<League>('leagues', leagueId);
-        dispatch(receiveLeagues(object.data));
+        dispatch(receiveLeagues([object.data]));
         dispatch(setCurrentViewFetching(false));
     };
 }
@@ -60,7 +60,7 @@ export function fetchLeagueDetail(leagueId: string): Dispatch<RootState> {
 export function saveLeague(league: League): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         const saveResponse = await postObject(league);
-        dispatch(receiveLeagues(new Map().set(saveResponse.id, saveResponse)));
+        dispatch(receiveLeagues([saveResponse]));
         dispatch(replace(`/manage/leagues/${saveResponse.id}`));
     };
 }

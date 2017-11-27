@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchTeamDetail } from '../../../../actions/teams';
+import { fetchTeamDetail, saveTeam } from '../../../../actions/teams';
 import { resetView } from '../../../../actions/currentView';
 import TeamDetailForm, { TeamDetailFormActions, TeamDetailFormProps } from '../presenters/TeamDetailForm';
 import { RootState } from '../../../../reducers/index';
@@ -18,27 +18,29 @@ const emptyTeam: Team = {
     relationships: {
         league: {
             data: {
-                type: '',
+                type: 'leagues',
                 id: ''
             },
         }
     }
 };
 
-const getTeam = (id: string, storedTeams: Map<string, Team>): Team | undefined => {
-    if (id === 'add') {
-        return deepCopy(emptyTeam);
-    }
-    return storedTeams.get(id);
-};
-
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>)
     : TeamDetailFormProps => {
     const teamId = ownProps.match.params.itemId;
-    return {
-        team: getTeam(teamId, state.data.teams),
-        currentView: state.currentView
-    };
+    if (teamId === 'add') {
+        return {
+            team: deepCopy(emptyTeam),
+            currentView: state.currentView,
+            isEdit: true
+        };
+    } else {
+        return {
+            team: state.data.teams.get(teamId),
+            currentView: state.currentView,
+            isEdit: false
+        };
+    }
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>)
@@ -50,6 +52,9 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         },
         fetchItemDetail: function () {
             dispatch(fetchTeamDetail(teamId));
+        },
+        saveTeam: function (team: Team) {
+            dispatch(saveTeam(team));
         }
     };
 };
