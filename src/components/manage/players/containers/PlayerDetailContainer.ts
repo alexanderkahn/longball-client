@@ -6,21 +6,64 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
+import { deepCopy, Player } from '../../../../models/models';
+import { isNullOrUndefined } from 'util';
 
-function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>):
-PlayerDetailFormProps {
-    // TODO: lordy this is ugly and bad.
-    const rosterPosition = state.data.rosterPositions.get(ownProps.match.params.itemId);
-    const person = !rosterPosition ? null : state.data.people.get(rosterPosition.relationships.player.data.id);
-    return {
-        rosterPosition: rosterPosition ? rosterPosition : null,
-        person: person ? person : null,
-        currentView: state.currentView
-    };
+const emptyPlayer: Player = {
+    person: {
+        id: '',
+        type: 'people',
+        attributes: {
+            first: '',
+            last: '',
+        },
+    },
+    rosterPosition: {
+        id: '',
+        type: 'rosterpositions',
+        attributes: {
+            jerseyNumber: 0,
+            startDate: '',
+        },
+        relationships: {
+            team: {
+                data: {
+                    type: 'teams',
+                    id: '',
+                },
+            },
+            player: {
+                data: {
+                    type: 'people',
+                    id: '',
+                },
+            },
+        }
+    }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>):
-    PlayerDetailFormActions => {
+function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailFormProps {
+    // TODO: lordy this is ugly and bad.
+    let teamId = ownProps.match.params.itemId;
+    if (teamId === 'add') {
+        return {
+            player: deepCopy(emptyPlayer),
+            isEdit: true,
+            currentView: state.currentView
+        }
+    } else {
+        const rosterPosition = state.data.rosterPositions.get(teamId);
+        const person = !rosterPosition ? null : state.data.people.get(rosterPosition.relationships.player.data.id);
+        return {
+            player: isNullOrUndefined(rosterPosition) || isNullOrUndefined(person) ? null : {rosterPosition, person},
+            isEdit: false,
+            currentView: state.currentView
+        };
+    }
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>)
+    : PlayerDetailFormActions => {
     const playerId = ownProps.match.params.itemId;
     return {
         resetView: function () {

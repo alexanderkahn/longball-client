@@ -12,18 +12,20 @@ export interface ManagePlayersFormProps {
 export interface ManagePlayersFormActions {
     resetView: () => void;
     fetchListItems: () => void;
+    onClickAdd: () => void;
     buildHandleSelectPlayerDetail: (rosterPosition: RosterPosition) => () => void;
 }
 
 export default class ManagePlayersForm extends Component<ManagePlayersFormProps & ManagePlayersFormActions> {
     render() {
-        const {currentView, resetView, fetchListItems} = this.props;
+        const {currentView, resetView, fetchListItems, onClickAdd} = this.props;
         return (
             <ManagementList
                 title="Players"
                 currentView={currentView}
                 resetView={resetView}
                 fetchListItems={fetchListItems}
+                onClickAdd={onClickAdd}
             >
                 {this.getChildListItems()}
             </ManagementList>

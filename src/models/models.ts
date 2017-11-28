@@ -48,8 +48,14 @@ export interface Person extends ResourceObject {
 export interface RosterPosition extends ResourceObject {
     id: string;
     type: string;
+    attributes: {
+        jerseyNumber: number;
+        startDate: string;
+        endDate?: string;
+    };
     relationships: {
-        player: RelationshipResource
+        team: RelationshipResource;
+        player: RelationshipResource;
     };
 }
 

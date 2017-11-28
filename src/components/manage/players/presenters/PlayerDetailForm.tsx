@@ -1,22 +1,25 @@
 import * as React from 'react';
-import { Component, CSSProperties } from 'react';
+import { ChangeEvent, Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { Person, RosterPosition, CurrentView } from '../../../../models/models';
+import { CurrentView, Player } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined, isNumber } from 'util';
 
 const styles: CSSProperties = {
     root: {
         padding: 10,
     },
-    input: {
-        display: 'block',
+    teamSelector: {
+        paddingBottom: 30,
+    },
+    playerInfo: {
+        paddingBottom: 30,
     }
 };
 
 export interface PlayerDetailFormProps {
-    rosterPosition: RosterPosition | null;
-    person: Person | null;
+    player: Player | null;
+    isEdit: boolean;
     currentView: CurrentView;
 }
 
@@ -26,51 +29,122 @@ export interface PlayerDetailFormActions {
 }
 
 export default class PlayerDetailForm extends Component<PlayerDetailFormProps & PlayerDetailFormActions> {
-    static getForm(rosterPosition: RosterPosition | null, person: Person | null) {
-        if (!rosterPosition || !person) {
-            return <div>I can't find the selected player</div>;
-        } else {
-            return (
-                <form style={styles.root}>
-                    <TextField
-                        style={styles.input}
-                        disabled={true}
-                        id="first"
-                        label="First Name"
-                        value={person.attributes.first}
-                    />
-                    <TextField
-                        style={styles.input}
-                        disabled={true}
-                        id="last"
-                        label="Last Name"
-                        value={person.attributes.last}
-                    />
-                </form>
-            );
-        }
-    }
 
     componentDidMount() {
         this.props.resetView();
     }
 
     componentDidUpdate() {
-        const {currentView, person, rosterPosition, fetchItemDetail} = this.props;
-        if (!currentView.isFetching
-            && !currentView.lastUpdated
-            && (isNullOrUndefined(person) || isNullOrUndefined(rosterPosition))) {
+        const {currentView, player, fetchItemDetail} = this.props;
+        if (!currentView.isFetching && !currentView.lastUpdated && (isNullOrUndefined(player))) {
             fetchItemDetail();
         }
     }
 
     render() {
-        const {rosterPosition, person} = this.props;
         return (
-            <FetchableAsset isFetching={isNullOrUndefined(person) || isNullOrUndefined(rosterPosition)}>
-                {PlayerDetailForm.getForm(rosterPosition, person)}
+            <FetchableAsset isFetching={isNullOrUndefined(this.props.player)}>
+                {this.getForm()}
             </FetchableAsset>
         );
+    }
+
+    getForm() {
+        const {player, isEdit} = this.props;
+        if (!player) {
+            return <div>I can't find the selected player</div>;
+        } else {
+            return (
+                <form style={styles.root}>
+                    <div style={styles.teamSelector}>
+                        <TextField
+                            fullWidth={true}
+                            disabled={!isEdit}
+                            id="team"
+                            label="Team"
+                            value={player.rosterPosition.relationships.team.data.id}
+                            onChange={this.onTeamChange}
+                        />
+                    </div>
+                    <div style={styles.playerInfo}>
+                        <TextField
+                            fullWidth={true}
+                            disabled={!isEdit}
+                            id="first"
+                            label="First Name"
+                            value={player.person.attributes.first}
+                            onChange={this.onFirstNameChange}
+
+                        />
+                        <TextField
+                            fullWidth={true}
+                            disabled={!isEdit}
+                            id="last"
+                            label="Last Name"
+                            value={player.person.attributes.last}
+                            onChange={this.onLastNameChange}
+
+                        />
+                    </div>
+                    <TextField
+                        fullWidth={true}
+                        disabled={!isEdit}
+                        id="jerseyNumber"
+                        label="Jersery Number"
+                        type="number"
+                        value={player.rosterPosition.attributes.jerseyNumber}
+                        onChange={this.onJerseyNumberChange}
+
+                    />
+                    <TextField
+                        fullWidth={true}
+                        disabled={!isEdit}
+                        id="startDate"
+                        label="Start Date"
+                        value={player.rosterPosition.attributes.startDate}
+                        onChange={this.onStartDateChange}
+
+                    />
+                </form>
+            );
+        }
+    }
+
+    onTeamChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!isNullOrUndefined(this.props.player)) {
+            this.props.player.rosterPosition.relationships.team.data.id = event.target.value;
+            this.forceUpdate();
+        }
+    }
+
+    onFirstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!isNullOrUndefined(this.props.player)) {
+            this.props.player.person.attributes.first = event.target.value;
+            this.forceUpdate();
+        }
+    }
+
+    onLastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!isNullOrUndefined(this.props.player)) {
+            this.props.player.person.attributes.last = event.target.value;
+            this.forceUpdate();
+        }
+    }
+
+    onJerseyNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
+
+        const jerseyNumber = Number(event.target.value);
+        if (!isNullOrUndefined(this.props.player) && isNumber(jerseyNumber)) {
+            this.props.player.rosterPosition.attributes.jerseyNumber = jerseyNumber;
+            this.forceUpdate();
+        }
+    }
+
+    onStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (!isNullOrUndefined(this.props.player)) {
+            this.props.player.rosterPosition.attributes.startDate = event.target.value;
+            this.forceUpdate();
+        }
     }
 
 }
