@@ -65,6 +65,11 @@ interface RelationshipResource {
     };
 }
 
+// TODO: the functions below don't really have a home right now. Maybe find one for them?
 export const deepCopy = <T>(o: T): T => {
     return JSON.parse(JSON.stringify(o));
 };
+
+export function toMap<T extends ResourceObject>(objectsArray: Array<T>): Map<string, T> {
+    return new Map(objectsArray.map((obj): [string, T] => [obj.id, obj]));
+}

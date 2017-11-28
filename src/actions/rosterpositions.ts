@@ -1,6 +1,6 @@
 import { fetchCollection, fetchObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
-import { Person, RosterPosition } from '../models/models';
+import { Person, RosterPosition, toMap } from '../models/models';
 import { receivePeople } from './people';
 import { Dispatch } from 'redux';
 import { RootState } from '../reducers/index';
@@ -14,14 +14,14 @@ export type RosterPositionAction = | ReceiveRosterPositionsAction;
 
 interface ReceiveRosterPositionsAction {
     type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS;
-    data: Array<RosterPosition>;
+    data: Map<string, RosterPosition>;
     receivedAt: number;
 }
 
 function receiveRosterPositions(rosterPositions: Array<RosterPosition>): ReceiveRosterPositionsAction {
     return {
         type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS,
-        data: rosterPositions,
+        data: toMap(rosterPositions),
         receivedAt: Date.now()
     };
 }
