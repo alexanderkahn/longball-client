@@ -1,17 +1,18 @@
-import { fetchCollection, fetchObject, postObject } from './rest';
+import { deleteObject, fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { Person, Player, RosterPosition, toMap } from '../models/models';
-import { receivePeople } from './people';
+import { receivePeople, removePerson } from './people';
 import { Dispatch } from 'redux';
 import { RootState } from '../reducers/index';
 import { isNullOrUndefined } from 'util';
 import { replace } from 'react-router-redux';
 
 export enum RosterPositionActionTypeKeys {
-    RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS'
+    RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS',
+    REMOVE_ROSTER_POSITION = 'REMOVE_ROSTER_POSITION'
 }
 
-export type RosterPositionAction = | ReceiveRosterPositionsAction;
+export type RosterPositionAction = | ReceiveRosterPositionsAction | RemoveRosterPositionAction;
 
 interface ReceiveRosterPositionsAction {
     type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS;
@@ -19,11 +20,23 @@ interface ReceiveRosterPositionsAction {
     receivedAt: number;
 }
 
+interface RemoveRosterPositionAction {
+    type: RosterPositionActionTypeKeys.REMOVE_ROSTER_POSITION;
+    removed: string;
+}
+
 function receiveRosterPositions(rosterPositions: Array<RosterPosition>): ReceiveRosterPositionsAction {
     return {
         type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS,
         data: toMap(rosterPositions),
         receivedAt: Date.now()
+    };
+}
+
+function removeRosterPosition(id: string): RemoveRosterPositionAction {
+    return {
+        type: RosterPositionActionTypeKeys.REMOVE_ROSTER_POSITION,
+        removed: id
     };
 }
 
@@ -63,4 +76,13 @@ export function savePlayer(player: Player) {
 
         dispatch(replace(`/manage/players/${saveRosterPositionResponse.id}`));
     };
+}
+
+export function deletePlayer(player: Player) {
+    return async function (dispatch: Dispatch<RootState>) {
+        await deleteObject(player.rosterPosition);
+        await deleteObject(player.person);
+        dispatch(removeRosterPosition(player.rosterPosition.id));
+        dispatch(removePerson(player.person.id));
+    }
 }

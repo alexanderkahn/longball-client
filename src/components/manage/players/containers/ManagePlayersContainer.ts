@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchPlayers } from '../../../../actions/rosterpositions';
+import { deletePlayer, fetchPlayers } from '../../../../actions/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
 import { Person, Player, RosterPosition } from '../../../../models/models';
 import { resetView } from '../../../../actions/currentView';
@@ -29,8 +29,9 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManagePlayersFormAct
         resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchPlayers(0)),
         onClickAdd: () => dispatch(push('/manage/players/add')),
-        buildHandleSelectPlayerDetail: (rosterPosition: RosterPosition) => () =>
-            dispatch(push(`/manage/players/${rosterPosition.id}`))
+        buildHandleSelectPlayerDetail: (player: Player) => () =>
+            dispatch(push(`/manage/players/${player.rosterPosition.id}`)),
+        buildHandleDeletePlayer: (player: Player) => () => dispatch(deletePlayer(player)),
     };
 };
 

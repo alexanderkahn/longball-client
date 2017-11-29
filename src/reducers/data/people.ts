@@ -5,6 +5,10 @@ export const people = (state: Map<string, Person> = new Map(), action: PeopleAct
     switch (action.type) {
         case PeopleActionTypeKeys.RECEIVE_PEOPLE:
             return new Map([...state, ...action.data]);
+        case PeopleActionTypeKeys.REMOVE_PERSON:
+            let newMap = new Map([...state]);
+            newMap.delete(action.removed);
+            return newMap;
         default:
             return state;
     }
