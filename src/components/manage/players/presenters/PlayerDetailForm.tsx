@@ -4,6 +4,7 @@ import { TextField } from 'material-ui';
 import { CurrentView, Player } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { isNullOrUndefined, isNumber } from 'util';
+import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 
 const styles: CSSProperties = {
     root: {
@@ -26,6 +27,7 @@ export interface PlayerDetailFormProps {
 export interface PlayerDetailFormActions {
     resetView: () => void;
     fetchItemDetail: () => void;
+    savePlayer: (player: Player) => void;
 }
 
 export default class PlayerDetailForm extends Component<PlayerDetailFormProps & PlayerDetailFormActions> {
@@ -50,7 +52,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailFormProps & 
     }
 
     getForm() {
-        const {player, isEdit} = this.props;
+        const {player, isEdit, savePlayer} = this.props;
         if (!player) {
             return <div>I can't find the selected player</div>;
         } else {
@@ -104,6 +106,10 @@ export default class PlayerDetailForm extends Component<PlayerDetailFormProps & 
                         value={player.rosterPosition.attributes.startDate}
                         onChange={this.onStartDateChange}
 
+                    />
+                    <SaveDetailFooter
+                        isEdit={isEdit}
+                        onSave={() => savePlayer(player)}
                     />
                 </form>
             );

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { fetchPlayerDetail } from '../../../../actions/rosterpositions';
+import { fetchPlayerDetail, savePlayer } from '../../../../actions/rosterpositions';
 import { resetView } from '../../../../actions/currentView';
 import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailFormProps } from '../presenters/PlayerDetailForm';
 import { Dispatch } from 'redux';
@@ -71,6 +71,9 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         },
         fetchItemDetail: function () {
             dispatch(fetchPlayerDetail(playerId));
+        },
+        savePlayer: function(player: Player) {
+            dispatch(savePlayer(player));
         }
     };
 };

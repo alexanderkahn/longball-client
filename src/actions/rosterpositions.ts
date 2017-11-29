@@ -1,10 +1,11 @@
-import { fetchCollection, fetchObject } from './rest';
+import { fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
-import { Person, RosterPosition, toMap } from '../models/models';
+import { Person, Player, RosterPosition, toMap } from '../models/models';
 import { receivePeople } from './people';
 import { Dispatch } from 'redux';
 import { RootState } from '../reducers/index';
 import { isNullOrUndefined } from 'util';
+import { replace } from 'react-router-redux';
 
 export enum RosterPositionActionTypeKeys {
     RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS'
@@ -47,5 +48,19 @@ export function fetchPlayerDetail(playerId: string) {
         }
         dispatch(receiveRosterPositions([object.data]));
         dispatch(setCurrentViewFetching(false));
+    };
+}
+
+export function savePlayer(player: Player) {
+    return async function (dispatch: Dispatch<RootState>) {
+
+        const savePersonResponse = await postObject(player.person);
+        dispatch(receivePeople([savePersonResponse]));
+
+        player.rosterPosition.relationships.player.data.id = savePersonResponse.id;
+        const saveRosterPositionResponse = await postObject(player.rosterPosition);
+        dispatch(receiveRosterPositions([saveRosterPositionResponse]));
+
+        dispatch(replace(`/manage/players/${saveRosterPositionResponse.id}`));
     };
 }
