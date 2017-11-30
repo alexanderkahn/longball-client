@@ -16,7 +16,7 @@ const mapStateToProps = (state: RootState): ManageTeamsFormProps => {
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageTeamsFormActions => {
     return {
         resetView: () => dispatch(resetView()),
-        fetchListItems: () => dispatch(fetchTeams(0)),
+        fetchListItems: () => dispatch(fetchTeams(1)),
         onClickAdd: () => dispatch(push('/manage/teams/add')),
         buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`/manage/teams/${team.id}`)),
         buildHandleDeleteTeam: (team: Team) => () => dispatch(deleteTeam(team))

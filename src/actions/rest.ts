@@ -94,7 +94,11 @@ function getFormattedUrl(url: string, includes?: Array<string>) {
 
 export async function fetchCollection<T extends ResourceObject>(type: string, page: number, includes?: Array<string>)
 : Promise<CollectionResponse<T>> {
-    const url = getFormattedUrl(`/rest/${type}?page=${page}`, includes);
+    const adjustedPage = page - 1;
+    if (0 > adjustedPage) {
+        throw new Error('Invalid page number for request: ' + page);
+    }
+    const url = getFormattedUrl(`/rest/${type}?page=${adjustedPage}`, includes);
     return await getJsonResponse<CollectionResponse<T>>(url);
 }
 
