@@ -1,10 +1,7 @@
-// TODO probably move all of these into their respective state reducers
 // TODO: get this from the server, not directly from firebase. Will look like the other models
-
-export interface ResourceObject {
-    id: string;
-    type: string;
-}
+import { parse } from 'querystring';
+import { Location } from 'history';
+import { isNumber } from 'util';
 
 export interface User {
     name: string;
@@ -13,6 +10,16 @@ export interface User {
 export interface CurrentView {
     isFetching: boolean;
     lastUpdated?: number;
+}
+
+export interface PagedViewParams {
+    page?: string;
+}
+
+// TODO probably move all of these into their respective state reducers
+export interface ResourceObject {
+    id: string;
+    type: string;
 }
 
 export interface League extends ResourceObject {
@@ -78,4 +85,13 @@ export const deepCopy = <T>(o: T): T => {
 
 export function toMap<T extends ResourceObject>(objectsArray: Array<T>): Map<string, T> {
     return new Map(objectsArray.map((obj): [string, T] => [obj.id, obj]));
+}
+
+export function getSafePage(location: Location): number {
+    const params = parse(location.search.substr(1)) as PagedViewParams;
+    const pageNumber = Number(params.page);
+    if (isNumber(pageNumber) && pageNumber > 0) {
+        return pageNumber;
+    }
+    return 1;
 }

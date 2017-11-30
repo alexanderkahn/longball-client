@@ -1,10 +1,11 @@
 import { connect, Dispatch } from 'react-redux';
 import { deletePlayer, fetchPlayers } from '../../../../actions/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
-import { Person, Player, RosterPosition } from '../../../../models/models';
+import { getSafePage, Person, Player, RosterPosition } from '../../../../models/models';
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
+import { RouteComponentProps } from 'react-router';
 
 function getPlayers(rosterPositions: Map<string, RosterPosition>, people: Map<string, Person>): Array<Player> {
     let players: Array<Player> = [];
@@ -24,10 +25,11 @@ const mapStateToProps = (state: RootState): ManagePlayersFormProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManagePlayersFormActions => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>)
+    : ManagePlayersFormActions => {
     return {
         resetView: () => dispatch(resetView()),
-        fetchListItems: () => dispatch(fetchPlayers(1)),
+        fetchListItems: () => dispatch(fetchPlayers(getSafePage(ownProps.location))),
         onClickAdd: () => dispatch(push('/manage/players/add')),
         buildHandleSelectPlayerDetail: (player: Player) => () =>
             dispatch(push(`/manage/players/${player.rosterPosition.id}`)),

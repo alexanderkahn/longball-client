@@ -4,7 +4,8 @@ import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
-import { League } from '../../../../models/models';
+import { getSafePage, League } from '../../../../models/models';
+import { RouteComponentProps } from 'react-router';
 
 const mapStateToProps = (state: RootState): ManageLeaguesProps => {
     return {
@@ -13,10 +14,10 @@ const mapStateToProps = (state: RootState): ManageLeaguesProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageLeaguesActions => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>): ManageLeaguesActions => {
     return {
         resetView: () => dispatch(resetView()),
-        fetchListItems: () => dispatch(fetchLeagues(1)),
+        fetchListItems: () => dispatch(fetchLeagues(getSafePage(ownProps.location))),
         onClickAdd: () => dispatch(push('/manage/leagues/add')),
         buildHandleSelectDetail: (id: string) => () => dispatch(push(`/manage/leagues/${id}`)),
         buildHandleDeleteLeague: (league: League) => () => dispatch(deleteLeague(league))

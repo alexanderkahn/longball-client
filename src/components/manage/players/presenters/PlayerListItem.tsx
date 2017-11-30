@@ -6,7 +6,6 @@ import { Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
 
-
 interface PlayerListItemProps {
     player: Player;
     handleSelectPlayerDetail: () => void;

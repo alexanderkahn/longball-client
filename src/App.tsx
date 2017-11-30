@@ -10,8 +10,14 @@ import AppRouterContainer from './components/main/containers/AppRouterContainer'
 import { watchForAuthChanges } from './actions/session';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import createBrowserHistory from 'history/createBrowserHistory';
+import { parse, stringify } from 'querystring';
+import qhistory from 'qhistory';
 
-const history = createBrowserHistory();
+const history = qhistory(
+    createBrowserHistory(),
+    stringify,
+    parse
+);
 const store = createStore(
     reducers,
     applyMiddleware(
