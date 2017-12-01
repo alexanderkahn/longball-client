@@ -40,7 +40,7 @@ const emptyPlayer: Player = {
             },
         }
     }
-}
+};
 
 function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailFormProps {
     // TODO: lordy this is ugly and bad.
@@ -50,7 +50,7 @@ function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageI
             player: deepCopy(emptyPlayer),
             isEdit: true,
             currentView: state.currentView
-        }
+        };
     } else {
         const rosterPosition = state.data.rosterPositions.get(teamId);
         const person = !rosterPosition ? null : state.data.people.get(rosterPosition.relationships.player.data.id);

@@ -84,5 +84,5 @@ export function deletePlayer(player: Player) {
         await deleteObject(player.person);
         dispatch(removeRosterPosition(player.rosterPosition.id));
         dispatch(removePerson(player.person.id));
-    }
+    };
 }
