@@ -1,14 +1,19 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
-import List, { ListSubheader } from 'material-ui/List';
-import { Button } from 'material-ui';
+import List from 'material-ui/List';
+import { Button, DialogTitle } from 'material-ui';
 import AddIcon from 'material-ui-icons/Add';
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
 import { CurrentView } from '../../../../models/models';
 import { isNullOrUndefined } from 'util';
 
 const styles: CSSProperties = {
-    button: {
+    title: {
+        display: 'inline-flex',
+    },
+    addButton: {
         margin: 10,
     },
 };
@@ -39,8 +44,13 @@ export default class ManagementList extends Component<ManagementListProps> {
         const {title, currentView, children, onClickAdd} = this.props;
 
         return (
-            <div>
-                <List subheader={<ListSubheader disableSticky={true}>{title}</ListSubheader>}>
+            <form>
+                <DialogTitle style={styles.title}>{title}</DialogTitle>
+                <span>
+                    <Button dense={true} aria-label="previous"><ChevronLeftIcon /></Button>
+                    <Button dense={true} aria-label="next"><ChevronRightIcon /></Button>
+                </span>
+                <List>
                     {children}
                 </List>
                 <LoadingProgressIndicator enabled={currentView.isFetching}/>
@@ -49,13 +59,13 @@ export default class ManagementList extends Component<ManagementListProps> {
                     fab={true}
                     color="accent"
                     aria-label="add"
-                    style={styles.button}
+                    style={styles.addButton}
                     onClick={onClickAdd}
                 >
                     <AddIcon/>
                 </Button>
                 }
-            </div>
+            </form>
         );
     }
 }
