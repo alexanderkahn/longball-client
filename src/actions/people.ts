@@ -1,5 +1,5 @@
 
-import { Person, toMap } from '../models/models';
+import { Person } from '../models/models';
 
 export enum PeopleActionTypeKeys {
     RECEIVE_PEOPLE = 'RECEIVE_PEOPLE',
@@ -10,7 +10,7 @@ export type PeopleAction = | ReceivePeopleAction | RemovePersonAction;
 
 interface ReceivePeopleAction {
     type: PeopleActionTypeKeys.RECEIVE_PEOPLE;
-    data: Map<string, Person>;
+    data: Array<Person>;
     receivedAt: number;
 }
 
@@ -22,7 +22,7 @@ interface RemovePersonAction {
 export function receivePeople(people: Array<Person>): ReceivePeopleAction {
     return {
         type: PeopleActionTypeKeys.RECEIVE_PEOPLE,
-        data: toMap(people),
+        data: people,
         receivedAt: Date.now()
     };
 }

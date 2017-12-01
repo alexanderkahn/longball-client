@@ -86,10 +86,6 @@ export const deepCopy = <T>(o: T): T => {
     return JSON.parse(JSON.stringify(o));
 };
 
-export function toMap<T extends ResourceObject>(objectsArray: Array<T>): Map<string, T> {
-    return new Map(objectsArray.map((obj): [string, T] => [obj.id, obj]));
-}
-
 export function getSafePage(location: Location): number {
     const params = parse(location.search.substr(1)) as PagedViewParams;
     const pageNumber = Number(params.page);

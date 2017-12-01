@@ -1,14 +1,13 @@
 import { Person } from '../../models/models';
 import { PeopleAction, PeopleActionTypeKeys } from '../../actions/people';
+import { Map } from 'immutable';
 
-export const people = (state: Map<string, Person> = new Map(), action: PeopleAction): Map<string, Person> => {
+export const people = (state: Map<string, Person> = Map(), action: PeopleAction): Map<string, Person> => {
     switch (action.type) {
         case PeopleActionTypeKeys.RECEIVE_PEOPLE:
-            return new Map([...state, ...action.data]);
+            return state.merge(Map(action.data.map(person => [person.id, person])));
         case PeopleActionTypeKeys.REMOVE_PERSON:
-            let newMap = new Map([...state]);
-            newMap.delete(action.removed);
-            return newMap;
+            return state.delete(action.removed);
         default:
             return state;
     }

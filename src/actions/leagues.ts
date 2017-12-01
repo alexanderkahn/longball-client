@@ -1,6 +1,6 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
-import { League, toMap } from '../models/models';
+import { League } from '../models/models';
 import { Dispatch } from 'redux';
 import { RootState } from '../reducers/index';
 import { replace } from 'react-router-redux';
@@ -15,7 +15,7 @@ export type LeagueAction =
 
 interface ReceiveLeaguesAction {
     type: LeagueActionTypeKeys.RECEIVE_LEAGUES;
-    data: Map<string, League>;
+    data: Array<League>;
     receivedAt: number;
 }
 
@@ -27,7 +27,7 @@ interface RemoveLeagueAction {
 function receiveLeagues(leagues: Array<League>): ReceiveLeaguesAction {
     return {
         type: LeagueActionTypeKeys.RECEIVE_LEAGUES,
-        data: toMap(leagues),
+        data: leagues,
         receivedAt: Date.now()
     };
 }

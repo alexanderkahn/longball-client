@@ -1,6 +1,6 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
-import { Person, Player, RosterPosition, toMap } from '../models/models';
+import { Person, Player, RosterPosition } from '../models/models';
 import { receivePeople, removePerson } from './people';
 import { Dispatch } from 'redux';
 import { RootState } from '../reducers/index';
@@ -16,7 +16,7 @@ export type RosterPositionAction = | ReceiveRosterPositionsAction | RemoveRoster
 
 interface ReceiveRosterPositionsAction {
     type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS;
-    data: Map<string, RosterPosition>;
+    data: Array<RosterPosition>;
     receivedAt: number;
 }
 
@@ -28,7 +28,7 @@ interface RemoveRosterPositionAction {
 function receiveRosterPositions(rosterPositions: Array<RosterPosition>): ReceiveRosterPositionsAction {
     return {
         type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS,
-        data: toMap(rosterPositions),
+        data: rosterPositions,
         receivedAt: Date.now()
     };
 }

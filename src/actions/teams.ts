@@ -1,6 +1,6 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
-import { Team, toMap } from '../models/models';
+import { Team } from '../models/models';
 import { RootState } from '../reducers/index';
 import { Dispatch } from 'redux';
 import { replace } from 'react-router-redux';
@@ -14,7 +14,7 @@ export type TeamAction = | ReceiveTeamsAction | RemoveTeamAction;
 
 interface ReceiveTeamsAction {
     type: TeamActionTypeKeys.RECEIVE_TEAMS;
-    data: Map<string, Team>;
+    data: Array<Team>;
     receivedAt: number;
 }
 
@@ -26,7 +26,7 @@ interface RemoveTeamAction {
 function receiveTeams(teams: Array<Team>): ReceiveTeamsAction {
     return {
         type: TeamActionTypeKeys.RECEIVE_TEAMS,
-        data: toMap(teams),
+        data: teams,
         receivedAt: Date.now()
     };
 }

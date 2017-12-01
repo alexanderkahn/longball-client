@@ -1,14 +1,13 @@
 import { TeamAction, TeamActionTypeKeys } from '../../actions/teams';
 import { Team } from '../../models/models';
+import { Map } from 'immutable';
 
-export const teams = (state: Map<string, Team> = new Map(), action: TeamAction): Map<string, Team> => {
+export const teams = (state: Map<string, Team> = Map(), action: TeamAction): Map<string, Team> => {
     switch (action.type) {
         case TeamActionTypeKeys.RECEIVE_TEAMS:
-            return new Map([...state, ...action.data]);
+            return state.merge(Map(action.data.map(team => [team.id, team])));
         case TeamActionTypeKeys.REMOVE_TEAM:
-            let newMap = new Map([...state]);
-            newMap.delete(action.removed);
-            return newMap;
+            return state.delete(action.removed);
         default:
             return state;
     }
