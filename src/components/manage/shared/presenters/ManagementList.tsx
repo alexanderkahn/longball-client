@@ -22,7 +22,9 @@ interface ManagementListProps {
     title: string;
     currentView: CurrentView;
     children: Array<JSX.Element>;
-    onClickAdd?: () => void;
+    onClickAdd: () => void;
+    onClickPrevious: (() => void) | null;
+    onClickNext: (() => void) | null;
     resetView: () => void;
     fetchListItems: () => void;
 }
@@ -41,20 +43,19 @@ export default class ManagementList extends Component<ManagementListProps> {
     }
 
     render() {
-        const {title, currentView, children, onClickAdd} = this.props;
+        const {title, currentView, children, onClickAdd, onClickPrevious, onClickNext} = this.props;
 
         return (
             <form>
                 <DialogTitle style={styles.title}>{title}</DialogTitle>
                 <span>
-                    <Button dense={true} aria-label="previous"><ChevronLeftIcon /></Button>
-                    <Button dense={true} aria-label="next"><ChevronRightIcon /></Button>
+                    <PagingButton ariaLabel="previous" onClick={onClickPrevious}><ChevronLeftIcon/></PagingButton>
+                    <PagingButton ariaLabel="next" onClick={onClickNext}><ChevronRightIcon/></PagingButton>
                 </span>
                 <List>
                     {children}
                 </List>
                 <LoadingProgressIndicator enabled={currentView.isFetching}/>
-                {!isNullOrUndefined(onClickAdd) &&
                 <Button
                     fab={true}
                     color="accent"
@@ -64,8 +65,32 @@ export default class ManagementList extends Component<ManagementListProps> {
                 >
                     <AddIcon/>
                 </Button>
-                }
             </form>
         );
+    }
+}
+
+interface PagingButtonProps {
+    ariaLabel: string;
+    onClick: (() => void) | null;
+    children: React.ReactNode;
+}
+
+class PagingButton extends Component<PagingButtonProps> {
+    render() {
+        const {ariaLabel, onClick, children} = this.props;
+        if (isNullOrUndefined(onClick)) {
+            return (
+                <Button dense={true} aria-label={ariaLabel} disabled={true}>
+                    {children}
+                </Button>
+            );
+        } else {
+            return (
+                <Button dense={true} aria-label={ariaLabel} onClick={onClick}>
+                    {children}
+                </Button>
+            );
+        }
     }
 }

@@ -2,6 +2,9 @@
 import { parse } from 'querystring';
 import { Location } from 'history';
 import { isNumber } from 'util';
+import { push } from 'react-router-redux';
+import { RootState } from '../reducers/index';
+import { Dispatch } from 'redux';
 
 export interface User {
     name: string;
@@ -94,4 +97,25 @@ export function getSafePage(location: Location): number {
         return pageNumber;
     }
     return 1;
+}
+
+// TODO: this is unbounded. should return null if there is no next page
+export function getNext(dispatch: Dispatch<RootState>, location: Location, currentPage: number)
+: (() => void) | null {
+    const nextPage = currentPage + 1;
+    return function() {
+        dispatch(push(location.pathname + '?page=' + nextPage));
+    };
+}
+
+export function getPrevious(dispatch: Dispatch<RootState>, location: Location, currentPage: number)
+: (() => void) | null {
+    const previousPage = currentPage - 1;
+    if (1 > previousPage) {
+        return null;
+    }
+
+    return function() {
+        dispatch(push(location.pathname + '?page=' + previousPage));
+    } ;
 }

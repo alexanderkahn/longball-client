@@ -4,7 +4,7 @@ import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '.
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
-import { getSafePage, Team } from '../../../../models/models';
+import { getNext, getPrevious, getSafePage, Team } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
 
 const mapStateToProps = (state: RootState): ManageTeamsFormProps => {
@@ -16,10 +16,15 @@ const mapStateToProps = (state: RootState): ManageTeamsFormProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>)
     : ManageTeamsFormActions => {
+    const currentPage = getSafePage(ownProps.location);
+    const previous = getPrevious(dispatch, ownProps.location, currentPage);
+    const next = getNext(dispatch, ownProps.location, currentPage);
     return {
         resetView: () => dispatch(resetView()),
-        fetchListItems: () => dispatch(fetchTeams(getSafePage(ownProps.location))),
+        fetchListItems: () => dispatch(fetchTeams(currentPage)),
         onClickAdd: () => dispatch(push('/manage/teams/add')),
+        onClickPrevious: previous,
+        onClickNext: next,
         buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`/manage/teams/${team.id}`)),
         buildHandleDeleteTeam: (team: Team) => () => dispatch(deleteTeam(team))
     };

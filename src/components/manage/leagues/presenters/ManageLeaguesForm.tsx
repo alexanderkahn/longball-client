@@ -13,6 +13,8 @@ export interface ManageLeaguesActions {
     resetView: () => void;
     fetchListItems: () => void;
     onClickAdd: () => void;
+    onClickPrevious: (() => void) | null;
+    onClickNext: (() => void) | null;
     buildHandleSelectDetail: (id: string) => () => void;
     buildHandleDeleteLeague: (league: League) => () => void;
 }
@@ -20,12 +22,14 @@ export interface ManageLeaguesActions {
 export default class ManageLeaguesForm extends Component<ManageLeaguesProps & ManageLeaguesActions> {
 
     render() {
-        const {currentView, onClickAdd, resetView, fetchListItems} = this.props;
+        const {currentView, onClickAdd, onClickPrevious, onClickNext, resetView, fetchListItems} = this.props;
         return (
             <ManagementList
                 title="Leagues"
                 currentView={currentView}
                 onClickAdd={onClickAdd}
+                onClickPrevious={onClickPrevious}
+                onClickNext={onClickNext}
                 resetView={resetView}
                 fetchListItems={fetchListItems}
             >
