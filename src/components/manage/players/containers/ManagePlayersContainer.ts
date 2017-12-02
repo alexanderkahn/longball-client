@@ -1,18 +1,18 @@
 import { connect, Dispatch } from 'react-redux';
 import { deletePlayer, fetchPlayers } from '../../../../actions/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
-import { getNext, getPrevious, getSafePage, Player } from '../../../../models/models';
+import { getNext, getPrevious, getSafePage, Player, RosterPosition } from '../../../../models/models';
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
 import { PeopleState } from '../../../../reducers/data/people';
-import { RosterPositionsState } from '../../../../reducers/data/rosterPositions';
+import { List } from 'immutable';
 
-function getPlayers(rosterPositions: RosterPositionsState, people: PeopleState): Array<Player> {
+function getPlayers(rosterPositions: Array<RosterPosition>, people: PeopleState): Array<Player> {
     let players: Array<Player> = [];
 
-    rosterPositions.data.forEach((rosterPosition) => {
+    rosterPositions.forEach((rosterPosition) => {
         const person = !rosterPosition ? null : people.data.get(rosterPosition.relationships.player.data.id);
         if (rosterPosition && person) {
             players.push({rosterPosition, person});
@@ -22,9 +22,14 @@ function getPlayers(rosterPositions: RosterPositionsState, people: PeopleState):
     return players;
 }
 
-const mapStateToProps = (state: RootState): ManagePlayersFormProps => {
+const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManagePlayersFormProps => {
+    const currentPage = getSafePage(ownProps.location);
+    const rosterPositionIds = state.data.rosterPositions.pageInfo.pages.get(currentPage, List());
+    console.info(rosterPositionIds);
+    const rosterPositions = rosterPositionIds
+        .map(id => state.data.rosterPositions.data.get(id || '', undefined)).toArray();
     return {
-        players: getPlayers(state.data.rosterPositions, state.data.people),
+        players: getPlayers(rosterPositions, state.data.people),
         currentView: state.currentView
     };
 };

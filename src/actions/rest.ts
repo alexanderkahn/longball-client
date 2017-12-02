@@ -107,7 +107,9 @@ export async function fetchCollection<T extends ResourceObject>(type: string, pa
         throw new Error('Invalid page number for request: ' + page);
     }
     const url = getFormattedUrl(`/rest/${type}?page=${adjustedPage}`, includes);
-    return await getJsonResponse<CollectionResponse<T>>(url);
+    const collectionResponse = await getJsonResponse<CollectionResponse<T>>(url);
+    collectionResponse.meta.page.number = page;
+    return collectionResponse;
 }
 
 export async function fetchObject<T extends ResourceObject>(type: string, id: string, includes?: Array<string>)
