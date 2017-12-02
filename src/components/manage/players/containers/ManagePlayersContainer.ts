@@ -1,15 +1,15 @@
 import { connect, Dispatch } from 'react-redux';
 import { deletePlayer, fetchPlayers } from '../../../../actions/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
-import { getNext, getPrevious, getSafePage, Player, RosterPosition } from '../../../../models/models';
+import { getNext, getPrevious, getSafePage, Person, Player, RosterPosition } from '../../../../models/models';
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
-import { PeopleState } from '../../../../reducers/data/people';
 import { List } from 'immutable';
+import { ResourceObjectState } from '../../../../reducers/data/index';
 
-function getPlayers(rosterPositions: Array<RosterPosition>, people: PeopleState): Array<Player> {
+function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObjectState<Person>): Array<Player> {
     let players: Array<Player> = [];
 
     rosterPositions.forEach((rosterPosition) => {

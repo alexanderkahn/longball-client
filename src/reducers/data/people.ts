@@ -1,23 +1,10 @@
 import { Person } from '../../models/models';
 import { PeopleAction, PeopleActionTypeKeys } from '../../actions/people';
 import { List, Map } from 'immutable';
-import { PageInfo } from './index';
+import { initialState, PageInfo, ResourceObjectState } from './index';
 import { isNullOrUndefined } from 'util';
 
-export interface PeopleState {
-    readonly data: Map<string, Person>;
-    readonly pageInfo: PageInfo;
-}
-
-const initialState: PeopleState = {
-    data: Map(),
-    pageInfo: {
-        totalPages: 1,
-        pages: Map()
-    }
-};
-
-export const people = (state: PeopleState = initialState, action: PeopleAction): PeopleState => {
+export const people = (state: ResourceObjectState<Person> = initialState(), action: PeopleAction): ResourceObjectState<Person> => {
     switch (action.type) {
         case PeopleActionTypeKeys.RECEIVE_PEOPLE:
             return {

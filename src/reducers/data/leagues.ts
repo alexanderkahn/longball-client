@@ -2,22 +2,10 @@ import { LeagueAction, LeagueActionTypeKeys } from '../../actions/leagues';
 import { League } from '../../models/models';
 import { List, Map } from 'immutable';
 import { isNullOrUndefined } from 'util';
-import { PageInfo } from './index';
+import { initialState, PageInfo, ResourceObjectState } from './index';
 
-export interface LeaguesState {
-    readonly data: Map<string, League>;
-    readonly pageInfo: PageInfo;
-}
-
-const initialState: LeaguesState = {
-    data: Map(),
-    pageInfo: {
-        totalPages: 1,
-        pages: Map()
-    }
-};
-
-export const leagues = (state: LeaguesState = initialState, action: LeagueAction): LeaguesState => {
+export const leagues = (state: ResourceObjectState<League> = initialState(), action: LeagueAction)
+    : ResourceObjectState<League> => {
     switch (action.type) {
         case LeagueActionTypeKeys.RECEIVE_LEAGUES:
             return {

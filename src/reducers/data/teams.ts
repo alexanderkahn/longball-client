@@ -1,23 +1,11 @@
 import { TeamAction, TeamActionTypeKeys } from '../../actions/teams';
 import { Team } from '../../models/models';
 import { List, Map } from 'immutable';
-import { PageInfo } from './index';
+import { initialState, PageInfo, ResourceObjectState } from './index';
 import { isNullOrUndefined } from 'util';
 
-export interface TeamsState {
-    readonly data: Map<string, Team>;
-    readonly pageInfo: PageInfo;
-}
-
-const initialState: TeamsState = {
-    data: Map(),
-    pageInfo: {
-        totalPages: 1,
-        pages: Map()
-    }
-};
-
-export const teams = (state: TeamsState = initialState, action: TeamAction): TeamsState => {
+export const teams = (state: ResourceObjectState<Team> = initialState(), action: TeamAction)
+    : ResourceObjectState<Team> => {
     switch (action.type) {
         case TeamActionTypeKeys.RECEIVE_TEAMS:
             return {
