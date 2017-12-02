@@ -25,7 +25,6 @@ function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObje
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManagePlayersFormProps => {
     const currentPage = getSafePage(ownProps.location);
     const rosterPositionIds = state.data.rosterPositions.pageInfo.pages.get(currentPage, List());
-    console.info(rosterPositionIds);
     const rosterPositions = rosterPositionIds
         .map(id => state.data.rosterPositions.data.get(id || '', undefined)).toArray();
     return {

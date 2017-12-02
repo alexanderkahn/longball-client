@@ -1,8 +1,7 @@
 import { TeamAction, TeamActionTypeKeys } from '../../actions/teams';
 import { Team } from '../../models/models';
 import { List, Map } from 'immutable';
-import { initialState, PageInfo, ResourceObjectState } from './index';
-import { isNullOrUndefined } from 'util';
+import { initialState, mergePages, ResourceObjectState } from './index';
 
 export const teams = (state: ResourceObjectState<Team> = initialState(), action: TeamAction)
     : ResourceObjectState<Team> => {
@@ -10,7 +9,7 @@ export const teams = (state: ResourceObjectState<Team> = initialState(), action:
         case TeamActionTypeKeys.RECEIVE_TEAMS:
             return {
                 ...state,
-                pageInfo: teamsPages(state.pageInfo, action),
+                pageInfo: mergePages(List(action.data.map(team => team.id)), state.pageInfo, action.page),
                 data: state.data.merge(Map(action.data.map(team => [team.id, team])))
             };
         case TeamActionTypeKeys.REMOVE_TEAM:
@@ -22,15 +21,3 @@ export const teams = (state: ResourceObjectState<Team> = initialState(), action:
             return state;
     }
 };
-
-function teamsPages(state: PageInfo, action: TeamAction): PageInfo {
-    if (action.type !== TeamActionTypeKeys.RECEIVE_TEAMS || isNullOrUndefined(action.page)) {
-        return state;
-    } else {
-        return {
-            ...state,
-            totalPages: action.page.totalPages,
-            pages: state.pages.set(action.page.number, List(action.data.map(league => league.id)))
-        };
-    }
-}
