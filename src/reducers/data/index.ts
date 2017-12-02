@@ -1,15 +1,14 @@
-import { teams } from './teams';
-import { people } from './people';
-import { rosterPositions } from './rosterPositions';
-import { leagues } from './leagues';
+import { teams, TeamsState } from './teams';
+import { people, PeopleState } from './people';
+import { rosterPositions, RosterPositionsState } from './rosterPositions';
+import { leagues, LeaguesState } from './leagues';
 import { combineReducers, Reducer } from 'redux';
-import { League, Person, RosterPosition, Team } from '../../models/models';
 
 export interface DataState {
-    leagues: Map<string, League>;
-    teams: Map<string, Team>;
-    people: Map<string, Person>;
-    rosterPositions: Map<string, RosterPosition>;
+    readonly leagues: LeaguesState;
+    readonly teams: TeamsState;
+    readonly people: PeopleState;
+    readonly rosterPositions: RosterPositionsState;
 }
 
 export const data: Reducer<DataState> = combineReducers<DataState>({

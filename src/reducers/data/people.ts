@@ -2,12 +2,26 @@ import { Person } from '../../models/models';
 import { PeopleAction, PeopleActionTypeKeys } from '../../actions/people';
 import { Map } from 'immutable';
 
-export const people = (state: Map<string, Person> = Map(), action: PeopleAction): Map<string, Person> => {
+export interface PeopleState {
+    readonly data: Map<string, Person>;
+}
+
+const initialState: PeopleState = {
+    data: Map(),
+};
+
+export const people = (state: PeopleState = initialState, action: PeopleAction): PeopleState => {
     switch (action.type) {
         case PeopleActionTypeKeys.RECEIVE_PEOPLE:
-            return state.merge(Map(action.data.map(person => [person.id, person])));
+            return {
+                ...state,
+                data: state.data.merge(Map(action.data.map(person => [person.id, person])))
+            };
         case PeopleActionTypeKeys.REMOVE_PERSON:
-            return state.delete(action.removed);
+            return {
+                ...state,
+                data: state.data.delete(action.removed)
+            };
         default:
             return state;
     }

@@ -9,7 +9,7 @@ import { RouteComponentProps } from 'react-router';
 
 const mapStateToProps = (state: RootState): ManageLeaguesProps => {
     return {
-        leagues: Array.from(state.data.leagues.values()),
+        leagues: state.data.leagues.data.toArray(),
         currentView: state.currentView,
     };
 };

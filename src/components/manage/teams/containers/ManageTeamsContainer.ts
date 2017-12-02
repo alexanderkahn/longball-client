@@ -9,7 +9,7 @@ import { RouteComponentProps } from 'react-router';
 
 const mapStateToProps = (state: RootState): ManageTeamsFormProps => {
     return {
-        teams: Array.from(state.data.teams.values()),
+        teams: Array.from(state.data.teams.data.toArray()),
         currentView: state.currentView,
     };
 };

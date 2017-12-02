@@ -1,20 +1,24 @@
 import { connect, Dispatch } from 'react-redux';
 import { deletePlayer, fetchPlayers } from '../../../../actions/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
-import { getNext, getPrevious, getSafePage, Person, Player, RosterPosition } from '../../../../models/models';
+import { getNext, getPrevious, getSafePage, Player } from '../../../../models/models';
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
+import { PeopleState } from '../../../../reducers/data/people';
+import { RosterPositionsState } from '../../../../reducers/data/rosterPositions';
 
-function getPlayers(rosterPositions: Map<string, RosterPosition>, people: Map<string, Person>): Array<Player> {
+function getPlayers(rosterPositions: RosterPositionsState, people: PeopleState): Array<Player> {
     let players: Array<Player> = [];
-    Array.from(rosterPositions.values()).forEach((rosterPosition) => {
-        const person = people.get(rosterPosition.relationships.player.data.id);
-        if (person) {
+
+    rosterPositions.data.forEach((rosterPosition) => {
+        const person = !rosterPosition ? null : people.data.get(rosterPosition.relationships.player.data.id);
+        if (rosterPosition && person) {
             players.push({rosterPosition, person});
         }
     });
+
     return players;
 }
 

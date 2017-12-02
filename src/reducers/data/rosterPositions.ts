@@ -2,13 +2,27 @@ import { RosterPositionAction, RosterPositionActionTypeKeys } from '../../action
 import { RosterPosition } from '../../models/models';
 import { Map } from 'immutable';
 
-export const rosterPositions = (state: Map<string, RosterPosition> = Map(), action: RosterPositionAction):
-    Map<string, RosterPosition> => {
+export interface RosterPositionsState {
+    readonly data: Map<string, RosterPosition>;
+}
+
+const initialState: RosterPositionsState = {
+    data: Map(),
+};
+
+export const rosterPositions = (state: RosterPositionsState = initialState, action: RosterPositionAction)
+    : RosterPositionsState => {
     switch (action.type) {
         case RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS:
-            return state.merge(Map(action.data.map(position => [position.id, position])));
+            return {
+                ...state,
+                data: state.data.merge(Map(action.data.map(position => [position.id, position]))),
+            };
         case RosterPositionActionTypeKeys.REMOVE_ROSTER_POSITION:
-            return state.delete(action.removed);
+            return {
+                ...state,
+                data: state.data.delete(action.removed)
+            };
         default:
             return state;
     }

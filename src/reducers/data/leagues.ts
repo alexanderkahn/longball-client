@@ -2,12 +2,26 @@ import { LeagueAction, LeagueActionTypeKeys } from '../../actions/leagues';
 import { League } from '../../models/models';
 import { Map } from 'immutable';
 
-export const leagues = (state: Map<string, League> = Map(), action: LeagueAction): Map<string, League> => {
+export interface LeaguesState {
+    readonly data: Map<string, League>;
+}
+
+const initialState: LeaguesState = {
+    data: Map(),
+};
+
+export const leagues = (state: LeaguesState = initialState, action: LeagueAction): LeaguesState => {
     switch (action.type) {
         case LeagueActionTypeKeys.RECEIVE_LEAGUES:
-            return state.merge(Map(action.data.map(league => [league.id, league])));
+            return {
+                ...state,
+                data: state.data.merge(Map(action.data.map(league => [league.id, league])))
+            };
         case LeagueActionTypeKeys.REMOVE_LEAGUE:
-            return state.delete(action.removed);
+            return {
+                ...state,
+                data: state.data.delete(action.removed)
+            };
         default:
             return state;
     }
