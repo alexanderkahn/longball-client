@@ -3,12 +3,18 @@ import { people, PeopleState } from './people';
 import { rosterPositions, RosterPositionsState } from './rosterPositions';
 import { leagues, LeaguesState } from './leagues';
 import { combineReducers, Reducer } from 'redux';
+import { List, Map } from 'immutable';
 
 export interface DataState {
     readonly leagues: LeaguesState;
     readonly teams: TeamsState;
     readonly people: PeopleState;
     readonly rosterPositions: RosterPositionsState;
+}
+
+export interface PageInfo {
+    totalPages: number;
+    pages: Map<number, List<string>>;
 }
 
 export const data: Reducer<DataState> = combineReducers<DataState>({

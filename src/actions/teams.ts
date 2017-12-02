@@ -1,4 +1,4 @@
-import { deleteObject, fetchCollection, fetchObject, postObject } from './rest';
+import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { Team } from '../models/models';
 import { RootState } from '../reducers/index';
@@ -14,21 +14,23 @@ export type TeamAction = | ReceiveTeamsAction | RemoveTeamAction;
 
 interface ReceiveTeamsAction {
     type: TeamActionTypeKeys.RECEIVE_TEAMS;
-    data: Array<Team>;
     receivedAt: number;
+    data: Array<Team>;
+    page?: CollectionPage;
+}
+
+function receiveTeams(teams: Array<Team>, page?: CollectionPage): ReceiveTeamsAction {
+    return {
+        type: TeamActionTypeKeys.RECEIVE_TEAMS,
+        receivedAt: Date.now(),
+        data: teams,
+        page: page
+    };
 }
 
 interface RemoveTeamAction {
     type: TeamActionTypeKeys.REMOVE_TEAM;
     removed: string;
-}
-
-function receiveTeams(teams: Array<Team>): ReceiveTeamsAction {
-    return {
-        type: TeamActionTypeKeys.RECEIVE_TEAMS,
-        data: teams,
-        receivedAt: Date.now()
-    };
 }
 
 function removeTeam(id: string): RemoveTeamAction {
@@ -42,7 +44,7 @@ export function fetchTeams(page: number): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         const collection = await fetchCollection<Team>('teams', page);
-        dispatch(receiveTeams(collection.data));
+        dispatch(receiveTeams(collection.data, collection.meta.page));
         dispatch(setCurrentViewFetching(false));
     };
 }

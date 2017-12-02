@@ -4,12 +4,19 @@ import { ResourceObject } from '../models/models';
 export interface MetaResponse {
     meta: {
         status: number,
+        page: CollectionPage
     };
+}
+
+export interface CollectionPage {
+    totalPages: number;
+    number: number;
 }
 
 export interface ObjectResponse<T extends ResourceObject> extends MetaResponse {
     meta: {
         status: number,
+        page: CollectionPage
     };
     data: T;
     included?: Array<ResourceObject>;
@@ -18,6 +25,7 @@ export interface ObjectResponse<T extends ResourceObject> extends MetaResponse {
 export interface CollectionResponse<T extends ResourceObject> extends MetaResponse {
     meta: {
         status: number,
+        page: CollectionPage
     };
     data: Array<T>;
     included?: Array<ResourceObject>;

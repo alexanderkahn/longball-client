@@ -1,5 +1,6 @@
 
 import { Person } from '../models/models';
+import { CollectionPage } from './rest';
 
 export enum PeopleActionTypeKeys {
     RECEIVE_PEOPLE = 'RECEIVE_PEOPLE',
@@ -10,8 +11,9 @@ export type PeopleAction = | ReceivePeopleAction | RemovePersonAction;
 
 interface ReceivePeopleAction {
     type: PeopleActionTypeKeys.RECEIVE_PEOPLE;
-    data: Array<Person>;
     receivedAt: number;
+    data: Array<Person>;
+    page?: CollectionPage;
 }
 
 interface RemovePersonAction {

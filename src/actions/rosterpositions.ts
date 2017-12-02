@@ -1,4 +1,4 @@
-import { deleteObject, fetchCollection, fetchObject, postObject } from './rest';
+import { deleteObject, fetchCollection, fetchObject, CollectionPage, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { Person, Player, RosterPosition } from '../models/models';
 import { receivePeople, removePerson } from './people';
@@ -16,8 +16,9 @@ export type RosterPositionAction = | ReceiveRosterPositionsAction | RemoveRoster
 
 interface ReceiveRosterPositionsAction {
     type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS;
-    data: Array<RosterPosition>;
     receivedAt: number;
+    data: Array<RosterPosition>;
+    page?: CollectionPage;
 }
 
 interface RemoveRosterPositionAction {
@@ -25,11 +26,13 @@ interface RemoveRosterPositionAction {
     removed: string;
 }
 
-function receiveRosterPositions(rosterPositions: Array<RosterPosition>): ReceiveRosterPositionsAction {
+function receiveRosterPositions(rosterPositions: Array<RosterPosition>, page?: CollectionPage)
+: ReceiveRosterPositionsAction {
     return {
         type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS,
+        receivedAt: Date.now(),
         data: rosterPositions,
-        receivedAt: Date.now()
+        page: page
     };
 }
 
@@ -47,7 +50,7 @@ export function fetchPlayers(page: number) {
         if (!isNullOrUndefined(collection.included)) {
             dispatch(receivePeople(collection.included.filter(ro => ro.type === 'people') as Array<Person>));
         }
-        dispatch(receiveRosterPositions(collection.data));
+        dispatch(receiveRosterPositions(collection.data, collection.meta.page));
         dispatch(setCurrentViewFetching(false));
     };
 }

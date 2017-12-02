@@ -1,4 +1,4 @@
-import { deleteObject, fetchCollection, fetchObject, postObject } from './rest';
+import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from './rest';
 import { setCurrentViewFetching } from './currentView';
 import { League } from '../models/models';
 import { Dispatch } from 'redux';
@@ -15,21 +15,23 @@ export type LeagueAction =
 
 interface ReceiveLeaguesAction {
     type: LeagueActionTypeKeys.RECEIVE_LEAGUES;
-    data: Array<League>;
     receivedAt: number;
+    data: Array<League>;
+    page?: CollectionPage;
+}
+
+function receiveLeagues(leagues: Array<League>, page?: CollectionPage): ReceiveLeaguesAction {
+    return {
+        type: LeagueActionTypeKeys.RECEIVE_LEAGUES,
+        receivedAt: Date.now(),
+        data: leagues,
+        page: page
+    };
 }
 
 interface RemoveLeagueAction {
     type: LeagueActionTypeKeys.REMOVE_LEAGUE;
     removed: string;
-}
-
-function receiveLeagues(leagues: Array<League>): ReceiveLeaguesAction {
-    return {
-        type: LeagueActionTypeKeys.RECEIVE_LEAGUES,
-        data: leagues,
-        receivedAt: Date.now()
-    };
 }
 
 function removeLeague(id: string): RemoveLeagueAction {
@@ -43,7 +45,7 @@ export function fetchLeagues(page: number) {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         const collection = await fetchCollection<League>('leagues', page);
-        dispatch(receiveLeagues(collection.data));
+        dispatch(receiveLeagues(collection.data, collection.meta.page));
         dispatch(setCurrentViewFetching(false));
     };
 }
