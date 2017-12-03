@@ -6,8 +6,7 @@ import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
-import { List } from 'immutable';
-import { ResourceObjectState } from '../../../../reducers/data/index';
+import { getObjectsForPage, ResourceObjectState } from '../../../../reducers/data/index';
 
 function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObjectState<Person>): Array<Player> {
     let players: Array<Player> = [];
@@ -24,9 +23,7 @@ function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObje
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManagePlayersFormProps => {
     const currentPage = getSafePage(ownProps.location);
-    const rosterPositionIds = state.data.rosterPositions.pageInfo.pages.get(currentPage, List());
-    const rosterPositions = rosterPositionIds
-        .map(id => state.data.rosterPositions.data.get(id || '', undefined)).toArray();
+    const rosterPositions = getObjectsForPage(state.data.rosterPositions, currentPage);
     return {
         players: getPlayers(rosterPositions, state.data.people),
         currentView: state.currentView

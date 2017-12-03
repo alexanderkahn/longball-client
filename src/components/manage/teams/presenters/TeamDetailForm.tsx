@@ -15,8 +15,8 @@ const styles: CSSProperties = {
     }
 };
 
-export interface TeamDetailFormProps {
-    team?: Team;
+export interface TeamDetailProps {
+    team: Team | null;
     isEdit: boolean;
     currentView: CurrentView;
 }
@@ -27,7 +27,7 @@ export interface TeamDetailFormActions {
     saveTeam: (team: Team) => void;
 }
 
-export default class TeamDetailForm extends Component<TeamDetailFormProps & TeamDetailFormActions> {
+export default class TeamDetailForm extends Component<TeamDetailProps & TeamDetailFormActions> {
 
     componentDidMount() {
         this.props.resetView();

@@ -6,13 +6,12 @@ import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { getNext, getPrevious, getSafePage, League } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
-import { List } from 'immutable';
+import { getObjectsForPage } from '../../../../reducers/data/index';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageLeaguesProps => {
     const currentPage = getSafePage(ownProps.location);
-    const leagueIds = state.data.leagues.pageInfo.pages.get(currentPage, List());
     return {
-        leagues: leagueIds.map(id => state.data.leagues.data.get(id || '', undefined)).toArray(),
+        leagues: getObjectsForPage(state.data.leagues, currentPage),
         currentView: state.currentView,
     };
 };

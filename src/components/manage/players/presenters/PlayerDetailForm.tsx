@@ -18,7 +18,7 @@ const styles: CSSProperties = {
     }
 };
 
-export interface PlayerDetailFormProps {
+export interface PlayerDetailProps {
     player: Player | null;
     isEdit: boolean;
     currentView: CurrentView;
@@ -30,7 +30,7 @@ export interface PlayerDetailFormActions {
     savePlayer: (player: Player) => void;
 }
 
-export default class PlayerDetailForm extends Component<PlayerDetailFormProps & PlayerDetailFormActions> {
+export default class PlayerDetailForm extends Component<PlayerDetailProps & PlayerDetailFormActions> {
 
     componentDidMount() {
         this.props.resetView();

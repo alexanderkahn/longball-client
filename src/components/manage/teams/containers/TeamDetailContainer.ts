@@ -1,7 +1,7 @@
 import { connect, Dispatch } from 'react-redux';
 import { fetchTeamDetail, saveTeam } from '../../../../actions/teams';
 import { resetView } from '../../../../actions/currentView';
-import TeamDetailForm, { TeamDetailFormActions, TeamDetailFormProps } from '../presenters/TeamDetailForm';
+import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../presenters/TeamDetailForm';
 import { RootState } from '../../../../reducers/index';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
@@ -25,8 +25,7 @@ const emptyTeam: Team = {
     }
 };
 
-const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>)
-    : TeamDetailFormProps => {
+const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): TeamDetailProps => {
     const teamId = ownProps.match.params.itemId;
     if (teamId === 'add') {
         return {

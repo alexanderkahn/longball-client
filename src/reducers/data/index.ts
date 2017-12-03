@@ -21,7 +21,7 @@ export interface PageInfo {
 }
 
 export interface ResourceObjectState<T extends ResourceObject> {
-    readonly data: Map<string, T>;
+    readonly data: Map<string, T | null>;
     readonly pageInfo: PageInfo;
 }
 
@@ -44,6 +44,22 @@ export function mergePages(responseObjectIds: List<string>, state: PageInfo, act
             totalPages: actionPage.totalPages,
             pages: state.pages.set(actionPage.number, responseObjectIds)
         };
+    }
+}
+
+export function getObjectsForPage<T extends ResourceObject>(state: ResourceObjectState<T>, page: number): Array<T> {
+    if (!state.pageInfo.pages.has(page)) {
+        return Array();
+    } else {
+        const ids = state.pageInfo.pages.get(page);
+        const objects = Array<T>();
+        for (const id of ids.toArray()) {
+            const object = state.data.get(id);
+            if (object !== null) {
+                objects.push(object as T);
+            }
+        }
+        return objects;
     }
 }
 

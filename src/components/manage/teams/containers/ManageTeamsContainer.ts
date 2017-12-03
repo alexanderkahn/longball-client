@@ -6,13 +6,12 @@ import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { getNext, getPrevious, getSafePage, Team } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
-import { List } from 'immutable';
+import { getObjectsForPage } from '../../../../reducers/data/index';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageTeamsFormProps => {
     const currentPage = getSafePage(ownProps.location);
-    const teamIds = state.data.teams.pageInfo.pages.get(currentPage, List());
     return {
-        teams: teamIds.map(id => state.data.teams.data.get(id || '', undefined)).toArray(),
+        teams: getObjectsForPage(state.data.teams, currentPage),
         currentView: state.currentView,
     };
 };

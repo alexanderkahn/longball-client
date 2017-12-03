@@ -1,7 +1,7 @@
 import { connect, Dispatch } from 'react-redux';
 import { fetchLeagueDetail, saveLeague } from '../../../../actions/leagues';
 import { resetView } from '../../../../actions/currentView';
-import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailFormProps } from '../presenters/LeagueDetailForm';
+import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '../presenters/LeagueDetailForm';
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
@@ -15,8 +15,7 @@ const emptyLeague = {
     }
 };
 
-const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>):
-    LeagueDetailFormProps => {
+const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): LeagueDetailProps => {
     const leagueId = ownProps.match.params.itemId;
     if  (leagueId === 'add') {
         return {

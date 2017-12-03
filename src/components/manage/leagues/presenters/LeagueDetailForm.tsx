@@ -15,8 +15,8 @@ const styles: CSSProperties = {
     }
 };
 
-export interface LeagueDetailFormProps {
-    league?: League;
+export interface LeagueDetailProps {
+    league: League | null;
     isEdit: boolean;
     currentView: CurrentView;
 }
@@ -27,7 +27,7 @@ export interface LeagueDetailFormActions {
     saveLeague: (league: League) => void;
 }
 
-export default class LeagueDetailForm extends Component<LeagueDetailFormProps & LeagueDetailFormActions> {
+export default class LeagueDetailForm extends Component<LeagueDetailProps & LeagueDetailFormActions> {
 
     componentDidMount() {
         this.props.resetView();

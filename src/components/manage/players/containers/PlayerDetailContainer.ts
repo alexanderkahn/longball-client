@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { fetchPlayerDetail, savePlayer } from '../../../../actions/rosterpositions';
 import { resetView } from '../../../../actions/currentView';
-import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailFormProps } from '../presenters/PlayerDetailForm';
+import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailProps } from '../presenters/PlayerDetailForm';
 import { Dispatch } from 'redux';
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
@@ -42,7 +42,7 @@ const emptyPlayer: Player = {
     }
 };
 
-function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailFormProps {
+function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailProps {
     // TODO: lordy this is ugly and bad.
     let teamId = ownProps.match.params.itemId;
     if (teamId === 'add') {
