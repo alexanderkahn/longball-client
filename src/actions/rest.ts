@@ -4,7 +4,7 @@ import { ResourceObject } from '../models/models';
 export interface MetaResponse {
     meta: {
         status: number,
-        page: CollectionPage
+        page?: CollectionPage
     };
 }
 
@@ -16,7 +16,6 @@ export interface CollectionPage {
 export interface ObjectResponse<T extends ResourceObject> extends MetaResponse {
     meta: {
         status: number,
-        page: CollectionPage
     };
     data: T;
     included?: Array<ResourceObject>;
@@ -47,6 +46,20 @@ interface JsonResponse {
     json: {};
 }
 
+class NotFoundServerResponseError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'NotFoundServerResponseError';
+    }
+}
+
+class UnexpectedServerResponseError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'UnexpectedServerResponseError';
+    }
+}
+
 async function fetchJson(url: string, options: RequestOptions): Promise<JsonResponse> {
     const token = await getIdTokenPromise();
     options.headers.Authorization = 'Bearer ' + token;
@@ -55,15 +68,19 @@ async function fetchJson(url: string, options: RequestOptions): Promise<JsonResp
     return {request: {url, options}, status: response.status, headers: response.headers, json};
 }
 
-async function getJsonResponse<T>(url: string): Promise<T> {
+async function getJsonGetResponse<T>(url: string): Promise<T> {
     const response = await fetchJson(url, {
         method: 'GET',
         headers: {}
     });
-    if (response.status !== 200) {
-        throw formatResponseError(response);
+    if (response.status === 200) {
+        return response.json as T;
+    } else if (response.status === 404) {
+        throw new NotFoundServerResponseError(`not found:  ${url}`);
+    } else {
+        throw formatUnexpectedResponseError(response);
     }
-    return response.json as T;
+
 }
 
 async function getJsonPostResponse<T extends ResourceObject>(url: string, body: T): Promise<ObjectResponse<T>> {
@@ -73,7 +90,7 @@ async function getJsonPostResponse<T extends ResourceObject>(url: string, body: 
         body: JSON.stringify({data: body})
     });
     if (response.status !== 201) {
-        throw formatResponseError(response);
+        throw formatUnexpectedResponseError(response);
 
     }
     return response.json as Promise<ObjectResponse<T>>;
@@ -85,7 +102,7 @@ async function getJsonDeleteResponse(url: string): Promise<{ meta: { status: num
         method: 'DELETE'
     });
     if (response.status !== 200) {
-        throw formatResponseError(response);
+        throw formatUnexpectedResponseError(response);
     }
     return response.json as ObjectResponse<ResourceObject>;
 }
@@ -107,15 +124,23 @@ export async function fetchCollection<T extends ResourceObject>(type: string, pa
         throw new Error('Invalid page number for request: ' + page);
     }
     const url = getFormattedUrl(`/rest/${type}?page=${adjustedPage}`, includes);
-    const collectionResponse = await getJsonResponse<CollectionResponse<T>>(url);
+    const collectionResponse = await getJsonGetResponse<CollectionResponse<T>>(url);
     collectionResponse.meta.page.number = page;
     return collectionResponse;
 }
 
 export async function fetchObject<T extends ResourceObject>(type: string, id: string, includes?: Array<string>)
-: Promise<ObjectResponse<T>> {
+: Promise<ObjectResponse<T> | null> {
     const url = getFormattedUrl(`/rest/${type}/${id}`, includes);
-    return await getJsonResponse<ObjectResponse<T>>(url);
+    try {
+        return await getJsonGetResponse<ObjectResponse<T>>(url);
+    } catch (e) {
+        if (e instanceof NotFoundServerResponseError) {
+            return null;
+        } else {
+            throw e;
+        }
+    }
 
 }
 
@@ -132,7 +157,9 @@ export async function deleteObject<T extends ResourceObject>(object: T): Promise
     return json.meta.status; // TODO: is returning the number necessary here?
 }
 
-function formatResponseError(response: JsonResponse): Error {
-    return new Error(`Got an unexpected response [${response.status}] for ${response.request.options.method} `
-    + `${response.request.url}\n${JSON.stringify(response.json)}`);
+function formatUnexpectedResponseError(response: JsonResponse): UnexpectedServerResponseError {
+    return new UnexpectedServerResponseError(
+        `Got an unexpected response [${response.status}] for ${response.request.options.method} `
+        + `${response.request.url}\n${JSON.stringify(response.json)}`
+    );
 }

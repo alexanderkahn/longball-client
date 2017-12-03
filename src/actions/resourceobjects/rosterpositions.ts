@@ -64,11 +64,11 @@ export function fetchPlayerDetail(playerId: string) {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         const object = await fetchObject<RosterPosition>('rosterpositions', playerId, ['player']);
-        if (!isNullOrUndefined(object.included)) {
+        if (object && object.included) {
             const people = object.included.filter(ro => ro.type === 'people') as Array<Person>;
             dispatch(receivePeople(OrderedMap(people.map(person => [person.id, person]))));
         }
-        dispatch(receiveRosterPositions(OrderedMap([[object.data.id, object.data]])));
+        dispatch(receiveRosterPositions(OrderedMap([[playerId, object ? object.data : null]])));
         dispatch(setCurrentViewFetching(false));
     };
 }

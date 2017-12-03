@@ -56,7 +56,7 @@ export function fetchLeagueDetail(leagueId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         const object = await fetchObject<League>('leagues', leagueId);
-        dispatch(receiveLeagues(OrderedMap([[object.data.id, object.data]])));
+        dispatch(receiveLeagues(OrderedMap([[leagueId, object ? object.data : null]])));
         dispatch(setCurrentViewFetching(false));
     };
 }
