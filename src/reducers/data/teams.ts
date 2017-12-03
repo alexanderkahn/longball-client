@@ -1,6 +1,6 @@
-import { TeamAction, TeamActionTypeKeys } from '../../actions/teams';
+import { TeamAction, TeamActionTypeKeys } from '../../actions/resourceobjects/teams';
 import { Team } from '../../models/models';
-import { List, Map } from 'immutable';
+import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectState } from './index';
 
 export const teams = (state: ResourceObjectState<Team> = initialState(), action: TeamAction)
@@ -9,8 +9,8 @@ export const teams = (state: ResourceObjectState<Team> = initialState(), action:
         case TeamActionTypeKeys.RECEIVE_TEAMS:
             return {
                 ...state,
-                pageInfo: mergePages(List(action.data.map(team => team.id)), state.pageInfo, action.page),
-                data: state.data.merge(Map(action.data.map(team => [team.id, team])))
+                pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
+                data: state.data.merge(action.data)
             };
         case TeamActionTypeKeys.REMOVE_TEAM:
             return {

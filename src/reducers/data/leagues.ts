@@ -1,6 +1,6 @@
-import { LeagueAction, LeagueActionTypeKeys } from '../../actions/leagues';
+import { LeagueAction, LeagueActionTypeKeys } from '../../actions/resourceobjects/leagues';
 import { League } from '../../models/models';
-import { List, Map } from 'immutable';
+import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectState } from './index';
 
 export const leagues = (state: ResourceObjectState<League> = initialState(), action: LeagueAction)
@@ -9,8 +9,8 @@ export const leagues = (state: ResourceObjectState<League> = initialState(), act
         case LeagueActionTypeKeys.RECEIVE_LEAGUES:
             return {
                 ...state,
-                pageInfo: mergePages(List(action.data.map(league => league.id)), state.pageInfo, action.page),
-                data: state.data.merge(Map(action.data.map(league => [league.id, league])))
+                pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
+                data: state.data.merge(action.data)
             };
         case LeagueActionTypeKeys.REMOVE_LEAGUE:
             return {

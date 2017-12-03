@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchTeamDetail, saveTeam } from '../../../../actions/teams';
+import { fetchTeamDetail, saveTeam } from '../../../../actions/resourceobjects/teams';
 import { resetView } from '../../../../actions/currentView';
 import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../presenters/TeamDetailForm';
 import { RootState } from '../../../../reducers/index';

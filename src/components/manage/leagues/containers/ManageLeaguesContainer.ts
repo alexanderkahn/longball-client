@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { deleteLeague, fetchLeagues } from '../../../../actions/leagues';
+import { deleteLeague, fetchLeagues } from '../../../../actions/resourceobjects/leagues';
 import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../presenters/ManageLeaguesForm';
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';

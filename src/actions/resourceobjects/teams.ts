@@ -1,9 +1,10 @@
-import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from './rest';
-import { setCurrentViewFetching } from './currentView';
-import { Team } from '../models/models';
-import { RootState } from '../reducers/index';
+import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
+import { setCurrentViewFetching } from '../currentView';
+import { Team } from '../../models/models';
+import { RootState } from '../../reducers/index';
 import { Dispatch } from 'redux';
 import { replace } from 'react-router-redux';
+import { OrderedMap } from 'immutable';
 
 export enum TeamActionTypeKeys {
     RECEIVE_TEAMS = 'RECEIVE_TEAMS',
@@ -15,11 +16,11 @@ export type TeamAction = | ReceiveTeamsAction | RemoveTeamAction;
 interface ReceiveTeamsAction {
     type: TeamActionTypeKeys.RECEIVE_TEAMS;
     receivedAt: number;
-    data: Array<Team>;
+    data: OrderedMap<string, Team>;
     page?: CollectionPage;
 }
 
-function receiveTeams(teams: Array<Team>, page?: CollectionPage): ReceiveTeamsAction {
+function receiveTeams(teams: OrderedMap<string, Team>, page?: CollectionPage): ReceiveTeamsAction {
     return {
         type: TeamActionTypeKeys.RECEIVE_TEAMS,
         receivedAt: Date.now(),
@@ -44,7 +45,7 @@ export function fetchTeams(page: number): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         const collection = await fetchCollection<Team>('teams', page);
-        dispatch(receiveTeams(collection.data, collection.meta.page));
+        dispatch(receiveTeams(OrderedMap(collection.data.map(team => [team.id, team])), collection.meta.page));
         dispatch(setCurrentViewFetching(false));
     };
 }
@@ -53,7 +54,7 @@ export function fetchTeamDetail(teamId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
         const object = await fetchObject<Team>('teams', teamId);
-        dispatch(receiveTeams([object.data]));
+        dispatch(receiveTeams(OrderedMap([[object.data.id, object.data]])));
         dispatch(setCurrentViewFetching(false));
     };
 }
@@ -61,7 +62,7 @@ export function fetchTeamDetail(teamId: string): Dispatch<RootState> {
 export function saveTeam(team: Team): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         const saveResponse = await postObject(team);
-        dispatch(receiveTeams([saveResponse]));
+        dispatch(receiveTeams(OrderedMap([[saveResponse.id, saveResponse]])));
         dispatch(replace(`/manage/teams/${saveResponse.id}`));
     };
 }

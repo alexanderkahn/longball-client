@@ -1,6 +1,6 @@
-import { RosterPositionAction, RosterPositionActionTypeKeys } from '../../actions/rosterpositions';
+import { RosterPositionAction, RosterPositionActionTypeKeys } from '../../actions/resourceobjects/rosterpositions';
 import { RosterPosition } from '../../models/models';
-import { List, Map } from 'immutable';
+import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectState } from './index';
 
 export const rosterPositions = (state: ResourceObjectState<RosterPosition> = initialState(),
@@ -9,8 +9,8 @@ export const rosterPositions = (state: ResourceObjectState<RosterPosition> = ini
         case RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS:
             return {
                 ...state,
-                pageInfo: mergePages(List(action.data.map(position => position.id)), state.pageInfo, action.page),
-                data: state.data.merge(Map(action.data.map(position => [position.id, position]))),
+                pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
+                data: state.data.merge(action.data),
             };
         case RosterPositionActionTypeKeys.REMOVE_ROSTER_POSITION:
             return {

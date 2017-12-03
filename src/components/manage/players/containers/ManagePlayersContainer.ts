@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { deletePlayer, fetchPlayers } from '../../../../actions/rosterpositions';
+import { deletePlayer, fetchPlayers } from '../../../../actions/resourceobjects/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
 import { getNext, getPrevious, getSafePage, Person, Player, RosterPosition } from '../../../../models/models';
 import { resetView } from '../../../../actions/currentView';

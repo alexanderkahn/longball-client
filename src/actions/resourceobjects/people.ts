@@ -1,6 +1,6 @@
-
-import { Person } from '../models/models';
-import { CollectionPage } from './rest';
+import { Person } from '../../models/models';
+import { CollectionPage } from '../rest';
+import { OrderedMap } from 'immutable';
 
 export enum PeopleActionTypeKeys {
     RECEIVE_PEOPLE = 'RECEIVE_PEOPLE',
@@ -12,7 +12,7 @@ export type PeopleAction = | ReceivePeopleAction | RemovePersonAction;
 interface ReceivePeopleAction {
     type: PeopleActionTypeKeys.RECEIVE_PEOPLE;
     receivedAt: number;
-    data: Array<Person>;
+    data: OrderedMap<string, Person>;
     page?: CollectionPage;
 }
 
@@ -21,7 +21,7 @@ interface RemovePersonAction {
     removed: string;
 }
 
-export function receivePeople(people: Array<Person>): ReceivePeopleAction {
+export function receivePeople(people: OrderedMap<string, Person>): ReceivePeopleAction {
     return {
         type: PeopleActionTypeKeys.RECEIVE_PEOPLE,
         data: people,

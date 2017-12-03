@@ -1,11 +1,12 @@
-import { deleteObject, fetchCollection, fetchObject, CollectionPage, postObject } from './rest';
-import { setCurrentViewFetching } from './currentView';
-import { Person, Player, RosterPosition } from '../models/models';
+import { deleteObject, fetchCollection, fetchObject, CollectionPage, postObject } from '../rest';
+import { setCurrentViewFetching } from '../currentView';
+import { Person, Player, RosterPosition } from '../../models/models';
 import { receivePeople, removePerson } from './people';
 import { Dispatch } from 'redux';
-import { RootState } from '../reducers/index';
+import { RootState } from '../../reducers/index';
 import { isNullOrUndefined } from 'util';
 import { replace } from 'react-router-redux';
+import { OrderedMap } from 'immutable';
 
 export enum RosterPositionActionTypeKeys {
     RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS',
@@ -17,7 +18,7 @@ export type RosterPositionAction = | ReceiveRosterPositionsAction | RemoveRoster
 interface ReceiveRosterPositionsAction {
     type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS;
     receivedAt: number;
-    data: Array<RosterPosition>;
+    data: OrderedMap<string, RosterPosition>;
     page?: CollectionPage;
 }
 
@@ -26,7 +27,7 @@ interface RemoveRosterPositionAction {
     removed: string;
 }
 
-function receiveRosterPositions(rosterPositions: Array<RosterPosition>, page?: CollectionPage)
+function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page?: CollectionPage)
 : ReceiveRosterPositionsAction {
     return {
         type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS,
@@ -48,9 +49,13 @@ export function fetchPlayers(page: number) {
         dispatch(setCurrentViewFetching(true));
         const collection = await fetchCollection<RosterPosition>('rosterpositions', page, ['player']);
         if (!isNullOrUndefined(collection.included)) {
-            dispatch(receivePeople(collection.included.filter(ro => ro.type === 'people') as Array<Person>));
+            const people = collection.included.filter(ro => ro.type === 'people') as Array<Person>;
+            dispatch(receivePeople(OrderedMap(people.map(person => [person.id, person]))));
         }
-        dispatch(receiveRosterPositions(collection.data, collection.meta.page));
+        dispatch(receiveRosterPositions(
+            OrderedMap(collection.data.map(position => [position.id, position])),
+            collection.meta.page)
+        );
         dispatch(setCurrentViewFetching(false));
     };
 }
@@ -60,9 +65,10 @@ export function fetchPlayerDetail(playerId: string) {
         dispatch(setCurrentViewFetching(true));
         const object = await fetchObject<RosterPosition>('rosterpositions', playerId, ['player']);
         if (!isNullOrUndefined(object.included)) {
-            dispatch(receivePeople(object.included.filter(ro => ro.type === 'people') as Array<Person>));
+            const people = object.included.filter(ro => ro.type === 'people') as Array<Person>;
+            dispatch(receivePeople(OrderedMap(people.map(person => [person.id, person]))));
         }
-        dispatch(receiveRosterPositions([object.data]));
+        dispatch(receiveRosterPositions(OrderedMap([[object.data.id, object.data]])));
         dispatch(setCurrentViewFetching(false));
     };
 }
@@ -71,11 +77,11 @@ export function savePlayer(player: Player) {
     return async function (dispatch: Dispatch<RootState>) {
 
         const savePersonResponse = await postObject(player.person);
-        dispatch(receivePeople([savePersonResponse]));
+        dispatch(receivePeople(OrderedMap([[savePersonResponse.id, savePersonResponse]])));
 
         player.rosterPosition.relationships.player.data.id = savePersonResponse.id;
         const saveRosterPositionResponse = await postObject(player.rosterPosition);
-        dispatch(receiveRosterPositions([saveRosterPositionResponse]));
+        dispatch(receiveRosterPositions(OrderedMap([[saveRosterPositionResponse.id, saveRosterPositionResponse]])));
 
         dispatch(replace(`/manage/players/${saveRosterPositionResponse.id}`));
     };

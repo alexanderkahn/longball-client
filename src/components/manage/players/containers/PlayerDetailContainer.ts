@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { fetchPlayerDetail, savePlayer } from '../../../../actions/rosterpositions';
+import { fetchPlayerDetail, savePlayer } from '../../../../actions/resourceobjects/rosterpositions';
 import { resetView } from '../../../../actions/currentView';
 import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailProps } from '../presenters/PlayerDetailForm';
 import { Dispatch } from 'redux';

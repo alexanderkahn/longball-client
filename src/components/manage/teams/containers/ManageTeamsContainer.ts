@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { deleteTeam, fetchTeams } from '../../../../actions/teams';
+import { deleteTeam, fetchTeams } from '../../../../actions/resourceobjects/teams';
 import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '../presenters/ManageTeamsForm';
 import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
