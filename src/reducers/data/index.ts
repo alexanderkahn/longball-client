@@ -15,13 +15,22 @@ export interface DataState {
     readonly rosterPositions: ResourceObjectState<RosterPosition>;
 }
 
+export class ResourceObjectCache<T> {
+    readonly isFetching: boolean;
+    readonly object: T | null;
+    constructor (isFetching: boolean, object?: T) {
+        this.isFetching = isFetching;
+        this.object = object ? object : null;
+    }
+}
+
 export interface PageInfo {
     totalPages: number;
-    pages: Map<number, List<string>>;
+    pages: Map<number, ResourceObjectCache<List<string>>>;
 }
 
 export interface ResourceObjectState<T extends ResourceObject> {
-    readonly data: Map<string, T | null>;
+    readonly data: Map<string, ResourceObjectCache<T>>;
     readonly pageInfo: PageInfo;
 }
 
@@ -42,7 +51,7 @@ export function mergePages(responseObjectIds: List<string>, state: PageInfo, act
         return {
             ...state,
             totalPages: actionPage.totalPages,
-            pages: state.pages.set(actionPage.number, responseObjectIds)
+            pages: state.pages.set(actionPage.number, new ResourceObjectCache(false, responseObjectIds))
         };
     }
 }
@@ -52,11 +61,14 @@ export function getObjectsForPage<T extends ResourceObject>(state: ResourceObjec
         return Array();
     } else {
         const ids = state.pageInfo.pages.get(page);
+        if (!ids || !ids.object) {
+            return Array();
+        }
         const objects = Array<T>();
-        for (const id of ids.toArray()) {
+        for (const id of ids.object.toArray()) {
             const object = state.data.get(id);
             if (object !== null) {
-                objects.push(object as T);
+                objects.push(object.object as T);
             }
         }
         return objects;

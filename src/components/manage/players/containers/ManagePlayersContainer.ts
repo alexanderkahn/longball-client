@@ -12,7 +12,7 @@ function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObje
     let players: Array<Player> = [];
 
     rosterPositions.forEach((rosterPosition) => {
-        const person = !rosterPosition ? null : people.data.get(rosterPosition.relationships.player.data.id);
+        const person = !rosterPosition ? null : people.data.get(rosterPosition.relationships.player.data.id).object;
         if (rosterPosition && person) {
             players.push({rosterPosition, person});
         }

@@ -9,11 +9,42 @@ import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 
 export enum RosterPositionActionTypeKeys {
+    REQUEST_ROSTER_POSITION = 'REQUEST_ROSTER_POSITION',
+    REQUEST_ROSTER_POSITION_COLLECTION = 'REQUEST_ROSTER_POSITION_COLLECTION',
     RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS',
     REMOVE_ROSTER_POSITION = 'REMOVE_ROSTER_POSITION'
 }
 
-export type RosterPositionAction = | ReceiveRosterPositionsAction | RemoveRosterPositionAction;
+export type RosterPositionAction =
+    | RequestRosterPositionAction
+    | RequestRosterPositionCollectionAction
+    | ReceiveRosterPositionsAction
+    | RemoveRosterPositionAction;
+
+interface RequestRosterPositionAction {
+    type: RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION;
+    id: string;
+
+}
+
+function requestRosterPosition(id: string): RequestRosterPositionAction {
+    return {
+        type: RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION,
+        id
+    };
+}
+
+interface RequestRosterPositionCollectionAction {
+    type: RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION_COLLECTION;
+    page: number;
+}
+
+function requestRosterPositionCollection(page: number): RequestRosterPositionCollectionAction {
+    return {
+        type: RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION_COLLECTION,
+        page
+    };
+}
 
 interface ReceiveRosterPositionsAction {
     type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS;
@@ -27,8 +58,7 @@ interface RemoveRosterPositionAction {
     removed: string;
 }
 
-function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page?: CollectionPage)
-: ReceiveRosterPositionsAction {
+function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page?: CollectionPage): ReceiveRosterPositionsAction {
     return {
         type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS,
         receivedAt: Date.now(),
@@ -47,6 +77,7 @@ function removeRosterPosition(id: string): RemoveRosterPositionAction {
 export function fetchPlayers(page: number) {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
+        dispatch(requestRosterPositionCollection(page));
         const collection = await fetchCollection<RosterPosition>('rosterpositions', page, ['player']);
         if (!isNullOrUndefined(collection.included)) {
             const people = collection.included.filter(ro => ro.type === 'people') as Array<Person>;
@@ -63,6 +94,7 @@ export function fetchPlayers(page: number) {
 export function fetchPlayerDetail(playerId: string) {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
+        dispatch(requestRosterPosition(playerId));
         const object = await fetchObject<RosterPosition>('rosterpositions', playerId, ['player']);
         if (object && object.included) {
             const people = object.included.filter(ro => ro.type === 'people') as Array<Person>;

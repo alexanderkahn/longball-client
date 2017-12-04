@@ -35,7 +35,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
         };
     } else {
         return {
-            team: state.data.teams.data.get(teamId),
+            team: state.data.teams.data.get(teamId).object,
             currentView: state.currentView,
             isEdit: false
         };

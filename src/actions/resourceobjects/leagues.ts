@@ -7,12 +7,41 @@ import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 
 export enum LeagueActionTypeKeys {
+    REQUEST_LEAGUE = 'REQUEST_LEAGUE',
+    REQUEST_LEAGUE_COLLECTION = 'REQUEST_LEAGUE_COLLECTION',
     RECEIVE_LEAGUES = 'RECEIVE_LEAGUES',
     REMOVE_LEAGUE = 'REMOVE_LEAGUE',
 }
 
 export type LeagueAction =
-    | ReceiveLeaguesAction | RemoveLeagueAction;
+    | RequestLeagueAction
+    | RequestLeagueCollectionAction
+    | ReceiveLeaguesAction
+    | RemoveLeagueAction;
+
+interface RequestLeagueAction {
+    type: LeagueActionTypeKeys.REQUEST_LEAGUE;
+    id: string;
+}
+
+function requestLeague(id: string): RequestLeagueAction {
+    return {
+        type: LeagueActionTypeKeys.REQUEST_LEAGUE,
+        id
+    };
+}
+
+interface RequestLeagueCollectionAction {
+    type: LeagueActionTypeKeys.REQUEST_LEAGUE_COLLECTION;
+    page: number;
+}
+
+function requestLeagueCollection(page: number): RequestLeagueCollectionAction {
+    return {
+        type: LeagueActionTypeKeys.REQUEST_LEAGUE_COLLECTION,
+        page
+    };
+}
 
 // TODO: can I generify these too? Let's not go crazy, but I'm getting tired of changing the same thing in 5 places
 interface ReceiveLeaguesAction {
@@ -46,6 +75,7 @@ function removeLeague(id: string): RemoveLeagueAction {
 export function fetchLeagues(page: number) {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
+        dispatch(requestLeagueCollection(page));
         const collection = await fetchCollection<League>('leagues', page);
         dispatch(receiveLeagues(OrderedMap(collection.data.map(league => [league.id, league])), collection.meta.page));
         dispatch(setCurrentViewFetching(false));
@@ -55,6 +85,7 @@ export function fetchLeagues(page: number) {
 export function fetchLeagueDetail(leagueId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
+        dispatch(requestLeague(leagueId));
         const object = await fetchObject<League>('leagues', leagueId);
         dispatch(receiveLeagues(OrderedMap([[leagueId, object ? object.data : null]])));
         dispatch(setCurrentViewFetching(false));
@@ -70,7 +101,7 @@ export function saveLeague(league: League): Dispatch<RootState> {
 }
 
 export function deleteLeague(league: League): Dispatch<RootState> {
-    return async function  (dispatch: Dispatch<RootState>) {
+    return async function (dispatch: Dispatch<RootState>) {
         await deleteObject(league);
         dispatch(removeLeague(league.id));
     };

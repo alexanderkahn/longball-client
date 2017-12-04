@@ -7,11 +7,41 @@ import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 
 export enum TeamActionTypeKeys {
+    REQUEST_TEAM = 'REQUEST_TEAM',
+    REQUEST_TEAM_COLLECTION = 'REQUEST_TEAM_COLLECTION',
     RECEIVE_TEAMS = 'RECEIVE_TEAMS',
     REMOVE_TEAM = 'REMOVE_TEAM'
 }
 
-export type TeamAction = | ReceiveTeamsAction | RemoveTeamAction;
+export type TeamAction =
+    | RequestTeamAction
+    | RequestTeamCollectionAction
+    | ReceiveTeamsAction
+    | RemoveTeamAction;
+
+interface RequestTeamAction {
+    type: TeamActionTypeKeys.REQUEST_TEAM;
+    id: string;
+}
+
+function requestTeam(id: string): RequestTeamAction {
+    return {
+        type: TeamActionTypeKeys.REQUEST_TEAM,
+        id
+    };
+}
+
+interface RequestTeamCollectionAction {
+    type: TeamActionTypeKeys.REQUEST_TEAM_COLLECTION;
+    page: number;
+}
+
+function requestTeamCollection(page: number): RequestTeamCollectionAction {
+    return {
+        type: TeamActionTypeKeys.REQUEST_TEAM_COLLECTION,
+        page
+    };
+}
 
 interface ReceiveTeamsAction {
     type: TeamActionTypeKeys.RECEIVE_TEAMS;
@@ -44,6 +74,7 @@ function removeTeam(id: string): RemoveTeamAction {
 export function fetchTeams(page: number): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
+        dispatch(requestTeamCollection(page));
         const collection = await fetchCollection<Team>('teams', page);
         dispatch(receiveTeams(OrderedMap(collection.data.map(team => [team.id, team])), collection.meta.page));
         dispatch(setCurrentViewFetching(false));
@@ -53,6 +84,7 @@ export function fetchTeams(page: number): Dispatch<RootState> {
 export function fetchTeamDetail(teamId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(setCurrentViewFetching(true));
+        dispatch(requestTeam(teamId));
         const object = await fetchObject<Team>('teams', teamId);
         dispatch(receiveTeams(OrderedMap([[teamId, object ? object.data : null]])));
         dispatch(setCurrentViewFetching(false));

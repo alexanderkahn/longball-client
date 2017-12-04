@@ -52,8 +52,9 @@ function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageI
             currentView: state.currentView
         };
     } else {
-        const rosterPosition = state.data.rosterPositions.data.get(teamId);
-        const person = !rosterPosition ? null : state.data.people.data.get(rosterPosition.relationships.player.data.id);
+        const rosterPosition = state.data.rosterPositions.data.get(teamId).object;
+        const person = !rosterPosition ? null
+            : state.data.people.data.get(rosterPosition.relationships.player.data.id).object;
         return {
             player: isNullOrUndefined(rosterPosition) || isNullOrUndefined(person) ? null : {rosterPosition, person},
             isEdit: false,
