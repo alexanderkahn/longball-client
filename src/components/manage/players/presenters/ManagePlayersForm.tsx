@@ -10,7 +10,6 @@ export interface ManagePlayersFormProps {
 }
 
 export interface ManagePlayersFormActions {
-    resetView: () => void;
     fetchListItems: () => void;
     onClickAdd: () => void;
     onClickPrevious: (() => void) | null;
@@ -21,12 +20,11 @@ export interface ManagePlayersFormActions {
 
 export default class ManagePlayersForm extends Component<ManagePlayersFormProps & ManagePlayersFormActions> {
     render() {
-        const {currentView, resetView, fetchListItems, onClickAdd, onClickPrevious, onClickNext} = this.props;
+        const {currentView, fetchListItems, onClickAdd, onClickPrevious, onClickNext} = this.props;
         return (
             <ManagementList
                 title="Players"
                 currentView={currentView}
-                resetView={resetView}
                 fetchListItems={fetchListItems}
                 onClickAdd={onClickAdd}
                 onClickPrevious={onClickPrevious}

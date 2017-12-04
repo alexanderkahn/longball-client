@@ -1,5 +1,4 @@
 import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
-import { setCurrentViewFetching } from '../currentView';
 import { Team } from '../../models/models';
 import { RootState } from '../../reducers/index';
 import { Dispatch } from 'redux';
@@ -73,21 +72,17 @@ function removeTeam(id: string): RemoveTeamAction {
 
 export function fetchTeams(page: number): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(setCurrentViewFetching(true));
         dispatch(requestTeamCollection(page));
         const collection = await fetchCollection<Team>('teams', page);
         dispatch(receiveTeams(OrderedMap(collection.data.map(team => [team.id, team])), collection.meta.page));
-        dispatch(setCurrentViewFetching(false));
     };
 }
 
 export function fetchTeamDetail(teamId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(setCurrentViewFetching(true));
         dispatch(requestTeam(teamId));
         const object = await fetchObject<Team>('teams', teamId);
         dispatch(receiveTeams(OrderedMap([[teamId, object ? object.data : null]])));
-        dispatch(setCurrentViewFetching(false));
     };
 }
 

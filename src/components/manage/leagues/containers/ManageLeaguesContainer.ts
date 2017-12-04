@@ -1,18 +1,20 @@
 import { connect, Dispatch } from 'react-redux';
 import { deleteLeague, fetchLeagues } from '../../../../actions/resourceobjects/leagues';
 import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../presenters/ManageLeaguesForm';
-import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
-import { getNext, getPrevious, getSafePage, League } from '../../../../models/models';
+import { FetchingState, getNext, getPrevious, getSafePage, League } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
 import { getObjectsForPage } from '../../../../reducers/data/index';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageLeaguesProps => {
     const currentPage = getSafePage(ownProps.location);
+    const pageInfo = state.data.leagues.pageInfo.pages.get(currentPage);
     return {
         leagues: getObjectsForPage(state.data.leagues, currentPage),
-        currentView: state.currentView,
+        currentView: {
+            fetchingState: pageInfo ? pageInfo.fetchingState : FetchingState.NOT_FETCHED,
+        },
     };
 };
 
@@ -21,7 +23,6 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     const previous = getPrevious(dispatch, ownProps.location, currentPage);
     const next = getNext(dispatch, ownProps.location, currentPage);
     return {
-        resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchLeagues(currentPage)),
         onClickAdd: () => dispatch(push('/manage/leagues/add')),
         onClickPrevious: previous,

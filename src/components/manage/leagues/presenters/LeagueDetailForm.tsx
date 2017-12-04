@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ChangeEvent, Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
-import { CurrentView, League } from '../../../../models/models';
+import { CurrentView, FetchingState, League } from '../../../../models/models';
 import { isNullOrUndefined } from 'util';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 
@@ -22,22 +22,18 @@ export interface LeagueDetailProps {
 }
 
 export interface LeagueDetailFormActions {
-    resetView: () => void;
     fetchItemDetail: () => void;
     saveLeague: (league: League) => void;
 }
 
 export default class LeagueDetailForm extends Component<LeagueDetailProps & LeagueDetailFormActions> {
 
-    componentDidMount() {
-        this.props.resetView();
+    componentWillMount() {
+        this.tryFetch();
     }
 
-    componentDidUpdate() {
-        const {currentView, league, fetchItemDetail} = this.props;
-        if (!currentView.isFetching && !currentView.lastUpdated && isNullOrUndefined(league)) {
-            fetchItemDetail();
-        }
+    componentWillUpdate() {
+        this.tryFetch();
     }
 
     render() {
@@ -48,7 +44,14 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
         );
     }
 
-    getForm() {
+    private tryFetch() {
+        const {currentView, fetchItemDetail} = this.props;
+        if (currentView.fetchingState === FetchingState.NOT_FETCHED) {
+            fetchItemDetail();
+        }
+    }
+
+    private getForm() {
         const {isEdit, saveLeague, league} = this.props;
         if (!league) {
             return <div>I can't find the league you requested!</div>;
@@ -72,7 +75,7 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
         }
     }
 
-    onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    private onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!isNullOrUndefined(this.props.league)) {
             this.props.league.attributes.name = event.target.value;
             this.forceUpdate();

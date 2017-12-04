@@ -6,7 +6,7 @@ import AddIcon from 'material-ui-icons/Add';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
-import { CurrentView } from '../../../../models/models';
+import { CurrentView, FetchingState } from '../../../../models/models';
 import { isNullOrUndefined } from 'util';
 
 const styles: CSSProperties = {
@@ -25,21 +25,17 @@ interface ManagementListProps {
     onClickAdd: () => void;
     onClickPrevious: (() => void) | null;
     onClickNext: (() => void) | null;
-    resetView: () => void;
     fetchListItems: () => void;
 }
 
 export default class ManagementList extends Component<ManagementListProps> {
 
-    componentDidMount() {
-        this.props.resetView();
+    componentWillMount() {
+        this.tryFetch();
     }
 
-    componentDidUpdate() {
-        const props = this.props;
-        if (!props.currentView.isFetching && !props.currentView.lastUpdated && props.children.length === 0) {
-            this.props.fetchListItems();
-        }
+    componentWillUpdate() {
+        this.tryFetch();
     }
 
     render() {
@@ -55,7 +51,7 @@ export default class ManagementList extends Component<ManagementListProps> {
                 <List>
                     {children}
                 </List>
-                <LoadingProgressIndicator enabled={currentView.isFetching}/>
+                <LoadingProgressIndicator enabled={currentView.fetchingState === FetchingState.FETCHING}/>
                 <Button
                     fab={true}
                     color="accent"
@@ -67,6 +63,13 @@ export default class ManagementList extends Component<ManagementListProps> {
                 </Button>
             </form>
         );
+    }
+
+    private tryFetch() {
+        const props = this.props;
+        if (props.currentView.fetchingState === FetchingState.NOT_FETCHED) {
+            this.props.fetchListItems();
+        }
     }
 }
 

@@ -5,15 +5,19 @@ import { isNumber } from 'util';
 import { push } from 'react-router-redux';
 import { RootState } from '../reducers/index';
 import { Dispatch } from 'redux';
-import { resetView } from '../actions/currentView';
+
+export enum FetchingState {
+    NOT_FETCHED,
+    FETCHING,
+    FETCHED
+}
 
 export interface User {
     name: string;
 }
 
 export interface CurrentView {
-    isFetching: boolean;
-    lastUpdated?: number;
+    fetchingState: FetchingState;
 }
 
 export interface PagedViewParams {
@@ -102,7 +106,6 @@ export function getNext(dispatch: Dispatch<RootState>, location: Location, curre
     const nextPage = currentPage + 1;
     return function() {
         dispatch(push(location.pathname + '?page=' + nextPage));
-        dispatch(resetView());
     };
 }
 
@@ -115,6 +118,5 @@ export function getPrevious(dispatch: Dispatch<RootState>, location: Location, c
 
     return function() {
         dispatch(push(location.pathname + '?page=' + previousPage));
-        dispatch(resetView());
     } ;
 }

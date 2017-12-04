@@ -1,11 +1,10 @@
 import { connect, Dispatch } from 'react-redux';
 import { fetchTeamDetail, saveTeam } from '../../../../actions/resourceobjects/teams';
-import { resetView } from '../../../../actions/currentView';
 import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../presenters/TeamDetailForm';
 import { RootState } from '../../../../reducers/index';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
-import { deepCopy, Team } from '../../../../models/models';
+import { deepCopy, FetchingState, Team } from '../../../../models/models';
 
 const emptyTeam: Team = {
     id: '',
@@ -30,13 +29,18 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
     if (teamId === 'add') {
         return {
             team: deepCopy(emptyTeam),
-            currentView: state.currentView,
+            currentView: {
+                fetchingState: FetchingState.FETCHED
+            },
             isEdit: true
         };
     } else {
+        const teamCache = state.data.teams.data.get(teamId);
         return {
-            team: state.data.teams.data.get(teamId).object,
-            currentView: state.currentView,
+            team: teamCache ? teamCache.object : null,
+            currentView: {
+                fetchingState: teamCache ? teamCache.fetchingState : FetchingState.NOT_FETCHED
+            },
             isEdit: false
         };
     }
@@ -46,9 +50,6 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     : TeamDetailFormActions => {
     const teamId = ownProps.match.params.itemId;
     return {
-        resetView: function () {
-            dispatch(resetView());
-        },
         fetchItemDetail: function () {
             dispatch(fetchTeamDetail(teamId));
         },

@@ -4,7 +4,7 @@ import { rosterPositions } from './rosterPositions';
 import { leagues } from './leagues';
 import { combineReducers, Reducer } from 'redux';
 import { List, Map } from 'immutable';
-import { League, Person, ResourceObject, RosterPosition, Team } from '../../models/models';
+import { FetchingState, League, Person, ResourceObject, RosterPosition, Team } from '../../models/models';
 import { isNullOrUndefined } from 'util';
 import { CollectionPage } from '../../actions/rest';
 
@@ -16,10 +16,10 @@ export interface DataState {
 }
 
 export class ResourceObjectCache<T> {
-    readonly isFetching: boolean;
+    readonly fetchingState: FetchingState.FETCHING | FetchingState.FETCHED;
     readonly object: T | null;
-    constructor (isFetching: boolean, object?: T) {
-        this.isFetching = isFetching;
+    constructor (fetchingState: FetchingState.FETCHING | FetchingState.FETCHED, object?: T) {
+        this.fetchingState = fetchingState;
         this.object = object ? object : null;
     }
 }
@@ -51,7 +51,7 @@ export function mergePages(responseObjectIds: List<string>, state: PageInfo, act
         return {
             ...state,
             totalPages: actionPage.totalPages,
-            pages: state.pages.set(actionPage.number, new ResourceObjectCache(false, responseObjectIds))
+            pages: state.pages.set(actionPage.number, new ResourceObjectCache(FetchingState.FETCHED, responseObjectIds))
         };
     }
 }

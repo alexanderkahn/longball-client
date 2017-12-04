@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChangeEvent, Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { CurrentView, Player } from '../../../../models/models';
+import { CurrentView, FetchingState, Player } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { isNullOrUndefined, isNumber } from 'util';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
@@ -25,22 +25,18 @@ export interface PlayerDetailProps {
 }
 
 export interface PlayerDetailFormActions {
-    resetView: () => void;
     fetchItemDetail: () => void;
     savePlayer: (player: Player) => void;
 }
 
 export default class PlayerDetailForm extends Component<PlayerDetailProps & PlayerDetailFormActions> {
 
-    componentDidMount() {
-        this.props.resetView();
+    componentWillMount() {
+        this.tryFetch();
     }
 
-    componentDidUpdate() {
-        const {currentView, player, fetchItemDetail} = this.props;
-        if (!currentView.isFetching && !currentView.lastUpdated && (isNullOrUndefined(player))) {
-            fetchItemDetail();
-        }
+    componentWillUpdate() {
+        this.tryFetch();
     }
 
     render() {
@@ -51,7 +47,14 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         );
     }
 
-    getForm() {
+    private tryFetch() {
+        const {currentView, fetchItemDetail} = this.props;
+        if (currentView.fetchingState === FetchingState.NOT_FETCHED) {
+            fetchItemDetail();
+        }
+    }
+
+    private getForm() {
         const {player, isEdit, savePlayer} = this.props;
         if (!player) {
             return <div>I can't find the selected player</div>;
@@ -116,28 +119,28 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         }
     }
 
-    onTeamChange = (event: ChangeEvent<HTMLInputElement>) => {
+    private onTeamChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!isNullOrUndefined(this.props.player)) {
             this.props.player.rosterPosition.relationships.team.data.id = event.target.value;
             this.forceUpdate();
         }
     }
 
-    onFirstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    private onFirstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!isNullOrUndefined(this.props.player)) {
             this.props.player.person.attributes.first = event.target.value;
             this.forceUpdate();
         }
     }
 
-    onLastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    private onLastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!isNullOrUndefined(this.props.player)) {
             this.props.player.person.attributes.last = event.target.value;
             this.forceUpdate();
         }
     }
 
-    onJerseyNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
+    private onJerseyNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
 
         const jerseyNumber = Number(event.target.value);
         if (!isNullOrUndefined(this.props.player) && isNumber(jerseyNumber)) {
@@ -146,7 +149,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         }
     }
 
-    onStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
+    private onStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!isNullOrUndefined(this.props.player)) {
             this.props.player.rosterPosition.attributes.startDate = event.target.value;
             this.forceUpdate();

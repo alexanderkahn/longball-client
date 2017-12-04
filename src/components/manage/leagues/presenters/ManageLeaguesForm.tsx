@@ -10,7 +10,6 @@ export interface ManageLeaguesProps {
 }
 
 export interface ManageLeaguesActions {
-    resetView: () => void;
     fetchListItems: () => void;
     onClickAdd: () => void;
     onClickPrevious: (() => void) | null;
@@ -22,7 +21,7 @@ export interface ManageLeaguesActions {
 export default class ManageLeaguesForm extends Component<ManageLeaguesProps & ManageLeaguesActions> {
 
     render() {
-        const {currentView, onClickAdd, onClickPrevious, onClickNext, resetView, fetchListItems} = this.props;
+        const {currentView, onClickAdd, onClickPrevious, onClickNext, fetchListItems} = this.props;
         return (
             <ManagementList
                 title="Leagues"
@@ -30,7 +29,6 @@ export default class ManageLeaguesForm extends Component<ManageLeaguesProps & Ma
                 onClickAdd={onClickAdd}
                 onClickPrevious={onClickPrevious}
                 onClickNext={onClickNext}
-                resetView={resetView}
                 fetchListItems={fetchListItems}
             >
                 {this.getChildListItems()}

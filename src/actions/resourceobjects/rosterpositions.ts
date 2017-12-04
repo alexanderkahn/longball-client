@@ -1,5 +1,4 @@
 import { deleteObject, fetchCollection, fetchObject, CollectionPage, postObject } from '../rest';
-import { setCurrentViewFetching } from '../currentView';
 import { Person, Player, RosterPosition } from '../../models/models';
 import { receivePeople, removePerson } from './people';
 import { Dispatch } from 'redux';
@@ -58,7 +57,8 @@ interface RemoveRosterPositionAction {
     removed: string;
 }
 
-function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page?: CollectionPage): ReceiveRosterPositionsAction {
+function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page?: CollectionPage)
+: ReceiveRosterPositionsAction {
     return {
         type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS,
         receivedAt: Date.now(),
@@ -76,7 +76,6 @@ function removeRosterPosition(id: string): RemoveRosterPositionAction {
 
 export function fetchPlayers(page: number) {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(setCurrentViewFetching(true));
         dispatch(requestRosterPositionCollection(page));
         const collection = await fetchCollection<RosterPosition>('rosterpositions', page, ['player']);
         if (!isNullOrUndefined(collection.included)) {
@@ -87,13 +86,11 @@ export function fetchPlayers(page: number) {
             OrderedMap(collection.data.map(position => [position.id, position])),
             collection.meta.page)
         );
-        dispatch(setCurrentViewFetching(false));
     };
 }
 
 export function fetchPlayerDetail(playerId: string) {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(setCurrentViewFetching(true));
         dispatch(requestRosterPosition(playerId));
         const object = await fetchObject<RosterPosition>('rosterpositions', playerId, ['player']);
         if (object && object.included) {
@@ -101,7 +98,6 @@ export function fetchPlayerDetail(playerId: string) {
             dispatch(receivePeople(OrderedMap(people.map(person => [person.id, person]))));
         }
         dispatch(receiveRosterPositions(OrderedMap([[playerId, object ? object.data : null]])));
-        dispatch(setCurrentViewFetching(false));
     };
 }
 

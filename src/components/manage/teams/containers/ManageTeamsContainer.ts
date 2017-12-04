@@ -1,18 +1,20 @@
 import { connect, Dispatch } from 'react-redux';
 import { deleteTeam, fetchTeams } from '../../../../actions/resourceobjects/teams';
 import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '../presenters/ManageTeamsForm';
-import { resetView } from '../../../../actions/currentView';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
-import { getNext, getPrevious, getSafePage, Team } from '../../../../models/models';
+import { FetchingState, getNext, getPrevious, getSafePage, Team } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
 import { getObjectsForPage } from '../../../../reducers/data/index';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageTeamsFormProps => {
     const currentPage = getSafePage(ownProps.location);
+    const pageInfo = state.data.teams.pageInfo.pages.get(currentPage);
     return {
         teams: getObjectsForPage(state.data.teams, currentPage),
-        currentView: state.currentView,
+        currentView: {
+            fetchingState: pageInfo ? pageInfo.fetchingState : FetchingState.NOT_FETCHED
+        },
     };
 };
 
@@ -22,7 +24,6 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     const previous = getPrevious(dispatch, ownProps.location, currentPage);
     const next = getNext(dispatch, ownProps.location, currentPage);
     return {
-        resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchTeams(currentPage)),
         onClickAdd: () => dispatch(push('/manage/teams/add')),
         onClickPrevious: previous,

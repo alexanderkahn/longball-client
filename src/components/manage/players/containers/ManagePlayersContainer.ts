@@ -1,8 +1,8 @@
 import { connect, Dispatch } from 'react-redux';
 import { deletePlayer, fetchPlayers } from '../../../../actions/resourceobjects/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
-import { getNext, getPrevious, getSafePage, Person, Player, RosterPosition } from '../../../../models/models';
-import { resetView } from '../../../../actions/currentView';
+import { FetchingState, getNext, getPrevious, getSafePage, Person, Player, RosterPosition }
+    from '../../../../models/models';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
@@ -23,10 +23,13 @@ function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObje
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManagePlayersFormProps => {
     const currentPage = getSafePage(ownProps.location);
+    const pageInfo = state.data.rosterPositions.pageInfo.pages.get(currentPage);
     const rosterPositions = getObjectsForPage(state.data.rosterPositions, currentPage);
     return {
         players: getPlayers(rosterPositions, state.data.people),
-        currentView: state.currentView
+        currentView: {
+            fetchingState: pageInfo ? pageInfo.fetchingState : FetchingState.NOT_FETCHED
+        }
     };
 };
 
@@ -36,7 +39,6 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     const previous = getPrevious(dispatch, ownProps.location, currentPage);
     const next = getNext(dispatch, ownProps.location, currentPage);
     return {
-        resetView: () => dispatch(resetView()),
         fetchListItems: () => dispatch(fetchPlayers(currentPage)),
         onClickAdd: () => dispatch(push('/manage/players/add')),
         onClickPrevious: previous,

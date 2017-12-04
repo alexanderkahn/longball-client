@@ -1,11 +1,10 @@
 import { connect, Dispatch } from 'react-redux';
 import { fetchLeagueDetail, saveLeague } from '../../../../actions/resourceobjects/leagues';
-import { resetView } from '../../../../actions/currentView';
 import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '../presenters/LeagueDetailForm';
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { deepCopy, League } from '../../../../models/models';
+import { deepCopy, FetchingState, League } from '../../../../models/models';
 
 const emptyLeague = {
     id: '',
@@ -21,13 +20,18 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
         return {
             league: deepCopy(emptyLeague),
             isEdit: true,
-            currentView: state.currentView
+            currentView: {
+                fetchingState: FetchingState.FETCHED
+            }
         };
     } else {
+        const leagueCache = state.data.leagues.data.get(leagueId);
         return {
-            league: state.data.leagues.data.get(leagueId).object,
+            league: leagueCache ? leagueCache.object : null,
             isEdit: false,
-            currentView: state.currentView
+            currentView: {
+                fetchingState: leagueCache ? leagueCache.fetchingState : FetchingState.NOT_FETCHED
+            }
         };
     }
 };
@@ -36,9 +40,6 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     LeagueDetailFormActions => {
     const leagueId = ownProps.match.params.itemId;
     return {
-        resetView: function() {
-            dispatch(resetView());
-        },
         fetchItemDetail: function() {
             dispatch(fetchLeagueDetail(leagueId));
         },
