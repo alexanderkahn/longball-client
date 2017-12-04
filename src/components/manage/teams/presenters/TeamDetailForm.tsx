@@ -37,9 +37,9 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
     }
 
     render() {
-        const {team} = this.props;
+        const {currentView} = this.props;
         return (
-            <FetchableAsset isFetching={isNullOrUndefined(team)}>
+            <FetchableAsset isFetching={currentView.fetchingState === FetchingState.FETCHING}>
                 {this.getForm()}
             </FetchableAsset>
         );

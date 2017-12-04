@@ -40,8 +40,9 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
     }
 
     render() {
+        const {currentView} = this.props;
         return (
-            <FetchableAsset isFetching={isNullOrUndefined(this.props.player)}>
+            <FetchableAsset isFetching={currentView.fetchingState === FetchingState.FETCHING}>
                 {this.getForm()}
             </FetchableAsset>
         );
