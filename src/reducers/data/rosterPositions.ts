@@ -28,7 +28,7 @@ export const rosterPositions = (state: ResourceObjectState<RosterPosition> = ini
         case RosterPositionActionTypeKeys.REMOVE_ROSTER_POSITION:
             return {
                 ...state,
-                data: state.data.delete(action.removed)
+                data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
             };
         default:
             return state;

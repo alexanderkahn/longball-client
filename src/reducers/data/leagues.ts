@@ -28,7 +28,7 @@ export const leagues = (state: ResourceObjectState<League> = initialState(), act
         case LeagueActionTypeKeys.REMOVE_LEAGUE:
             return {
                 ...state,
-                data: state.data.delete(action.removed)
+                data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
             };
         default:
             return state;

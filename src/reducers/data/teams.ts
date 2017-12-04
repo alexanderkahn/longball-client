@@ -28,7 +28,7 @@ export const teams = (state: ResourceObjectState<Team> = initialState(), action:
         case TeamActionTypeKeys.REMOVE_TEAM:
             return {
                 ...state,
-                data: state.data.delete(action.removed)
+                data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
             };
         default:
             return state;
