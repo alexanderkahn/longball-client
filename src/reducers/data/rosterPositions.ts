@@ -7,8 +7,18 @@ export const rosterPositions = (state: ResourceObjectState<RosterPosition> = ini
                                 action: RosterPositionAction): ResourceObjectState<RosterPosition> => {
     switch (action.type) {
         case RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION:
+            return {
+                ...state,
+                data: state.data.set(action.id, new ResourceObjectCache(true))
+            };
         case RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION_COLLECTION:
-            return state;
+            return {
+                ...state,
+                pageInfo: {
+                    ...state.pageInfo,
+                    pages: state.pageInfo.pages.set(action.page, new ResourceObjectCache(true))
+                }
+            };
         case RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS:
             return {
                 ...state,

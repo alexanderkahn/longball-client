@@ -7,8 +7,18 @@ export const leagues = (state: ResourceObjectState<League> = initialState(), act
     : ResourceObjectState<League> => {
     switch (action.type) {
         case LeagueActionTypeKeys.REQUEST_LEAGUE:
+            return {
+                ...state,
+                data: state.data.set(action.id, new ResourceObjectCache(true))
+            };
         case LeagueActionTypeKeys.REQUEST_LEAGUE_COLLECTION:
-            return state;
+            return {
+                ...state,
+                pageInfo: {
+                    ...state.pageInfo,
+                    pages: state.pageInfo.pages.set(action.page, new ResourceObjectCache(true))
+                }
+            };
         case LeagueActionTypeKeys.RECEIVE_LEAGUES:
             return {
                 ...state,

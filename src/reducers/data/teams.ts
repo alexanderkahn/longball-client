@@ -7,8 +7,18 @@ export const teams = (state: ResourceObjectState<Team> = initialState(), action:
     : ResourceObjectState<Team> => {
     switch (action.type) {
         case TeamActionTypeKeys.REQUEST_TEAM:
+            return {
+                ...state,
+                data: state.data.set(action.id, new ResourceObjectCache(true))
+            };
         case TeamActionTypeKeys.REQUEST_TEAM_COLLECTION:
-            return state;
+            return {
+                ...state,
+                pageInfo: {
+                    ...state.pageInfo,
+                    pages: state.pageInfo.pages.set(action.page, new ResourceObjectCache(true))
+                }
+            };
         case TeamActionTypeKeys.RECEIVE_TEAMS:
             return {
                 ...state,
