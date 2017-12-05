@@ -32,7 +32,7 @@ export default class ManagementList extends Component<ManagementListProps> {
         this.tryFetch();
     }
 
-    componentWillUpdate() {
+    componentDidUpdate() {
         this.tryFetch();
     }
 

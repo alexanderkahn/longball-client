@@ -32,7 +32,7 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
         this.tryFetch();
     }
 
-    componentWillUpdate() {
+    componentDidUpdate() {
         this.tryFetch();
     }
 

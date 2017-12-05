@@ -35,7 +35,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         this.tryFetch();
     }
 
-    componentWillUpdate() {
+    componentDidUpdate() {
         this.tryFetch();
     }
 

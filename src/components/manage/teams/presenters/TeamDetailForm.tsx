@@ -32,7 +32,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
         this.tryFetch();
     }
 
-    componentWillUpdate() {
+    componentDidUpdate() {
         this.tryFetch();
     }
 
