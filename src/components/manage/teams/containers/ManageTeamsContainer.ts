@@ -3,7 +3,7 @@ import { deleteTeam, fetchTeams } from '../../../../actions/resourceobjects/team
 import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '../presenters/ManageTeamsForm';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
-import { FetchingState, getNext, getPrevious, getSafePage, Team } from '../../../../models/models';
+import { FetchingState, getSafePage, getUrlForPage, hasNext, hasPrevious, Team } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
 import { getObjectsForPage } from '../../../../reducers/data/index';
 
@@ -13,7 +13,10 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
     return {
         teams: getObjectsForPage(state.data.teams, currentPage),
         currentView: {
-            fetchingState: pageInfo ? pageInfo.fetchingState : FetchingState.NOT_FETCHED
+            fetchingState: pageInfo ? pageInfo.fetchingState : FetchingState.NOT_FETCHED,
+            page: currentPage,
+            hasNext: hasNext(state.data.leagues, currentPage),
+            hasPrevious: hasPrevious(currentPage),
         },
     };
 };
@@ -21,13 +24,10 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>)
     : ManageTeamsFormActions => {
     const currentPage = getSafePage(ownProps.location);
-    const previous = getPrevious(dispatch, ownProps.location, currentPage);
-    const next = getNext(dispatch, ownProps.location, currentPage);
     return {
         fetchListItems: () => dispatch(fetchTeams(currentPage)),
         onClickAdd: () => dispatch(push('/manage/teams/add')),
-        onClickPrevious: previous,
-        onClickNext: next,
+        getPage: (page: number) => () => dispatch(push(getUrlForPage(ownProps.location, page))),
         buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`/manage/teams/${team.id}`)),
         buildHandleDeleteTeam: (team: Team) => () => dispatch(deleteTeam(team))
     };

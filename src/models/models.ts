@@ -2,9 +2,7 @@
 import { parse } from 'querystring';
 import { Location } from 'history';
 import { isNumber } from 'util';
-import { push } from 'react-router-redux';
-import { RootState } from '../reducers/index';
-import { Dispatch } from 'redux';
+import { ResourceObjectState } from '../reducers/data/index';
 
 export enum FetchingState {
     NOT_FETCHED,
@@ -18,6 +16,13 @@ export interface User {
 
 export interface CurrentView {
     fetchingState: FetchingState;
+}
+
+export interface PagedView extends CurrentView {
+    page: number;
+    hasPrevious: boolean;
+    hasNext: boolean;
+
 }
 
 export interface PagedViewParams {
@@ -91,6 +96,7 @@ export const deepCopy = <T>(o: T): T => {
     return JSON.parse(JSON.stringify(o));
 };
 
+// TODO: with a little more information, this could return a built PagedView
 export function getSafePage(location: Location): number {
     const params = parse(location.search.substr(1)) as PagedViewParams;
     const pageNumber = Number(params.page);
@@ -100,23 +106,15 @@ export function getSafePage(location: Location): number {
     return 1;
 }
 
-// TODO: this is unbounded. should return null if there is no next page
-export function getNext(dispatch: Dispatch<RootState>, location: Location, currentPage: number)
-: (() => void) | null {
-    const nextPage = currentPage + 1;
-    return function() {
-        dispatch(push(location.pathname + '?page=' + nextPage));
-    };
+export function hasPrevious(currentPage: number): boolean {
+    return currentPage > 1;
 }
 
-export function getPrevious(dispatch: Dispatch<RootState>, location: Location, currentPage: number)
-: (() => void) | null {
-    const previousPage = currentPage - 1;
-    if (1 > previousPage) {
-        return null;
-    }
+export function hasNext(state: ResourceObjectState<ResourceObject>,  currentPage: number): boolean {
+    return currentPage < state.pageInfo.totalPages;
+}
 
-    return function() {
-        dispatch(push(location.pathname + '?page=' + previousPage));
-    } ;
+// TODO: this really does not need to exist. Better to extract a constant and use it for all the route pushing.
+export function getUrlForPage(currentLocation: Location, page: number) {
+    return `${currentLocation.pathname}?page=${page}`;
 }

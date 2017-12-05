@@ -1,19 +1,18 @@
 import * as React from 'react';
 import ManagementList from '../../shared/presenters/ManagementList';
-import { CurrentView, League } from '../../../../models/models';
+import { League, PagedView } from '../../../../models/models';
 import LeagueListItem from './LeagueListItem';
 import { Component } from 'react';
 
 export interface ManageLeaguesProps {
     leagues: Array<League>;
-    currentView: CurrentView;
+    currentView: PagedView;
 }
 
 export interface ManageLeaguesActions {
     fetchListItems: () => void;
     onClickAdd: () => void;
-    onClickPrevious: (() => void) | null;
-    onClickNext: (() => void) | null;
+    getPage: (page: number) => () => void;
     buildHandleSelectDetail: (id: string) => () => void;
     buildHandleDeleteLeague: (league: League) => () => void;
 }
@@ -21,14 +20,13 @@ export interface ManageLeaguesActions {
 export default class ManageLeaguesForm extends Component<ManageLeaguesProps & ManageLeaguesActions> {
 
     render() {
-        const {currentView, onClickAdd, onClickPrevious, onClickNext, fetchListItems} = this.props;
+        const {currentView, onClickAdd, getPage, fetchListItems} = this.props;
         return (
             <ManagementList
                 title="Leagues"
                 currentView={currentView}
                 onClickAdd={onClickAdd}
-                onClickPrevious={onClickPrevious}
-                onClickNext={onClickNext}
+                getPage={getPage}
                 fetchListItems={fetchListItems}
             >
                 {this.getChildListItems()}

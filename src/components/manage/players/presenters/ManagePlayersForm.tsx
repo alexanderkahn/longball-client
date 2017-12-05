@@ -1,34 +1,32 @@
 import * as React from 'react';
 import ManagementList from '../../shared/presenters/ManagementList';
-import { CurrentView, Player } from '../../../../models/models';
+import { PagedView, Player } from '../../../../models/models';
 import PlayerListItem from './PlayerListItem';
 import { Component } from 'react';
 
 export interface ManagePlayersFormProps {
     players: Array<Player>;
-    currentView: CurrentView;
+    currentView: PagedView;
 }
 
 export interface ManagePlayersFormActions {
     fetchListItems: () => void;
     onClickAdd: () => void;
-    onClickPrevious: (() => void) | null;
-    onClickNext: (() => void) | null;
+    getPage: (page: number) => () => void;
     buildHandleSelectPlayerDetail: (player: Player) => () => void;
     buildHandleDeletePlayer: (player: Player) => () => void;
 }
 
 export default class ManagePlayersForm extends Component<ManagePlayersFormProps & ManagePlayersFormActions> {
     render() {
-        const {currentView, fetchListItems, onClickAdd, onClickPrevious, onClickNext} = this.props;
+        const {currentView, fetchListItems, onClickAdd, getPage} = this.props;
         return (
             <ManagementList
                 title="Players"
                 currentView={currentView}
                 fetchListItems={fetchListItems}
                 onClickAdd={onClickAdd}
-                onClickPrevious={onClickPrevious}
-                onClickNext={onClickNext}
+                getPage={getPage}
             >
                 {this.getChildListItems()}
             </ManagementList>

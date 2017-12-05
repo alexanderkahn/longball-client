@@ -1,8 +1,10 @@
 import { connect, Dispatch } from 'react-redux';
 import { deletePlayer, fetchPlayers } from '../../../../actions/resourceobjects/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
-import { FetchingState, getNext, getPrevious, getSafePage, Person, Player, RosterPosition }
-    from '../../../../models/models';
+import {
+    FetchingState, getSafePage, getUrlForPage, hasNext, hasPrevious, Person, Player,
+    RosterPosition
+} from '../../../../models/models';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
@@ -28,7 +30,10 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
     return {
         players: getPlayers(rosterPositions, state.data.people),
         currentView: {
-            fetchingState: pageInfo ? pageInfo.fetchingState : FetchingState.NOT_FETCHED
+            fetchingState: pageInfo ? pageInfo.fetchingState : FetchingState.NOT_FETCHED,
+            page: currentPage,
+            hasPrevious: hasPrevious(currentPage),
+            hasNext: hasNext(state.data.rosterPositions, currentPage)
         }
     };
 };
@@ -36,13 +41,10 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>)
     : ManagePlayersFormActions => {
     const currentPage = getSafePage(ownProps.location);
-    const previous = getPrevious(dispatch, ownProps.location, currentPage);
-    const next = getNext(dispatch, ownProps.location, currentPage);
     return {
         fetchListItems: () => dispatch(fetchPlayers(currentPage)),
         onClickAdd: () => dispatch(push('/manage/players/add')),
-        onClickPrevious: previous,
-        onClickNext: next,
+        getPage: (page: number) => () => dispatch(push(getUrlForPage(ownProps.location, page))),
         buildHandleSelectPlayerDetail: (player: Player) => () =>
             dispatch(push(`/manage/players/${player.rosterPosition.id}`)),
         buildHandleDeletePlayer: (player: Player) => () => dispatch(deletePlayer(player)),

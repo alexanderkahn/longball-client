@@ -1,19 +1,18 @@
 import * as React from 'react';
 import ManagementList from '../../shared/presenters/ManagementList';
-import { CurrentView, Team } from '../../../../models/models';
+import { PagedView, Team } from '../../../../models/models';
 import TeamListItem from './TeamListItem';
 import { Component } from 'react';
 
 export interface ManageTeamsFormProps {
     teams: Array<Team>;
-    currentView: CurrentView;
+    currentView: PagedView;
 }
 
 export interface ManageTeamsFormActions {
     fetchListItems: () => void;
     onClickAdd: () => void;
-    onClickPrevious: (() => void) | null;
-    onClickNext: (() => void) | null;
+    getPage: (page: number) => () => void;
     buildHandleSelectTeamDetail: (team: Team) => () => void;
     buildHandleDeleteTeam: (team: Team) => () => void;
 }
@@ -21,15 +20,14 @@ export interface ManageTeamsFormActions {
 export default class ManageTeamsForm extends Component<ManageTeamsFormProps & ManageTeamsFormActions> {
 
     render() {
-        const {currentView, fetchListItems, onClickAdd, onClickPrevious, onClickNext} = this.props;
+        const {currentView, fetchListItems, getPage, onClickAdd} = this.props;
         return (
             <ManagementList
                 title="Teams"
                 currentView={currentView}
                 fetchListItems={fetchListItems}
+                getPage={getPage}
                 onClickAdd={onClickAdd}
-                onClickPrevious={onClickPrevious}
-                onClickNext={onClickNext}
             >
                 {this.getChildListItems()}
             </ManagementList>

@@ -3,7 +3,7 @@ import { deleteLeague, fetchLeagues } from '../../../../actions/resourceobjects/
 import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../presenters/ManageLeaguesForm';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
-import { FetchingState, getNext, getPrevious, getSafePage, League } from '../../../../models/models';
+import { FetchingState, hasNext, hasPrevious, getSafePage, League, getUrlForPage } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
 import { getObjectsForPage } from '../../../../reducers/data/index';
 
@@ -13,6 +13,9 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
     return {
         leagues: getObjectsForPage(state.data.leagues, currentPage),
         currentView: {
+            page: currentPage,
+            hasPrevious: hasPrevious(currentPage),
+            hasNext: hasNext(state.data.leagues, currentPage),
             fetchingState: pageInfo ? pageInfo.fetchingState : FetchingState.NOT_FETCHED,
         },
     };
@@ -20,13 +23,10 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>): ManageLeaguesActions => {
     const currentPage = getSafePage(ownProps.location);
-    const previous = getPrevious(dispatch, ownProps.location, currentPage);
-    const next = getNext(dispatch, ownProps.location, currentPage);
     return {
         fetchListItems: () => dispatch(fetchLeagues(currentPage)),
         onClickAdd: () => dispatch(push('/manage/leagues/add')),
-        onClickPrevious: previous,
-        onClickNext: next,
+        getPage: (page: number) => () => dispatch(push(getUrlForPage(ownProps.location, page))),
         buildHandleSelectDetail: (id: string) => () => dispatch(push(`/manage/leagues/${id}`)),
         buildHandleDeleteLeague: (league: League) => () => dispatch(deleteLeague(league))
     };
