@@ -1,60 +1,40 @@
 import { deleteObject, fetchCollection, fetchObject, CollectionPage, postObject } from '../rest';
-import { Person, Player, RosterPosition } from '../../models/models';
+import { Person, Player, ResourceType, RosterPosition } from '../../models/models';
 import { receivePeople, removePerson } from './people';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/index';
 import { isNullOrUndefined } from 'util';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
-import { RemoveResourceObjectAction, ResourceObjectActionType } from './index';
+import {
+    ReceiveResourceAction,
+    RemoveResourceObjectAction, RequestResourceCollectionAction, RequestResourceObjectAction,
+    ResourceActionType
+} from './index';
 
-export enum RosterPositionActionTypeKeys {
-    REQUEST_ROSTER_POSITION = 'REQUEST_ROSTER_POSITION',
-    REQUEST_ROSTER_POSITION_COLLECTION = 'REQUEST_ROSTER_POSITION_COLLECTION',
-    RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS',
-}
+const ROSTER_POSITIONS_RESOURCE_TYPE: ResourceType = 'rosterpositions';
 
-export type RosterPositionAction =
-    | RequestRosterPositionAction
-    | RequestRosterPositionCollectionAction
-    | ReceiveRosterPositionsAction;
-
-interface RequestRosterPositionAction {
-    type: RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION;
-    id: string;
-
-}
-
-function requestRosterPosition(id: string): RequestRosterPositionAction {
+function requestRosterPosition(id: string): RequestResourceObjectAction {
     return {
-        type: RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION,
+        type: ResourceActionType.REQUEST_RESOURCE_OBJECT,
+        resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
         id
     };
 }
 
-interface RequestRosterPositionCollectionAction {
-    type: RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION_COLLECTION;
-    page: number;
-}
-
-function requestRosterPositionCollection(page: number): RequestRosterPositionCollectionAction {
+function requestRosterPositionCollection(page: number): RequestResourceCollectionAction {
     return {
-        type: RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION_COLLECTION,
+        type: ResourceActionType.REQUEST_RESOURCE_COLLECTION,
+        resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
         page
     };
 }
 
-interface ReceiveRosterPositionsAction {
-    type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS;
-    receivedAt: number;
-    data: OrderedMap<string, RosterPosition>;
-    page?: CollectionPage;
-}
-
 function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page?: CollectionPage)
-: ReceiveRosterPositionsAction {
+: ReceiveResourceAction<RosterPosition> {
     return {
-        type: RosterPositionActionTypeKeys.RECEIVE_ROSTER_POSITIONS,
+        type: ResourceActionType.RECEIVE_RESOURCE,
+        resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
         receivedAt: Date.now(),
         data: rosterPositions,
         page: page
@@ -63,8 +43,8 @@ function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPositi
 
 function removeRosterPosition(id: string): RemoveResourceObjectAction {
     return {
-        type: ResourceObjectActionType.REMOVE_RESOURCE_OBJECT,
-        resourceObjectType: 'rosterpositions',
+        type: ResourceActionType.REMOVE_RESOURCE_OBJECT,
+        resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
         removed: id
     };
 }
@@ -104,7 +84,8 @@ export function savePlayer(player: Player) {
 
         player.rosterPosition.relationships.player.data.id = savePersonResponse.id;
         const saveRosterPositionResponse = await postObject(player.rosterPosition);
-        dispatch(receiveRosterPositions(OrderedMap([[saveRosterPositionResponse.id, saveRosterPositionResponse]])));
+        dispatch(receiveRosterPositions(OrderedMap(
+            [[saveRosterPositionResponse.id, saveRosterPositionResponse]])));
 
         dispatch(replace(`/manage/players/${saveRosterPositionResponse.id}`));
     };

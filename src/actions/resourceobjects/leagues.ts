@@ -1,57 +1,37 @@
 import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
-import { League} from '../../models/models';
+import { League, ResourceType } from '../../models/models';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/index';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
-import { RemoveResourceObjectAction, ResourceObjectActionType } from './index';
+import {
+    ReceiveResourceAction,
+    RemoveResourceObjectAction, RequestResourceCollectionAction, RequestResourceObjectAction,
+    ResourceActionType
+} from './index';
 
-export enum LeagueActionTypeKeys {
-    REQUEST_LEAGUE = 'REQUEST_LEAGUE',
-    REQUEST_LEAGUE_COLLECTION = 'REQUEST_LEAGUE_COLLECTION',
-    RECEIVE_LEAGUES = 'RECEIVE_LEAGUES',
-}
+const LEAGUE_RESOURCE_TYPE: ResourceType = 'leagues';
 
-export type LeagueAction =
-    | RequestLeagueAction
-    | RequestLeagueCollectionAction
-    | ReceiveLeaguesAction;
-
-interface RequestLeagueAction {
-    type: LeagueActionTypeKeys.REQUEST_LEAGUE;
-    id: string;
-}
-
-function requestLeague(id: string): RequestLeagueAction {
+function requestLeague(id: string): RequestResourceObjectAction {
     return {
-        type: LeagueActionTypeKeys.REQUEST_LEAGUE,
+        type: ResourceActionType.REQUEST_RESOURCE_OBJECT,
+        resourceType: LEAGUE_RESOURCE_TYPE,
         id
     };
 }
 
-interface RequestLeagueCollectionAction {
-    type: LeagueActionTypeKeys.REQUEST_LEAGUE_COLLECTION;
-    page: number;
-}
-
-function requestLeagueCollection(page: number): RequestLeagueCollectionAction {
+function requestLeagueCollection(page: number): RequestResourceCollectionAction {
     return {
-        type: LeagueActionTypeKeys.REQUEST_LEAGUE_COLLECTION,
+        type: ResourceActionType.REQUEST_RESOURCE_COLLECTION,
+        resourceType: LEAGUE_RESOURCE_TYPE,
         page
     };
 }
 
-// TODO: can I generify these too? Let's not go crazy, but I'm getting tired of changing the same thing in 5 places
-interface ReceiveLeaguesAction {
-    type: LeagueActionTypeKeys.RECEIVE_LEAGUES;
-    receivedAt: number;
-    data: OrderedMap<string, League>;
-    page?: CollectionPage;
-}
-
-function receiveLeagues(leagues: OrderedMap<string, League>, page?: CollectionPage): ReceiveLeaguesAction {
+function receiveLeagues(leagues: OrderedMap<string, League>, page?: CollectionPage): ReceiveResourceAction<League> {
     return {
-        type: LeagueActionTypeKeys.RECEIVE_LEAGUES,
+        type: ResourceActionType.RECEIVE_RESOURCE,
+        resourceType: LEAGUE_RESOURCE_TYPE,
         receivedAt: Date.now(),
         data: leagues,
         page: page
@@ -60,8 +40,8 @@ function receiveLeagues(leagues: OrderedMap<string, League>, page?: CollectionPa
 
 function removeLeague(id: string): RemoveResourceObjectAction {
     return {
-        type: ResourceObjectActionType.REMOVE_RESOURCE_OBJECT,
-        resourceObjectType: 'leagues',
+        type: ResourceActionType.REMOVE_RESOURCE_OBJECT,
+        resourceType: 'leagues',
         removed: id
     };
 }

@@ -1,27 +1,22 @@
-import { LeagueAction, LeagueActionTypeKeys } from '../../actions/resourceobjects/leagues';
 import { FetchingState, League } from '../../models/models';
 import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectCache, ResourceObjectState } from './index';
-import { ResourceObjectAction, ResourceObjectActionType } from '../../actions/resourceobjects/index';
+import { ResourceObjectAction, ResourceActionType } from '../../actions/resourceobjects/index';
 
 export const leagues = (
-    state: ResourceObjectState<League> = initialState(),
-    action: LeagueAction | ResourceObjectAction): ResourceObjectState<League> => {
-    if (action.type === ResourceObjectActionType.REMOVE_RESOURCE_OBJECT
-        && action.resourceObjectType === 'leagues') {
-        return {
-            ...state,
-            data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
-        };
+    state: ResourceObjectState<League> = initialState(), action: ResourceObjectAction<League>):
+    ResourceObjectState<League> => {
+    if (action.resourceType !== 'leagues') {
+        return state;
     }
 
     switch (action.type) {
-        case LeagueActionTypeKeys.REQUEST_LEAGUE:
+        case ResourceActionType.REQUEST_RESOURCE_OBJECT:
             return {
                 ...state,
                 data: state.data.set(action.id, new ResourceObjectCache(FetchingState.FETCHING))
             };
-        case LeagueActionTypeKeys.REQUEST_LEAGUE_COLLECTION:
+        case ResourceActionType.REQUEST_RESOURCE_COLLECTION:
             return {
                 ...state,
                 pageInfo: {
@@ -29,13 +24,17 @@ export const leagues = (
                     pages: state.pageInfo.pages.set(action.page, new ResourceObjectCache(FetchingState.FETCHING))
                 }
             };
-        case LeagueActionTypeKeys.RECEIVE_LEAGUES:
+        case ResourceActionType.RECEIVE_RESOURCE:
             return {
                 ...state,
                 pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
                 data: state.data.merge(action.data.map(it => new ResourceObjectCache(FetchingState.FETCHED, it)))
             };
-
+        case ResourceActionType.REMOVE_RESOURCE_OBJECT:
+            return {
+                ...state,
+                data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
+            };
         default:
             return state;
     }

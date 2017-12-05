@@ -1,56 +1,37 @@
 import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
-import { Team } from '../../models/models';
+import { ResourceType, Team } from '../../models/models';
 import { RootState } from '../../reducers/index';
 import { Dispatch } from 'redux';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
-import { RemoveResourceObjectAction, ResourceObjectActionType } from './index';
+import {
+    ReceiveResourceAction,
+    RemoveResourceObjectAction, RequestResourceCollectionAction, RequestResourceObjectAction,
+    ResourceActionType
+} from './index';
 
-export enum TeamActionTypeKeys {
-    REQUEST_TEAM = 'REQUEST_TEAM',
-    REQUEST_TEAM_COLLECTION = 'REQUEST_TEAM_COLLECTION',
-    RECEIVE_TEAMS = 'RECEIVE_TEAMS',
-}
+const TEAMS_RESOURCE_TYPE: ResourceType = 'teams';
 
-export type TeamAction =
-    | RequestTeamAction
-    | RequestTeamCollectionAction
-    | ReceiveTeamsAction;
-
-interface RequestTeamAction {
-    type: TeamActionTypeKeys.REQUEST_TEAM;
-    id: string;
-}
-
-function requestTeam(id: string): RequestTeamAction {
+function requestTeam(id: string): RequestResourceObjectAction {
     return {
-        type: TeamActionTypeKeys.REQUEST_TEAM,
+        type: ResourceActionType.REQUEST_RESOURCE_OBJECT,
+        resourceType: TEAMS_RESOURCE_TYPE,
         id
     };
 }
 
-interface RequestTeamCollectionAction {
-    type: TeamActionTypeKeys.REQUEST_TEAM_COLLECTION;
-    page: number;
-}
-
-function requestTeamCollection(page: number): RequestTeamCollectionAction {
+function requestTeamCollection(page: number): RequestResourceCollectionAction {
     return {
-        type: TeamActionTypeKeys.REQUEST_TEAM_COLLECTION,
+        type: ResourceActionType.REQUEST_RESOURCE_COLLECTION,
+        resourceType: TEAMS_RESOURCE_TYPE,
         page
     };
 }
 
-interface ReceiveTeamsAction {
-    type: TeamActionTypeKeys.RECEIVE_TEAMS;
-    receivedAt: number;
-    data: OrderedMap<string, Team>;
-    page?: CollectionPage;
-}
-
-function receiveTeams(teams: OrderedMap<string, Team>, page?: CollectionPage): ReceiveTeamsAction {
+function receiveTeams(teams: OrderedMap<string, Team>, page?: CollectionPage): ReceiveResourceAction<Team> {
     return {
-        type: TeamActionTypeKeys.RECEIVE_TEAMS,
+        type: ResourceActionType.RECEIVE_RESOURCE,
+        resourceType: TEAMS_RESOURCE_TYPE,
         receivedAt: Date.now(),
         data: teams,
         page: page
@@ -59,8 +40,8 @@ function receiveTeams(teams: OrderedMap<string, Team>, page?: CollectionPage): R
 
 function removeTeam(id: string): RemoveResourceObjectAction {
     return {
-        type: ResourceObjectActionType.REMOVE_RESOURCE_OBJECT,
-        resourceObjectType: 'teams',
+        type: ResourceActionType.REMOVE_RESOURCE_OBJECT,
+        resourceType: TEAMS_RESOURCE_TYPE,
         removed: id
     };
 }

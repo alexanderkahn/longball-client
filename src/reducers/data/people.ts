@@ -1,24 +1,38 @@
 import { FetchingState, Person } from '../../models/models';
-import { PeopleAction, PeopleActionTypeKeys } from '../../actions/resourceobjects/people';
 import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectCache, ResourceObjectState } from './index';
-import { ResourceObjectAction, ResourceObjectActionType } from '../../actions/resourceobjects/index';
+import { ResourceObjectAction, ResourceActionType } from '../../actions/resourceobjects/index';
 
-export const people = (state: ResourceObjectState<Person> = initialState(), action: PeopleAction | ResourceObjectAction)
+export const people = (state: ResourceObjectState<Person> = initialState(), action: ResourceObjectAction<Person>)
     : ResourceObjectState<Person> => {
-    if (action.type === ResourceObjectActionType.REMOVE_RESOURCE_OBJECT
-        && action.resourceObjectType === 'people') {
-        return {
-            ...state,
-            data: state.data.delete(action.removed)
-        };
+    if (action.resourceType !== 'people') {
+        return state;
     }
+
     switch (action.type) {
-        case PeopleActionTypeKeys.RECEIVE_PEOPLE:
+        case ResourceActionType.REQUEST_RESOURCE_OBJECT:
+            return {
+                ...state,
+                data: state.data.set(action.id, new ResourceObjectCache(FetchingState.FETCHING))
+            };
+        case ResourceActionType.REQUEST_RESOURCE_COLLECTION:
+            return {
+                ...state,
+                pageInfo: {
+                    ...state.pageInfo,
+                    pages: state.pageInfo.pages.set(action.page, new ResourceObjectCache(FetchingState.FETCHING))
+                }
+            };
+        case ResourceActionType.RECEIVE_RESOURCE:
             return {
                 ...state,
                 pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
                 data: state.data.merge(action.data.map(it => new ResourceObjectCache(FetchingState.FETCHED, it)))
+            };
+        case ResourceActionType.REMOVE_RESOURCE_OBJECT:
+            return {
+                ...state,
+                data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
             };
         default:
             return state;

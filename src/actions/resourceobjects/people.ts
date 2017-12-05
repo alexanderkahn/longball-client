@@ -1,24 +1,13 @@
-import { Person} from '../../models/models';
-import { CollectionPage } from '../rest';
+import { Person, ResourceType } from '../../models/models';
 import { OrderedMap } from 'immutable';
-import { RemoveResourceObjectAction, ResourceObjectActionType } from './index';
+import { ReceiveResourceAction, RemoveResourceObjectAction, ResourceActionType } from './index';
 
-export enum PeopleActionTypeKeys {
-    RECEIVE_PEOPLE = 'RECEIVE_PEOPLE'
-}
+const PEOPLE_RESOURCE_TYPE: ResourceType = 'people';
 
-export type PeopleAction = | ReceivePeopleAction;
-
-interface ReceivePeopleAction {
-    type: PeopleActionTypeKeys.RECEIVE_PEOPLE;
-    receivedAt: number;
-    data: OrderedMap<string, Person>;
-    page?: CollectionPage;
-}
-
-export function receivePeople(people: OrderedMap<string, Person>): ReceivePeopleAction {
+export function receivePeople(people: OrderedMap<string, Person>): ReceiveResourceAction<Person> {
     return {
-        type: PeopleActionTypeKeys.RECEIVE_PEOPLE,
+        type: ResourceActionType.RECEIVE_RESOURCE,
+        resourceType: PEOPLE_RESOURCE_TYPE,
         data: people,
         receivedAt: Date.now()
     };
@@ -26,8 +15,8 @@ export function receivePeople(people: OrderedMap<string, Person>): ReceivePeople
 
 export function removePerson(id: string): RemoveResourceObjectAction {
     return {
-        type: ResourceObjectActionType.REMOVE_RESOURCE_OBJECT,
-        resourceObjectType: 'people',
+        type: ResourceActionType.REMOVE_RESOURCE_OBJECT,
+        resourceType: PEOPLE_RESOURCE_TYPE,
         removed: id
     };
 }

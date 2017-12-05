@@ -32,10 +32,10 @@ export interface PagedViewParams {
 // TODO probably move all of these into their respective state reducers
 export interface ResourceObject {
     id: string;
-    type: ResourceObjectType;
+    type: ResourceType;
 }
 
-export type ResourceObjectType =
+export type ResourceType =
     | 'leagues'
     | 'teams'
     | 'rosterpositions'
