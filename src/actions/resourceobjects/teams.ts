@@ -4,19 +4,18 @@ import { RootState } from '../../reducers/index';
 import { Dispatch } from 'redux';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
+import { RemoveResourceObjectAction, ResourceObjectActionType } from './index';
 
 export enum TeamActionTypeKeys {
     REQUEST_TEAM = 'REQUEST_TEAM',
     REQUEST_TEAM_COLLECTION = 'REQUEST_TEAM_COLLECTION',
     RECEIVE_TEAMS = 'RECEIVE_TEAMS',
-    REMOVE_TEAM = 'REMOVE_TEAM'
 }
 
 export type TeamAction =
     | RequestTeamAction
     | RequestTeamCollectionAction
-    | ReceiveTeamsAction
-    | RemoveTeamAction;
+    | ReceiveTeamsAction;
 
 interface RequestTeamAction {
     type: TeamActionTypeKeys.REQUEST_TEAM;
@@ -58,14 +57,10 @@ function receiveTeams(teams: OrderedMap<string, Team>, page?: CollectionPage): R
     };
 }
 
-interface RemoveTeamAction {
-    type: TeamActionTypeKeys.REMOVE_TEAM;
-    removed: string;
-}
-
-function removeTeam(id: string): RemoveTeamAction {
+function removeTeam(id: string): RemoveResourceObjectAction {
     return {
-        type: TeamActionTypeKeys.REMOVE_TEAM,
+        type: ResourceObjectActionType.REMOVE_RESOURCE_OBJECT,
+        resourceObjectType: 'teams',
         removed: id
     };
 }

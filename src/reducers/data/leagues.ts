@@ -2,9 +2,19 @@ import { LeagueAction, LeagueActionTypeKeys } from '../../actions/resourceobject
 import { FetchingState, League } from '../../models/models';
 import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectCache, ResourceObjectState } from './index';
+import { ResourceObjectAction, ResourceObjectActionType } from '../../actions/resourceobjects/index';
 
-export const leagues = (state: ResourceObjectState<League> = initialState(), action: LeagueAction)
-    : ResourceObjectState<League> => {
+export const leagues = (
+    state: ResourceObjectState<League> = initialState(),
+    action: LeagueAction | ResourceObjectAction): ResourceObjectState<League> => {
+    if (action.type === ResourceObjectActionType.REMOVE_RESOURCE_OBJECT
+        && action.resourceObjectType === 'leagues') {
+        return {
+            ...state,
+            data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
+        };
+    }
+
     switch (action.type) {
         case LeagueActionTypeKeys.REQUEST_LEAGUE:
             return {
@@ -25,11 +35,7 @@ export const leagues = (state: ResourceObjectState<League> = initialState(), act
                 pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
                 data: state.data.merge(action.data.map(it => new ResourceObjectCache(FetchingState.FETCHED, it)))
             };
-        case LeagueActionTypeKeys.REMOVE_LEAGUE:
-            return {
-                ...state,
-                data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
-            };
+
         default:
             return state;
     }

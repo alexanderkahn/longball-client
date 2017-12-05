@@ -2,9 +2,18 @@ import { TeamAction, TeamActionTypeKeys } from '../../actions/resourceobjects/te
 import { FetchingState, Team } from '../../models/models';
 import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectCache, ResourceObjectState } from './index';
+import { ResourceObjectAction, ResourceObjectActionType } from '../../actions/resourceobjects/index';
 
-export const teams = (state: ResourceObjectState<Team> = initialState(), action: TeamAction)
+export const teams = (state: ResourceObjectState<Team> = initialState(), action: TeamAction | ResourceObjectAction)
     : ResourceObjectState<Team> => {
+    if (action.type === ResourceObjectActionType.REMOVE_RESOURCE_OBJECT
+        && action.resourceObjectType === 'teams') {
+        return {
+            ...state,
+            data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
+        };
+    }
+
     switch (action.type) {
         case TeamActionTypeKeys.REQUEST_TEAM:
             return {
@@ -24,11 +33,6 @@ export const teams = (state: ResourceObjectState<Team> = initialState(), action:
                 ...state,
                 pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
                 data: state.data.merge(action.data.map(it => new ResourceObjectCache(FetchingState.FETCHED, it)))
-            };
-        case TeamActionTypeKeys.REMOVE_TEAM:
-            return {
-                ...state,
-                data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
             };
         default:
             return state;

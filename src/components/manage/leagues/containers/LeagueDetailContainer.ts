@@ -6,7 +6,7 @@ import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRout
 import { RouteComponentProps } from 'react-router';
 import { deepCopy, FetchingState, League } from '../../../../models/models';
 
-const emptyLeague = {
+const emptyLeague: League = {
     id: '',
     type: 'leagues',
     attributes: {

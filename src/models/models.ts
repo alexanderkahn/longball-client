@@ -32,12 +32,18 @@ export interface PagedViewParams {
 // TODO probably move all of these into their respective state reducers
 export interface ResourceObject {
     id: string;
-    type: string;
+    type: ResourceObjectType;
 }
+
+export type ResourceObjectType =
+    | 'leagues'
+    | 'teams'
+    | 'rosterpositions'
+    | 'people';
 
 export interface League extends ResourceObject {
     id: string;
-    type: string;
+    type: 'leagues';
     attributes: {
         name: string
     };
@@ -45,7 +51,7 @@ export interface League extends ResourceObject {
 
 export interface Team extends ResourceObject {
     id: string;
-    type: string;
+    type: 'teams';
     attributes: {
         abbreviation: string,
         location: string,
@@ -58,7 +64,7 @@ export interface Team extends ResourceObject {
 
 export interface Person extends ResourceObject {
     id: string;
-    type: string;
+    type: 'people';
     attributes: {
         first: string,
         last: string
@@ -67,7 +73,7 @@ export interface Person extends ResourceObject {
 
 export interface RosterPosition extends ResourceObject {
     id: string;
-    type: string;
+    type: 'rosterpositions';
     attributes: {
         jerseyNumber: number;
         startDate: string;
@@ -85,10 +91,7 @@ export interface Player {
 }
 
 interface RelationshipResource {
-    data: {
-        type: string;
-        id: string
-    };
+    data: ResourceObject;
 }
 
 // TODO: the functions below don't really have a home right now. Maybe find one for them?

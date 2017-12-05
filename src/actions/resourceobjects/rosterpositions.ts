@@ -6,19 +6,18 @@ import { RootState } from '../../reducers/index';
 import { isNullOrUndefined } from 'util';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
+import { RemoveResourceObjectAction, ResourceObjectActionType } from './index';
 
 export enum RosterPositionActionTypeKeys {
     REQUEST_ROSTER_POSITION = 'REQUEST_ROSTER_POSITION',
     REQUEST_ROSTER_POSITION_COLLECTION = 'REQUEST_ROSTER_POSITION_COLLECTION',
     RECEIVE_ROSTER_POSITIONS = 'RECEIVE_ROSTER_POSITIONS',
-    REMOVE_ROSTER_POSITION = 'REMOVE_ROSTER_POSITION'
 }
 
 export type RosterPositionAction =
     | RequestRosterPositionAction
     | RequestRosterPositionCollectionAction
-    | ReceiveRosterPositionsAction
-    | RemoveRosterPositionAction;
+    | ReceiveRosterPositionsAction;
 
 interface RequestRosterPositionAction {
     type: RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION;
@@ -52,11 +51,6 @@ interface ReceiveRosterPositionsAction {
     page?: CollectionPage;
 }
 
-interface RemoveRosterPositionAction {
-    type: RosterPositionActionTypeKeys.REMOVE_ROSTER_POSITION;
-    removed: string;
-}
-
 function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page?: CollectionPage)
 : ReceiveRosterPositionsAction {
     return {
@@ -67,9 +61,10 @@ function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPositi
     };
 }
 
-function removeRosterPosition(id: string): RemoveRosterPositionAction {
+function removeRosterPosition(id: string): RemoveResourceObjectAction {
     return {
-        type: RosterPositionActionTypeKeys.REMOVE_ROSTER_POSITION,
+        type: ResourceObjectActionType.REMOVE_RESOURCE_OBJECT,
+        resourceObjectType: 'rosterpositions',
         removed: id
     };
 }

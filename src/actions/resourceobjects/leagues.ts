@@ -1,22 +1,21 @@
 import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
-import { League } from '../../models/models';
+import { League} from '../../models/models';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/index';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
+import { RemoveResourceObjectAction, ResourceObjectActionType } from './index';
 
 export enum LeagueActionTypeKeys {
     REQUEST_LEAGUE = 'REQUEST_LEAGUE',
     REQUEST_LEAGUE_COLLECTION = 'REQUEST_LEAGUE_COLLECTION',
     RECEIVE_LEAGUES = 'RECEIVE_LEAGUES',
-    REMOVE_LEAGUE = 'REMOVE_LEAGUE',
 }
 
 export type LeagueAction =
     | RequestLeagueAction
     | RequestLeagueCollectionAction
-    | ReceiveLeaguesAction
-    | RemoveLeagueAction;
+    | ReceiveLeaguesAction;
 
 interface RequestLeagueAction {
     type: LeagueActionTypeKeys.REQUEST_LEAGUE;
@@ -59,14 +58,10 @@ function receiveLeagues(leagues: OrderedMap<string, League>, page?: CollectionPa
     };
 }
 
-interface RemoveLeagueAction {
-    type: LeagueActionTypeKeys.REMOVE_LEAGUE;
-    removed: string;
-}
-
-function removeLeague(id: string): RemoveLeagueAction {
+function removeLeague(id: string): RemoveResourceObjectAction {
     return {
-        type: LeagueActionTypeKeys.REMOVE_LEAGUE,
+        type: ResourceObjectActionType.REMOVE_RESOURCE_OBJECT,
+        resourceObjectType: 'leagues',
         removed: id
     };
 }

@@ -2,9 +2,19 @@ import { RosterPositionAction, RosterPositionActionTypeKeys } from '../../action
 import { FetchingState, RosterPosition } from '../../models/models';
 import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectCache, ResourceObjectState } from './index';
+import { ResourceObjectAction, ResourceObjectActionType } from '../../actions/resourceobjects/index';
 
 export const rosterPositions = (state: ResourceObjectState<RosterPosition> = initialState(),
-                                action: RosterPositionAction): ResourceObjectState<RosterPosition> => {
+                                action: RosterPositionAction | ResourceObjectAction)
+    : ResourceObjectState<RosterPosition> => {
+    if (action.type === ResourceObjectActionType.REMOVE_RESOURCE_OBJECT
+        && action.resourceObjectType === 'rosterpositions') {
+        return {
+            ...state,
+            data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
+        };
+    }
+
     switch (action.type) {
         case RosterPositionActionTypeKeys.REQUEST_ROSTER_POSITION:
             return {
@@ -24,11 +34,6 @@ export const rosterPositions = (state: ResourceObjectState<RosterPosition> = ini
                 ...state,
                 pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
                 data: state.data.merge(action.data.map(it => new ResourceObjectCache(FetchingState.FETCHED, it))),
-            };
-        case RosterPositionActionTypeKeys.REMOVE_ROSTER_POSITION:
-            return {
-                ...state,
-                data: state.data.set(action.removed, new ResourceObjectCache(FetchingState.FETCHED))
             };
         default:
             return state;
