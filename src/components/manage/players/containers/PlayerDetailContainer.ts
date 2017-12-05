@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { deepCopy, FetchingState, Player } from '../../../../models/models';
+import { deepCopy, FetchedState, Player } from '../../../../models/models';
 import { isNullOrUndefined } from 'util';
 
 const emptyPlayer: Player = {
@@ -49,7 +49,7 @@ function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageI
             player: deepCopy(emptyPlayer),
             isEdit: true,
             currentView: {
-                fetchingState: FetchingState.FETCHED
+                fetchedState: FetchedState.FETCHED
             }
         };
     } else {
@@ -61,7 +61,7 @@ function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageI
             player: isNullOrUndefined(rosterPosition) || isNullOrUndefined(person) ? null : {rosterPosition, person},
             isEdit: false,
             currentView: {
-                fetchingState: rosterPositionCache ? rosterPositionCache.fetchingState : FetchingState.NOT_FETCHED
+                fetchedState: rosterPositionCache ? rosterPositionCache.fetchingState : FetchedState.NOT_FETCHED
             }
         };
     }

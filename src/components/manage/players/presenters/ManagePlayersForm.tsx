@@ -10,7 +10,7 @@ export interface ManagePlayersFormProps {
 }
 
 export interface ManagePlayersFormActions {
-    fetchListItems: () => void;
+    fetchListItems: (currentPage: number) => () => void;
     onClickAdd: () => void;
     getPage: (page: number) => () => void;
     buildHandleSelectPlayerDetail: (player: Player) => () => void;
@@ -24,7 +24,7 @@ export default class ManagePlayersForm extends Component<ManagePlayersFormProps 
             <ManagementList
                 title="Players"
                 currentView={currentView}
-                fetchListItems={fetchListItems}
+                fetchListItems={fetchListItems(currentView.page)}
                 onClickAdd={onClickAdd}
                 getPage={getPage}
             >

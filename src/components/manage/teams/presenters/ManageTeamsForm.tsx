@@ -10,7 +10,7 @@ export interface ManageTeamsFormProps {
 }
 
 export interface ManageTeamsFormActions {
-    fetchListItems: () => void;
+    fetchListItems: (page: number) => () => void;
     onClickAdd: () => void;
     getPage: (page: number) => () => void;
     buildHandleSelectTeamDetail: (team: Team) => () => void;
@@ -25,7 +25,7 @@ export default class ManageTeamsForm extends Component<ManageTeamsFormProps & Ma
             <ManagementList
                 title="Teams"
                 currentView={currentView}
-                fetchListItems={fetchListItems}
+                fetchListItems={fetchListItems(currentView.page)}
                 getPage={getPage}
                 onClickAdd={onClickAdd}
             >

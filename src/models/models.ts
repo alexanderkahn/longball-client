@@ -4,7 +4,7 @@ import { Location } from 'history';
 import { isNumber } from 'util';
 import { ResourceObjectState } from '../reducers/data/index';
 
-export enum FetchingState {
+export enum FetchedState {
     NOT_FETCHED,
     FETCHING,
     FETCHED
@@ -15,7 +15,7 @@ export interface User {
 }
 
 export interface CurrentView {
-    fetchingState: FetchingState;
+    fetchedState: FetchedState;
 }
 
 export interface PagedView extends CurrentView {
@@ -100,21 +100,26 @@ export const deepCopy = <T>(o: T): T => {
 };
 
 // TODO: with a little more information, this could return a built PagedView
-export function getSafePage(location: Location): number {
+export function getSafePage(state: ResourceObjectState<ResourceObject>, location: Location): PagedView {
     const params = parse(location.search.substr(1)) as PagedViewParams;
     const pageNumber = Number(params.page);
-    if (isNumber(pageNumber) && pageNumber > 0) {
-        return pageNumber;
+    const safePage = (isNumber(pageNumber) && pageNumber > 0) ? pageNumber : 1;
+    const pageInfo = state.pageInfo.pages.get(safePage);
+    if (!pageInfo) {
+        return {
+            page: safePage,
+            fetchedState: FetchedState.NOT_FETCHED,
+            hasPrevious: false,
+            hasNext: false,
+        };
+    } else {
+        return {
+            page: safePage,
+            fetchedState: pageInfo.fetchingState,
+            hasPrevious: safePage > 1,
+            hasNext: safePage < state.pageInfo.totalPages,
+        };
     }
-    return 1;
-}
-
-export function hasPrevious(currentPage: number): boolean {
-    return currentPage > 1;
-}
-
-export function hasNext(state: ResourceObjectState<ResourceObject>,  currentPage: number): boolean {
-    return currentPage < state.pageInfo.totalPages;
 }
 
 // TODO: this really does not need to exist. Better to extract a constant and use it for all the route pushing.

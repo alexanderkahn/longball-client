@@ -3,28 +3,21 @@ import { deleteLeague, fetchLeagues } from '../../../../actions/resourceobjects/
 import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../presenters/ManageLeaguesForm';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
-import { FetchingState, hasNext, hasPrevious, getSafePage, League, getUrlForPage } from '../../../../models/models';
+import { getSafePage, League, getUrlForPage } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
 import { getObjectsForPage } from '../../../../reducers/data/index';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageLeaguesProps => {
-    const currentPage = getSafePage(ownProps.location);
-    const pageInfo = state.data.leagues.pageInfo.pages.get(currentPage);
+    const currentPage = getSafePage(state.data.leagues, ownProps.location);
     return {
-        leagues: getObjectsForPage(state.data.leagues, currentPage),
-        currentView: {
-            page: currentPage,
-            hasPrevious: hasPrevious(currentPage),
-            hasNext: hasNext(state.data.leagues, currentPage),
-            fetchingState: pageInfo ? pageInfo.fetchingState : FetchingState.NOT_FETCHED,
-        },
+        leagues: getObjectsForPage(state.data.leagues, currentPage.page),
+        currentView: currentPage,
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>): ManageLeaguesActions => {
-    const currentPage = getSafePage(ownProps.location);
     return {
-        fetchListItems: () => dispatch(fetchLeagues(currentPage)),
+        fetchListItems: (page: number) => () => dispatch(fetchLeagues(page)),
         onClickAdd: () => dispatch(push('/manage/leagues/add')),
         getPage: (page: number) => () => dispatch(push(getUrlForPage(ownProps.location, page))),
         buildHandleSelectDetail: (id: string) => () => dispatch(push(`/manage/leagues/${id}`)),

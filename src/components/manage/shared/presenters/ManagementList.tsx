@@ -6,7 +6,7 @@ import AddIcon from 'material-ui-icons/Add';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
-import { FetchingState, PagedView } from '../../../../models/models';
+import { FetchedState, PagedView } from '../../../../models/models';
 
 const styles: CSSProperties = {
     title: {
@@ -61,7 +61,7 @@ export default class ManagementList extends Component<ManagementListProps> {
                 <List>
                     {children}
                 </List>
-                <LoadingProgressIndicator enabled={currentView.fetchingState === FetchingState.FETCHING}/>
+                <LoadingProgressIndicator enabled={currentView.fetchedState === FetchedState.FETCHING}/>
                 <Button
                     fab={true}
                     color="accent"
@@ -77,7 +77,7 @@ export default class ManagementList extends Component<ManagementListProps> {
 
     private tryFetch() {
         const props = this.props;
-        if (props.currentView.fetchingState === FetchingState.NOT_FETCHED) {
+        if (props.currentView.fetchedState === FetchedState.NOT_FETCHED) {
             this.props.fetchListItems();
         }
     }

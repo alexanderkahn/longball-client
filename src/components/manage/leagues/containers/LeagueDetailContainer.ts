@@ -4,7 +4,7 @@ import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '..
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { deepCopy, FetchingState, League } from '../../../../models/models';
+import { deepCopy, FetchedState, League } from '../../../../models/models';
 
 const emptyLeague: League = {
     id: '',
@@ -21,7 +21,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
             league: deepCopy(emptyLeague),
             isEdit: true,
             currentView: {
-                fetchingState: FetchingState.FETCHED
+                fetchedState: FetchedState.FETCHED
             }
         };
     } else {
@@ -30,7 +30,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
             league: leagueCache ? leagueCache.object : null,
             isEdit: false,
             currentView: {
-                fetchingState: leagueCache ? leagueCache.fetchingState : FetchingState.NOT_FETCHED
+                fetchedState: leagueCache ? leagueCache.fetchingState : FetchedState.NOT_FETCHED
             }
         };
     }

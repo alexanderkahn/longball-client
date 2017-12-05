@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChangeEvent, Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { CurrentView, FetchingState, Team } from '../../../../models/models';
+import { CurrentView, FetchedState, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { isNullOrUndefined } from 'util';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
@@ -39,7 +39,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
     render() {
         const {currentView} = this.props;
         return (
-            <FetchableAsset isFetching={currentView.fetchingState === FetchingState.FETCHING}>
+            <FetchableAsset isFetching={currentView.fetchedState === FetchedState.FETCHING}>
                 {this.getForm()}
             </FetchableAsset>
         );
@@ -47,7 +47,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
 
     private tryFetch() {
         const {currentView, fetchItemDetail} = this.props;
-        if (currentView.fetchingState === FetchingState.NOT_FETCHED) {
+        if (currentView.fetchedState === FetchedState.NOT_FETCHED) {
             fetchItemDetail();
         }
     }
@@ -60,8 +60,6 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
             return (
                 <form style={styles.root}>
                     <div style={styles.leagueSelector}>
-                        {/*<span>League: {team.relationships.league.data.id} </span>*/}
-                        {/*<Button disabled={true} dense={true}>Change selection</Button>*/}
                         <TextField
                             fullWidth={true}
                             disabled={!isEdit}

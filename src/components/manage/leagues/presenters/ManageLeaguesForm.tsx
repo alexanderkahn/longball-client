@@ -10,7 +10,7 @@ export interface ManageLeaguesProps {
 }
 
 export interface ManageLeaguesActions {
-    fetchListItems: () => void;
+    fetchListItems: (page: number) => () => void;
     onClickAdd: () => void;
     getPage: (page: number) => () => void;
     buildHandleSelectDetail: (id: string) => () => void;
@@ -27,7 +27,7 @@ export default class ManageLeaguesForm extends Component<ManageLeaguesProps & Ma
                 currentView={currentView}
                 onClickAdd={onClickAdd}
                 getPage={getPage}
-                fetchListItems={fetchListItems}
+                fetchListItems={fetchListItems(currentView.page)}
             >
                 {this.getChildListItems()}
             </ManagementList>

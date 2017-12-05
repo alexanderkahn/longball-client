@@ -4,7 +4,7 @@ import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../prese
 import { RootState } from '../../../../reducers/index';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
-import { deepCopy, FetchingState, Team } from '../../../../models/models';
+import { deepCopy, FetchedState, Team } from '../../../../models/models';
 
 const emptyTeam: Team = {
     id: '',
@@ -30,7 +30,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
         return {
             team: deepCopy(emptyTeam),
             currentView: {
-                fetchingState: FetchingState.FETCHED
+                fetchedState: FetchedState.FETCHED
             },
             isEdit: true
         };
@@ -39,7 +39,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
         return {
             team: teamCache ? teamCache.object : null,
             currentView: {
-                fetchingState: teamCache ? teamCache.fetchingState : FetchingState.NOT_FETCHED
+                fetchedState: teamCache ? teamCache.fetchingState : FetchedState.NOT_FETCHED
             },
             isEdit: false
         };
