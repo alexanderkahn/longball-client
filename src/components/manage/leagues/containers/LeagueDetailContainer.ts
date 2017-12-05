@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchLeagueDetail, saveLeague } from '../../../../actions/resourceobjects/leagues';
+import { fetchLeagueDetail, saveLeague } from '../../../../actions/resource/leagues';
 import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '../presenters/LeagueDetailForm';
 import { RootState } from '../../../../reducers/index';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
@@ -25,7 +25,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
             }
         };
     } else {
-        const leagueCache = state.data.leagues.data.get(leagueId);
+        const leagueCache = state.resource.leagues.data.get(leagueId);
         return {
             league: leagueCache ? leagueCache.object : null,
             isEdit: false,

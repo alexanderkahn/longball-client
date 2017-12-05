@@ -1,18 +1,18 @@
 import { auth, AuthState } from './auth';
-import { data, DataState } from './data/index';
+import { resource, ResourceState } from './resource/index';
 import { combineReducers, Reducer } from 'redux';
 import { easterEgg, EasterEggState } from './easterEgg';
 import { routerReducer } from 'react-router-redux';
 
 export interface RootState {
     auth: AuthState;
-    data: DataState;
+    resource: ResourceState;
     easterEgg: EasterEggState;
 }
 
 const reducers: Reducer<RootState> = combineReducers({
     auth,
-    data,
+    resource,
     easterEgg,
     routing: routerReducer,
 });

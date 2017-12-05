@@ -1,11 +1,11 @@
 import { connect, Dispatch } from 'react-redux';
-import { deletePlayer, fetchPlayers } from '../../../../actions/resourceobjects/rosterpositions';
+import { deletePlayer, fetchPlayers } from '../../../../actions/resource/rosterpositions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
 import { getSafePage, getUrlForPage, Person, Player, RosterPosition } from '../../../../models/models';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
-import { getObjectsForPage, ResourceObjectState } from '../../../../reducers/data/index';
+import { getObjectsForPage, ResourceObjectState } from '../../../../reducers/resource/index';
 
 function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObjectState<Person>): Array<Player> {
     let players: Array<Player> = [];
@@ -21,10 +21,10 @@ function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObje
 }
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManagePlayersFormProps => {
-    const currentPage = getSafePage(state.data.rosterPositions, ownProps.location);
-    const rosterPositions = getObjectsForPage(state.data.rosterPositions, currentPage.page);
+    const currentPage = getSafePage(state.resource.rosterPositions, ownProps.location);
+    const rosterPositions = getObjectsForPage(state.resource.rosterPositions, currentPage.page);
     return {
-        players: getPlayers(rosterPositions, state.data.people),
+        players: getPlayers(rosterPositions, state.resource.people),
         currentView: currentPage
     };
 };

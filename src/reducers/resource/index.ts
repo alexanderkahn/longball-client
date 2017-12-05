@@ -8,7 +8,7 @@ import { FetchedState, League, Person, ResourceObject, RosterPosition, Team } fr
 import { isNullOrUndefined } from 'util';
 import { CollectionPage } from '../../actions/rest';
 
-export interface DataState {
+export interface ResourceState {
     readonly leagues: ResourceObjectState<League>;
     readonly teams: ResourceObjectState<Team>;
     readonly people: ResourceObjectState<Person>;
@@ -75,7 +75,7 @@ export function getObjectsForPage<T extends ResourceObject>(state: ResourceObjec
     }
 }
 
-export const data: Reducer<DataState> = combineReducers<DataState>({
+export const resource: Reducer<ResourceState> = combineReducers<ResourceState>({
     leagues,
     teams,
     people,

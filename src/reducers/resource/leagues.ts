@@ -1,11 +1,12 @@
-import { FetchedState, Person } from '../../models/models';
+import { FetchedState, League } from '../../models/models';
 import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectCache, ResourceObjectState } from './index';
-import { ResourceObjectAction, ResourceActionType } from '../../actions/resourceobjects/index';
+import { ResourceObjectAction, ResourceActionType } from '../../actions/resource/index';
 
-export const people = (state: ResourceObjectState<Person> = initialState(), action: ResourceObjectAction<Person>)
-    : ResourceObjectState<Person> => {
-    if (action.resourceType !== 'people') {
+export const leagues = (
+    state: ResourceObjectState<League> = initialState(), action: ResourceObjectAction<League>):
+    ResourceObjectState<League> => {
+    if (action.resourceType !== 'leagues') {
         return state;
     }
 

@@ -1,16 +1,16 @@
 import { connect, Dispatch } from 'react-redux';
-import { deleteTeam, fetchTeams } from '../../../../actions/resourceobjects/teams';
+import { deleteTeam, fetchTeams } from '../../../../actions/resource/teams';
 import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '../presenters/ManageTeamsForm';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { getSafePage, getUrlForPage, Team } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
-import { getObjectsForPage } from '../../../../reducers/data/index';
+import { getObjectsForPage } from '../../../../reducers/resource/index';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageTeamsFormProps => {
-    const currentPage = getSafePage(state.data.teams, ownProps.location);
+    const currentPage = getSafePage(state.resource.teams, ownProps.location);
     return {
-        teams: getObjectsForPage(state.data.teams, currentPage.page),
+        teams: getObjectsForPage(state.resource.teams, currentPage.page),
         currentView: currentPage,
     };
 };

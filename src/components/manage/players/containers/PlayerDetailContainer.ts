@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { fetchPlayerDetail, savePlayer } from '../../../../actions/resourceobjects/rosterpositions';
+import { fetchPlayerDetail, savePlayer } from '../../../../actions/resource/rosterpositions';
 import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailProps } from '../presenters/PlayerDetailForm';
 import { Dispatch } from 'redux';
 import { RootState } from '../../../../reducers/index';
@@ -53,10 +53,10 @@ function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageI
             }
         };
     } else {
-        const rosterPositionCache = state.data.rosterPositions.data.get(teamId);
+        const rosterPositionCache = state.resource.rosterPositions.data.get(teamId);
         const rosterPosition = rosterPositionCache ? rosterPositionCache.object : null;
         const person = !rosterPosition ? null
-            : state.data.people.data.get(rosterPosition.relationships.player.data.id).object;
+            : state.resource.people.data.get(rosterPosition.relationships.player.data.id).object;
         return {
             player: isNullOrUndefined(rosterPosition) || isNullOrUndefined(person) ? null : {rosterPosition, person},
             isEdit: false,

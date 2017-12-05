@@ -2,7 +2,7 @@
 import { parse } from 'querystring';
 import { Location } from 'history';
 import { isNumber } from 'util';
-import { ResourceObjectState } from '../reducers/data/index';
+import { ResourceObjectState } from '../reducers/resource/index';
 
 export enum FetchedState {
     NOT_FETCHED,

@@ -1,16 +1,16 @@
 import { connect, Dispatch } from 'react-redux';
-import { deleteLeague, fetchLeagues } from '../../../../actions/resourceobjects/leagues';
+import { deleteLeague, fetchLeagues } from '../../../../actions/resource/leagues';
 import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../presenters/ManageLeaguesForm';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
 import { getSafePage, League, getUrlForPage } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
-import { getObjectsForPage } from '../../../../reducers/data/index';
+import { getObjectsForPage } from '../../../../reducers/resource/index';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageLeaguesProps => {
-    const currentPage = getSafePage(state.data.leagues, ownProps.location);
+    const currentPage = getSafePage(state.resource.leagues, ownProps.location);
     return {
-        leagues: getObjectsForPage(state.data.leagues, currentPage.page),
+        leagues: getObjectsForPage(state.resource.leagues, currentPage.page),
         currentView: currentPage,
     };
 };

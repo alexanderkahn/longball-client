@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchTeamDetail, saveTeam } from '../../../../actions/resourceobjects/teams';
+import { fetchTeamDetail, saveTeam } from '../../../../actions/resource/teams';
 import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../presenters/TeamDetailForm';
 import { RootState } from '../../../../reducers/index';
 import { RouteComponentProps } from 'react-router';
@@ -35,7 +35,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
             isEdit: true
         };
     } else {
-        const teamCache = state.data.teams.data.get(teamId);
+        const teamCache = state.resource.teams.data.get(teamId);
         return {
             team: teamCache ? teamCache.object : null,
             currentView: {

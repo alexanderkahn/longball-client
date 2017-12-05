@@ -1,7 +1,7 @@
 import { FetchedState, RosterPosition } from '../../models/models';
 import { List } from 'immutable';
 import { initialState, mergePages, ResourceObjectCache, ResourceObjectState } from './index';
-import { ResourceObjectAction, ResourceActionType } from '../../actions/resourceobjects/index';
+import { ResourceObjectAction, ResourceActionType } from '../../actions/resource/index';
 
 export const rosterPositions = (state: ResourceObjectState<RosterPosition> = initialState(),
                                 action: ResourceObjectAction<RosterPosition>)
