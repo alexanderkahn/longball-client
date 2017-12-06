@@ -121,8 +121,3 @@ export function getSafePage(state: ResourceObjectState<ResourceObject>, location
         };
     }
 }
-
-// TODO: this really does not need to exist. Better to extract a constant and use it for all the route pushing.
-export function getUrlForPage(currentLocation: Location, page: number) {
-    return `${currentLocation.pathname}?page=${page}`;
-}

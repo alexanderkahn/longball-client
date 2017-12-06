@@ -3,9 +3,11 @@ import { deleteTeam, fetchTeams } from '../../../../actions/resource/teams';
 import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '../presenters/ManageTeamsForm';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
-import { getSafePage, getUrlForPage, Team } from '../../../../models/models';
+import { getSafePage, Team } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
 import { getObjectsForPage } from '../../../../reducers/resource/index';
+
+const MANAGE_TEAMS_BASE_URL = '/manage/teams';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageTeamsFormProps => {
     const currentPage = getSafePage(state.resource.teams, ownProps.location);
@@ -19,8 +21,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     : ManageTeamsFormActions => {
     return {
         fetchListItems: (page: number) => () => dispatch(fetchTeams(page)),
-        onClickAdd: () => dispatch(push('/manage/teams/add')),
-        getPage: (page: number) => () => dispatch(push(getUrlForPage(ownProps.location, page))),
+        onClickAdd: () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}/add`)),
+        getPage: (page: number) => () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}?page=${page}`)),
         buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`/manage/teams/${team.id}`)),
         buildHandleDeleteTeam: (team: Team) => () => dispatch(deleteTeam(team))
     };
