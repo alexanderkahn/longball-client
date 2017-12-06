@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         onClickAdd: () => dispatch(push(MANAGE_PLAYERS_BASE_URL + '/add')),
         getPage: (page: number) => () => dispatch(push(MANAGE_PLAYERS_BASE_URL + `?page=${page}`)),
         buildHandleSelectPlayerDetail: (player: Player) => () =>
-            dispatch(push(`${MANAGE_PLAYERS_BASE_URL}${player.rosterPosition.id}`)),
+            dispatch(push(`${MANAGE_PLAYERS_BASE_URL}/${player.rosterPosition.id}`)),
         buildHandleDeletePlayer: (player: Player) => () => dispatch(deletePlayer(player)),
     };
 };

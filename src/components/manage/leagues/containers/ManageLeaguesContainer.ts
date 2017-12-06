@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageLeaguesActions
         fetchListItems: (page: number) => () => dispatch(fetchLeagues(page)),
         onClickAdd: () => dispatch(push(MANAGE_LEAGUES_BASE_URL + 'add')),
         getPage: (page: number) => () => dispatch(push(MANAGE_LEAGUES_BASE_URL + `?page=${page}`)),
-        buildHandleSelectDetail: (id: string) => () => dispatch(push(MANAGE_LEAGUES_BASE_URL + `${id}`)),
+        buildHandleSelectDetail: (id: string) => () => dispatch(push(`${MANAGE_LEAGUES_BASE_URL}/${id}`)),
         buildHandleDeleteLeague: (league: League) => () => dispatch(deleteLeague(league))
     };
 };

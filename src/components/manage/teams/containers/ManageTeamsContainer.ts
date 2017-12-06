@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         fetchListItems: (page: number) => () => dispatch(fetchTeams(page)),
         onClickAdd: () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}/add`)),
         getPage: (page: number) => () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}?page=${page}`)),
-        buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`/manage/teams/${team.id}`)),
+        buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}/${team.id}`)),
         buildHandleDeleteTeam: (team: Team) => () => dispatch(deleteTeam(team))
     };
 };
