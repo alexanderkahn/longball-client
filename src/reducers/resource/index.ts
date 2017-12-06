@@ -1,12 +1,9 @@
-import { teams } from './teams';
-import { people } from './people';
-import { rosterPositions } from './rosterPositions';
-import { leagues } from './leagues';
 import { combineReducers, Reducer } from 'redux';
 import { List, Map } from 'immutable';
-import { FetchedState, League, Person, ResourceObject, RosterPosition, Team } from '../../models/models';
+import { FetchedState, League, Person, ResourceObject, ResourceType, RosterPosition, Team } from '../../models/models';
 import { isNullOrUndefined } from 'util';
 import { CollectionPage } from '../../actions/rest';
+import { ResourceActionType, ResourceObjectAction } from '../../actions/resource/index';
 
 export interface ResourceState {
     readonly leagues: ResourceObjectState<League>;
@@ -44,6 +41,42 @@ export function initialState<T extends ResourceObject>(): ResourceObjectState<T>
     };
 }
 
+const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceType) =>
+    (state: ResourceObjectState<T> = initialState(), action: ResourceObjectAction<T>): ResourceObjectState<T> => {
+        if (action.resourceType !== typeFilter) {
+            return state;
+        }
+
+        switch (action.type) {
+            case ResourceActionType.REQUEST_RESOURCE_OBJECT:
+                return {
+                    ...state,
+                    data: state.data.set(action.id, new ResourceObjectCache(FetchedState.FETCHING))
+                };
+            case ResourceActionType.REQUEST_RESOURCE_COLLECTION:
+                return {
+                    ...state,
+                    pageInfo: {
+                        ...state.pageInfo,
+                        pages: state.pageInfo.pages.set(action.page, new ResourceObjectCache(FetchedState.FETCHING))
+                    }
+                };
+            case ResourceActionType.RECEIVE_RESOURCE:
+                return {
+                    ...state,
+                    pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
+                    data: state.data.merge(action.data.map(it => new ResourceObjectCache(FetchedState.FETCHED, it)))
+                };
+            case ResourceActionType.REMOVE_RESOURCE_OBJECT:
+                return {
+                    ...state,
+                    data: state.data.set(action.removed, new ResourceObjectCache(FetchedState.FETCHED))
+                };
+            default:
+                return state;
+        }
+    };
+
 export function mergePages(responseObjectIds: List<string>, state: PageInfo, actionPage?: CollectionPage): PageInfo {
     if (isNullOrUndefined(actionPage)) {
         return state;
@@ -74,6 +107,11 @@ export function getObjectsForPage<T extends ResourceObject>(state: ResourceObjec
         return objects;
     }
 }
+
+const leagues = resourceReducerBuilder<League>('leagues');
+const teams = resourceReducerBuilder<Team>('teams');
+const people = resourceReducerBuilder<Person>('people');
+const rosterPositions = resourceReducerBuilder<RosterPosition>('rosterpositions');
 
 export const resource: Reducer<ResourceState> = combineReducers<ResourceState>({
     leagues,
