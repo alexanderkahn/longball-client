@@ -1,8 +1,6 @@
 import { combineReducers, Reducer } from 'redux';
 import { List, Map } from 'immutable';
 import { FetchedState, League, Person, ResourceObject, ResourceType, RosterPosition, Team } from '../../models/models';
-import { isNullOrUndefined } from 'util';
-import { CollectionPage } from '../../actions/rest';
 import { ResourceActionType, ResourceObjectAction } from '../../actions/resource/index';
 
 export interface ResourceState {
@@ -71,7 +69,12 @@ const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceTy
             case ResourceActionType.RECEIVE_RESOURCE_PAGE:
                 return {
                     ...state,
-                    pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),
+                    pageInfo: {
+                        ...state.pageInfo,
+                        totalPages: action.page.totalPages,
+                        pages: state.pageInfo.pages.set(
+                            action.page.number, new ResourceObjectCache(FetchedState.FETCHED, List(action.data.keys())))
+                    },
                     data: state.data.merge(action.data.map(it => new ResourceObjectCache(FetchedState.FETCHED, it)))
                 };
             case ResourceActionType.REMOVE_RESOURCE_OBJECT:
@@ -83,18 +86,6 @@ const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceTy
                 return state;
         }
     };
-
-export function mergePages(responseObjectIds: List<string>, state: PageInfo, actionPage?: CollectionPage): PageInfo {
-    if (isNullOrUndefined(actionPage)) {
-        return state;
-    } else {
-        return {
-            ...state,
-            totalPages: actionPage.totalPages,
-            pages: state.pages.set(actionPage.number, new ResourceObjectCache(FetchedState.FETCHED, responseObjectIds))
-        };
-    }
-}
 
 export function getObjectsForPage<T extends ResourceObject>(state: ResourceObjectState<T>, page: number): Array<T> {
     if (!state.pageInfo.pages.has(page)) {
