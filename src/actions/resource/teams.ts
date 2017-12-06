@@ -5,9 +5,9 @@ import { Dispatch } from 'redux';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 import {
-    ReceiveResourceAction,
-    RemoveResourceObjectAction, RequestResourceCollectionAction, RequestResourceObjectAction,
-    ResourceActionType
+    ReceiveResourcePageAction,
+    RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
+    ResourceActionType, ReceiveResourceObjectAction
 } from './index';
 
 const TEAMS_RESOURCE_TYPE: ResourceType = 'teams';
@@ -20,19 +20,29 @@ function requestTeam(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestTeamCollection(page: number): RequestResourceCollectionAction {
+function requestTeamCollection(page: number): RequestResourcePageAction {
     return {
-        type: ResourceActionType.REQUEST_RESOURCE_COLLECTION,
+        type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: TEAMS_RESOURCE_TYPE,
         page
     };
 }
 
-function receiveTeams(teams: OrderedMap<string, Team>, page?: CollectionPage): ReceiveResourceAction<Team> {
+function receiveTeam(id: string, resource: Team | null): ReceiveResourceObjectAction<Team> {
     return {
-        type: ResourceActionType.RECEIVE_RESOURCE,
+        type: ResourceActionType.RECEIVE_RESOURCE_OBJECT,
         resourceType: TEAMS_RESOURCE_TYPE,
-        receivedAt: Date.now(),
+        data: {
+            id,
+            resource
+        },
+    };
+}
+
+function receiveTeams(teams: OrderedMap<string, Team>, page: CollectionPage): ReceiveResourcePageAction<Team> {
+    return {
+        type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
+        resourceType: TEAMS_RESOURCE_TYPE,
         data: teams,
         page: page
     };
@@ -58,14 +68,14 @@ export function fetchTeamDetail(teamId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(requestTeam(teamId));
         const object = await fetchObject<Team>('teams', teamId);
-        dispatch(receiveTeams(OrderedMap([[teamId, object ? object.data : null]])));
+        dispatch(receiveTeam(teamId, object ? object.data : null));
     };
 }
 
 export function saveTeam(team: Team): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         const saveResponse = await postObject(team);
-        dispatch(receiveTeams(OrderedMap([[saveResponse.id, saveResponse]])));
+        dispatch(receiveTeam(saveResponse.id, saveResponse));
         dispatch(replace(`/manage/teams/${saveResponse.id}`));
     };
 }

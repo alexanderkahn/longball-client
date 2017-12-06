@@ -5,9 +5,9 @@ import { RootState } from '../../reducers/index';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 import {
-    ReceiveResourceAction,
-    RemoveResourceObjectAction, RequestResourceCollectionAction, RequestResourceObjectAction,
-    ResourceActionType
+    ReceiveResourcePageAction,
+    RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
+    ResourceActionType, ReceiveResourceObjectAction
 } from './index';
 
 const LEAGUE_RESOURCE_TYPE: ResourceType = 'leagues';
@@ -20,19 +20,29 @@ function requestLeague(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestLeagueCollection(page: number): RequestResourceCollectionAction {
+function requestLeagueCollection(page: number): RequestResourcePageAction {
     return {
-        type: ResourceActionType.REQUEST_RESOURCE_COLLECTION,
+        type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: LEAGUE_RESOURCE_TYPE,
         page
     };
 }
 
-function receiveLeagues(leagues: OrderedMap<string, League>, page?: CollectionPage): ReceiveResourceAction<League> {
+function receiveLeague(id: string, resource: League | null): ReceiveResourceObjectAction<League> {
     return {
-        type: ResourceActionType.RECEIVE_RESOURCE,
+        type: ResourceActionType.RECEIVE_RESOURCE_OBJECT,
         resourceType: LEAGUE_RESOURCE_TYPE,
-        receivedAt: Date.now(),
+        data: {
+            id,
+            resource
+        },
+    };
+}
+
+function receiveLeagues(leagues: OrderedMap<string, League>, page: CollectionPage): ReceiveResourcePageAction<League> {
+    return {
+        type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
+        resourceType: LEAGUE_RESOURCE_TYPE,
         data: leagues,
         page: page
     };
@@ -58,14 +68,14 @@ export function fetchLeagueDetail(leagueId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(requestLeague(leagueId));
         const object = await fetchObject<League>('leagues', leagueId);
-        dispatch(receiveLeagues(OrderedMap([[leagueId, object ? object.data : null]])));
+        dispatch(receiveLeague(leagueId, object ? object.data : null));
     };
 }
 
 export function saveLeague(league: League): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         const saveResponse = await postObject(league);
-        dispatch(receiveLeagues(OrderedMap([[saveResponse.id, saveResponse]])));
+        dispatch(receiveLeague(saveResponse.id, saveResponse));
         dispatch(replace(`/manage/leagues/${saveResponse.id}`));
     };
 }

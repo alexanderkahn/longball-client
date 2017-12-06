@@ -7,9 +7,9 @@ import { isNullOrUndefined } from 'util';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 import {
-    ReceiveResourceAction,
-    RemoveResourceObjectAction, RequestResourceCollectionAction, RequestResourceObjectAction,
-    ResourceActionType
+    ReceiveResourcePageAction,
+    RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
+    ResourceActionType, ReceiveResourceObjectAction
 } from './index';
 
 const ROSTER_POSITIONS_RESOURCE_TYPE: ResourceType = 'rosterpositions';
@@ -22,20 +22,31 @@ function requestRosterPosition(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestRosterPositionCollection(page: number): RequestResourceCollectionAction {
+function requestRosterPositionCollection(page: number): RequestResourcePageAction {
     return {
-        type: ResourceActionType.REQUEST_RESOURCE_COLLECTION,
+        type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
         page
     };
 }
 
-function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page?: CollectionPage)
-: ReceiveResourceAction<RosterPosition> {
+function receiveRosterPosition(id: string, resource: RosterPosition | null):
+ReceiveResourceObjectAction<RosterPosition> {
     return {
-        type: ResourceActionType.RECEIVE_RESOURCE,
+        type: ResourceActionType.RECEIVE_RESOURCE_OBJECT,
         resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
-        receivedAt: Date.now(),
+        data: {
+            id,
+            resource
+        },
+    };
+}
+
+function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page: CollectionPage)
+: ReceiveResourcePageAction<RosterPosition> {
+    return {
+        type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
+        resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
         data: rosterPositions,
         page: page
     };
@@ -72,7 +83,7 @@ export function fetchPlayerDetail(playerId: string) {
             const people = object.included.filter(ro => ro.type === 'people') as Array<Person>;
             dispatch(receivePeople(OrderedMap(people.map(person => [person.id, person]))));
         }
-        dispatch(receiveRosterPositions(OrderedMap([[playerId, object ? object.data : null]])));
+        dispatch(receiveRosterPosition(playerId, object ? object.data : null));
     };
 }
 
@@ -84,8 +95,7 @@ export function savePlayer(player: Player) {
 
         player.rosterPosition.relationships.player.data.id = savePersonResponse.id;
         const saveRosterPositionResponse = await postObject(player.rosterPosition);
-        dispatch(receiveRosterPositions(OrderedMap(
-            [[saveRosterPositionResponse.id, saveRosterPositionResponse]])));
+        dispatch(receiveRosterPosition(saveRosterPositionResponse.id, saveRosterPositionResponse));
 
         dispatch(replace(`/manage/players/${saveRosterPositionResponse.id}`));
     };

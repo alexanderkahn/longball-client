@@ -15,7 +15,8 @@ export interface ResourceState {
 export class ResourceObjectCache<T> {
     readonly fetchingState: FetchedState.FETCHING | FetchedState.FETCHED;
     readonly object: T | null;
-    constructor (fetchingState: FetchedState.FETCHING | FetchedState.FETCHED, object?: T) {
+
+    constructor(fetchingState: FetchedState.FETCHING | FetchedState.FETCHED, object?: T) {
         this.fetchingState = fetchingState;
         this.object = object ? object : null;
     }
@@ -31,7 +32,7 @@ export interface ResourceObjectState<T extends ResourceObject> {
     readonly pageInfo: PageInfo;
 }
 
-export function initialState<T extends ResourceObject>(): ResourceObjectState<T>  {
+export function initialState<T extends ResourceObject>(): ResourceObjectState<T> {
     return {
         data: Map(),
         pageInfo: {
@@ -53,7 +54,7 @@ const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceTy
                     ...state,
                     data: state.data.set(action.id, new ResourceObjectCache(FetchedState.FETCHING))
                 };
-            case ResourceActionType.REQUEST_RESOURCE_COLLECTION:
+            case ResourceActionType.REQUEST_RESOURCE_PAGE:
                 return {
                     ...state,
                     pageInfo: {
@@ -61,7 +62,13 @@ const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceTy
                         pages: state.pageInfo.pages.set(action.page, new ResourceObjectCache(FetchedState.FETCHING))
                     }
                 };
-            case ResourceActionType.RECEIVE_RESOURCE:
+            case ResourceActionType.RECEIVE_RESOURCE_OBJECT:
+                return {
+                    ...state,
+                    data: state.data.set(action.data.id,
+                                         new ResourceObjectCache(FetchedState.FETCHED, action.data.resource))
+                };
+            case ResourceActionType.RECEIVE_RESOURCE_PAGE:
                 return {
                     ...state,
                     pageInfo: mergePages(List(action.data.keys()), state.pageInfo, action.page),

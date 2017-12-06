@@ -4,15 +4,17 @@ import { CollectionPage } from '../rest';
 
 export enum ResourceActionType {
     REQUEST_RESOURCE_OBJECT = 'REQUEST_RESOURCE_OBJECT',
-    REQUEST_RESOURCE_COLLECTION = 'REQUEST_RESOURCE_COLLECTION',
-    RECEIVE_RESOURCE = 'RECEIVE_RESOURCE',
+    REQUEST_RESOURCE_PAGE = 'REQUEST_RESOURCE_PAGE',
+    RECEIVE_RESOURCE_OBJECT = 'RECEIVE_RESOURCE_OBJECT',
+    RECEIVE_RESOURCE_PAGE = 'RECEIVE_RESOURCE_PAGE',
     REMOVE_RESOURCE_OBJECT = 'REMOVE_RESOURCE_OBJECT'
 }
 
 export type ResourceObjectAction<T extends ResourceObject> =
     | RequestResourceObjectAction
-    | RequestResourceCollectionAction
-    | ReceiveResourceAction<T>
+    | RequestResourcePageAction
+    | ReceiveResourceObjectAction<T>
+    | ReceiveResourcePageAction<T>
     | RemoveResourceObjectAction;
 
 export interface RequestResourceObjectAction {
@@ -21,18 +23,26 @@ export interface RequestResourceObjectAction {
     id: string;
 }
 
-export interface RequestResourceCollectionAction {
-    type: ResourceActionType.REQUEST_RESOURCE_COLLECTION;
+export interface RequestResourcePageAction {
+    type: ResourceActionType.REQUEST_RESOURCE_PAGE;
     resourceType: ResourceType;
     page: number;
 }
 
-export interface ReceiveResourceAction<T extends ResourceObject> {
-    type: ResourceActionType.RECEIVE_RESOURCE;
+export interface ReceiveResourceObjectAction<T extends ResourceObject> {
+    type: ResourceActionType.RECEIVE_RESOURCE_OBJECT;
     resourceType: ResourceType;
-    receivedAt: number;
+    data: {
+        id: string;
+        resource: T | null;
+    };
+}
+
+export interface ReceiveResourcePageAction<T extends ResourceObject> {
+    type: ResourceActionType.RECEIVE_RESOURCE_PAGE;
+    resourceType: ResourceType;
     data: OrderedMap<string, T>;
-    page?: CollectionPage;
+    page: CollectionPage;
 }
 
 export interface RemoveResourceObjectAction {
