@@ -4,7 +4,10 @@ import { TextField } from 'material-ui';
 import { CurrentView, FetchedState, Player } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { isNullOrUndefined, isNumber } from 'util';
+import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
+import { Moment } from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const styles: CSSProperties = {
     root: {
@@ -102,14 +105,13 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                         onChange={this.onJerseyNumberChange}
 
                     />
-                    <TextField
-                        fullWidth={true}
+                    <span>Start Date:</span>
+                    <DatePicker
                         disabled={!isEdit}
-                        id="startDate"
-                        label="Start Date"
+                        onChange={this.onStartDateMomentChange}
                         value={player.rosterPosition.attributes.startDate}
-                        onChange={this.onStartDateChange}
-
+                        id="startDate"
+                        dateFormat={'YYYY-MM-DD'}
                     />
                     <SaveDetailFooter
                         isEdit={isEdit}
@@ -150,9 +152,9 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         }
     }
 
-    private onStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!isNullOrUndefined(this.props.player)) {
-            this.props.player.rosterPosition.attributes.startDate = event.target.value;
+    private onStartDateMomentChange = (date: Moment | null) => {
+        if (date && this.props.player) {
+            this.props.player.rosterPosition.attributes.startDate = date.format('YYYY-MM-DD');
             this.forceUpdate();
         }
     }
