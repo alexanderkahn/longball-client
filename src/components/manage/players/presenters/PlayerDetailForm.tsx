@@ -8,6 +8,7 @@ import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import { Moment } from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import TeamPickerContainer from '../containers/TeamPickerContainer';
 
 const styles: CSSProperties = {
     root: {
@@ -66,14 +67,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
             return (
                 <form style={styles.root}>
                     <div style={styles.teamSelector}>
-                        <TextField
-                            fullWidth={true}
-                            disabled={!isEdit}
-                            id="team"
-                            label="Team"
-                            value={player.rosterPosition.relationships.team.data.id}
-                            onChange={this.onTeamChange}
-                        />
+                        <TeamPickerContainer/>
                     </div>
                     <div style={styles.playerInfo}>
                         <TextField
@@ -122,12 +116,12 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         }
     }
 
-    private onTeamChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!isNullOrUndefined(this.props.player)) {
-            this.props.player.rosterPosition.relationships.team.data.id = event.target.value;
-            this.forceUpdate();
-        }
-    }
+    // private onTeamChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //     if (!isNullOrUndefined(this.props.player)) {
+    //         this.props.player.rosterPosition.relationships.team.data.id = event.target.value;
+    //         this.forceUpdate();
+    //     }
+    // }
 
     private onFirstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (!isNullOrUndefined(this.props.player)) {
