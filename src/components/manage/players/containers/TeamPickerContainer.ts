@@ -19,7 +19,7 @@ function nonNull<T extends ResourceObject>(resources: Map<string, ResourceObject
 
 function mapStateToProps(state: RootState): TeamPickerProps {
     return {
-        teams: nonNull(state.resource.teams.data)
+        teams: nonNull(state.resource.teams.data),
     };
 }
 

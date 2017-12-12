@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/qhistory": "^1.0.0",
     "@types/react-datepicker": "^0.55.1",
+    "downshift": "^1.22.3",
     "firebase": "^4.3.1",
     "history": "^4.7.2",
     "immutable": "^3.8.2",

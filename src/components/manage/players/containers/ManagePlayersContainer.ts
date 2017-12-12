@@ -31,7 +31,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>)
+const mapDispatchToProps = (dispatch: Dispatch<RootState>)
     : ManagePlayersFormActions => {
     return {
         fetchListItems: (currentPage: number) => () => dispatch(fetchPlayers(currentPage)),
