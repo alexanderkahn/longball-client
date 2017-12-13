@@ -14,27 +14,18 @@ export interface TeamPickerActions {
 
 }
 
-interface Suggestion {
-    label: string;
-}
-
-const suggestions: Array<Suggestion> = [
-    {label: 'Hello'},
-    {label: 'Hiya'},
-    {label: 'Hey'}
-];
-
 export default class TeamPicker extends Component<TeamPickerProps & TeamPickerActions> {
     render() {
         return (
             <Downshift
+                itemToString={this.getItemDisplay}
                 render={({inputValue, isOpen, getInputProps, getItemProps}) => (
                     <div>
                         {this.renderInput(getInputProps({placeholder: 'Teams'}))}
                         {isOpen
                             ? this.renderSuggestionsContainer(
-                            this.getSuggestions(inputValue).map((suggestion: Suggestion) =>
-                                this.renderSuggestion(suggestion, getItemProps({item: suggestion.label}))
+                            this.getSuggestions(inputValue).map((team: Team) =>
+                                this.renderSuggestion(team, getItemProps({item: team}))
                             )
                         ) : null}
                     </div>
@@ -55,10 +46,10 @@ export default class TeamPicker extends Component<TeamPickerProps & TeamPickerAc
         );
     }
 
-    renderSuggestion(suggestion: Suggestion, itemProps: any): JSX.Element {
+    renderSuggestion(team: Team, itemProps: any): JSX.Element {
         return (
-            <MenuItem {...itemProps} key={suggestion.label} component="div">
-                {suggestion.label}
+            <MenuItem {...itemProps} key={team.id} component="div">
+                {this.getItemDisplay(team)}
             </MenuItem>
         );
     }
@@ -73,19 +64,23 @@ export default class TeamPicker extends Component<TeamPickerProps & TeamPickerAc
         );
     }
 
-    getSuggestions(inputValue: string | null): Array<Suggestion> {
-        let count = 0;
-
-        return suggestions.filter(suggestion => {
-            const keep =
-                (!inputValue || suggestion.label.toLowerCase().includes(inputValue.toLowerCase())) &&
-                count < 5;
-
-            if (keep) {
-                count += 1;
+    getSuggestions(inputValue: string | null): Array<Team> {
+        // TODO: filter back down to first 5 matches
+        return this.props.teams.filter(team => {
+            if (!inputValue || !team) {
+                return false;
             }
+            return (!inputValue || this.getItemDisplay(team).toLowerCase().includes(inputValue.toLowerCase()));
+        }).toArray();
+    }
 
-            return keep;
-        });
+    getItemDisplay(obj: any): string {
+        if (!obj) {
+            return '';
+        } else if (!obj.attributes) {
+            return String(obj);
+        } else {
+            return `${obj.attributes.location} ${obj.attributes.nickname}`;
+        }
     }
 }

@@ -7,11 +7,13 @@ import { ResourceObject } from '../../../../models/models';
 import { List, Map } from 'immutable';
 
 function nonNull<T extends ResourceObject>(resources: Map<string, ResourceObjectCache<T>>): List<T> {
-    const list: List<T> = List();
+    let list: List<T> = List();
     for (const resource of List(resources.values()).toArray()) {
         const object = resource.object;
         if (object !== null) {
-            list.push(object);
+            // TODO: holy shit this is dumb. Let's not use immutables outside the store I'm over it. Let's get
+            // lodash and reselect in here maybe instead.
+            list = list.push(object);
         }
     }
     return list;
