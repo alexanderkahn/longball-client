@@ -99,7 +99,6 @@ export const deepCopy = <T>(o: T): T => {
     return JSON.parse(JSON.stringify(o));
 };
 
-// TODO: with a little more information, this could return a built PagedView
 export function getSafePage(state: ResourceObjectState<ResourceObject>, location: Location): PagedView {
     const params = parse(location.search.substr(1)) as PagedViewParams;
     const pageNumber = Number(params.page);

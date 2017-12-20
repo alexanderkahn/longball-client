@@ -7,16 +7,11 @@ import { ResourceObject } from '../../../../models/models';
 import { List, Map } from 'immutable';
 
 function nonNull<T extends ResourceObject>(resources: Map<string, ResourceObjectCache<T>>): List<T> {
-    let list: List<T> = List();
-    for (const resource of List(resources.values()).toArray()) {
-        const object = resource.object;
-        if (object !== null) {
-            // TODO: holy shit this is dumb. Let's not use immutables outside the store I'm over it. Let's get
-            // lodash and reselect in here maybe instead.
-            list = list.push(object);
-        }
-    }
-    return list;
+    return List(List(resources.entries()).filter(notEmpty));
+}
+
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+    return value !== null && value !== undefined;
 }
 
 function mapStateToProps(state: RootState): TeamPickerProps {
