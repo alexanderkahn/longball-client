@@ -64,30 +64,32 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         if (!player) {
             return <div>I can't find the selected player</div>;
         } else {
+            const {person, rosterPosition} = player;
             return (
+                <div>
+                <form style={styles.root}>
+                    <TextField
+                        fullWidth={true}
+                        disabled={!isEdit}
+                        id="first"
+                        label="First Name"
+                        value={person.attributes.first}
+                        onChange={this.onFirstNameChange}
+
+                    />
+                    <TextField
+                        fullWidth={true}
+                        disabled={!isEdit}
+                        id="last"
+                        label="Last Name"
+                        value={person.attributes.last}
+                        onChange={this.onLastNameChange}
+
+                    />
+                </form>
                 <form style={styles.root}>
                     <div style={styles.teamSelector}>
                         <TeamPickerContainer/>
-                    </div>
-                    <div style={styles.playerInfo}>
-                        <TextField
-                            fullWidth={true}
-                            disabled={!isEdit}
-                            id="first"
-                            label="First Name"
-                            value={player.person.attributes.first}
-                            onChange={this.onFirstNameChange}
-
-                        />
-                        <TextField
-                            fullWidth={true}
-                            disabled={!isEdit}
-                            id="last"
-                            label="Last Name"
-                            value={player.person.attributes.last}
-                            onChange={this.onLastNameChange}
-
-                        />
                     </div>
                     <TextField
                         fullWidth={true}
@@ -95,7 +97,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                         id="jerseyNumber"
                         label="Jersery Number"
                         type="number"
-                        value={player.rosterPosition.attributes.jerseyNumber}
+                        value={rosterPosition.attributes.jerseyNumber}
                         onChange={this.onJerseyNumberChange}
 
                     />
@@ -103,7 +105,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                     <DatePicker
                         disabled={!isEdit}
                         onChange={this.onStartDateMomentChange}
-                        value={player.rosterPosition.attributes.startDate}
+                        value={rosterPosition.attributes.startDate}
                         id="startDate"
                         dateFormat={'YYYY-MM-DD'}
                     />
@@ -112,6 +114,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                         onSave={() => savePlayer(player)}
                     />
                 </form>
+                </div>
             );
         }
     }
