@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { deleteTeam, fetchTeams } from '../../../../actions/resource/teams';
+import { deleteTeam, fetchTeams } from '../../../../actions/resource/teamsActions';
 import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '../presenters/ManageTeamsForm';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';

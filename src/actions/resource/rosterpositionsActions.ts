@@ -1,6 +1,6 @@
 import { deleteObject, fetchCollection, fetchObject, CollectionPage, postObject } from '../rest';
 import { Person, Player, ResourceType, RosterPosition } from '../../models/models';
-import { receivePeople, removePerson } from './people';
+import { receivePeople, removePerson } from './peopleActions';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/index';
 import { isNullOrUndefined } from 'util';

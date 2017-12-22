@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { ChangeEvent, Component, CSSProperties } from 'react';
+import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { CurrentView, FetchedState, League } from '../../../../models/models';
-import { isNullOrUndefined } from 'util';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 
 const styles: CSSProperties = {
@@ -23,6 +22,7 @@ export interface LeagueDetailProps {
 
 export interface LeagueDetailFormActions {
     fetchItemDetail: () => void;
+    updateName: (name: string) => void;
     saveLeague: (league: League) => void;
 }
 
@@ -53,7 +53,7 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
     }
 
     private getForm() {
-        const {isEdit, saveLeague, league} = this.props;
+        const {isEdit, updateName, saveLeague, league} = this.props;
         if (!league) {
             return <div>I can't find the league you requested!</div>;
         } else {
@@ -65,7 +65,7 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
                         id="name"
                         label="Name"
                         value={league.attributes.name}
-                        onChange={this.onNameChange}
+                        onChange={event => updateName(event.target.value)}
                     />
                     <SaveDetailFooter
                         isEdit={isEdit}
@@ -73,13 +73,6 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
                     />
                 </form>
             );
-        }
-    }
-
-    private onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!isNullOrUndefined(this.props.league)) {
-            this.props.league.attributes.name = event.target.value;
-            this.forceUpdate();
         }
     }
 

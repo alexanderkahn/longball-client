@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { deleteLeague, fetchLeagues } from '../../../../actions/resource/leagues';
+import { deleteLeague, fetchLeagues } from '../../../../actions/resource/leaguesActions';
 import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../presenters/ManageLeaguesForm';
 import { RootState } from '../../../../reducers/index';
 import { push } from 'react-router-redux';
@@ -20,7 +20,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageLeaguesActions => {
     return {
         fetchListItems: (page: number) => () => dispatch(fetchLeagues(page)),
-        onClickAdd: () => dispatch(push(MANAGE_LEAGUES_BASE_URL + 'add')),
+        onClickAdd: () => dispatch(push(MANAGE_LEAGUES_BASE_URL + '/add')),
         getPage: (page: number) => () => dispatch(push(MANAGE_LEAGUES_BASE_URL + `?page=${page}`)),
         buildHandleSelectDetail: (id: string) => () => dispatch(push(`${MANAGE_LEAGUES_BASE_URL}/${id}`)),
         buildHandleDeleteLeague: (league: League) => () => dispatch(deleteLeague(league))

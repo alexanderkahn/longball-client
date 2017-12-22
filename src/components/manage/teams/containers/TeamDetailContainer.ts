@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchTeamDetail, saveTeam } from '../../../../actions/resource/teams';
+import { fetchTeamDetail, saveTeam } from '../../../../actions/resource/teamsActions';
 import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../presenters/TeamDetailForm';
 import { RootState } from '../../../../reducers/index';
 import { RouteComponentProps } from 'react-router';

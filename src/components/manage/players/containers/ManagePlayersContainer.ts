@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { deletePlayer, fetchPlayers } from '../../../../actions/resource/rosterpositions';
+import { deletePlayer, fetchPlayers } from '../../../../actions/resource/rosterpositionsActions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
 import { getSafePage, Person, Player, RosterPosition } from '../../../../models/models';
 import { RootState } from '../../../../reducers';
