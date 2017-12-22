@@ -1,9 +1,10 @@
 import { League } from '../../models/models';
 import { ReceiveResourceObjectAction, ResourceActionType } from '../../actions/resource';
 import { LeagueFormAction, LeagueFormActionType } from '../../actions/form/leagueFormActions';
+import * as _ from 'lodash';
 
 export interface LeagueFormState {
-    league: League;
+    readonly league: League;
 }
 
 const initialState: LeagueFormState = {
@@ -28,16 +29,7 @@ export const leagueForm = (
 
     switch (action.type) {
         case LeagueFormActionType.UPDATE_LEAGUE_NAME:
-            return {
-                ...state,
-                league: {
-                    ...state.league,
-                    attributes: {
-                        ...state.league.attributes,
-                        name: action.name
-                    }
-                }
-            };
+            return _.set(_.cloneDeep(state), 'league.attributes.name', action.name);
         default:
             return state;
     }

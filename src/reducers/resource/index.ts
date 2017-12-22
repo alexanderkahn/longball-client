@@ -97,9 +97,9 @@ export function getObjectsForPage<T extends ResourceObject>(state: ResourceObjec
         }
         const objects = Array<T>();
         for (const id of ids.object.toArray()) {
-            const object = state.data.get(id);
-            if (object !== null) {
-                objects.push(object.object as T);
+            const record = state.data.get(id);
+            if (record !== null && record.object !== null) {
+                objects.push(record.object as T);
             }
         }
         return objects;
