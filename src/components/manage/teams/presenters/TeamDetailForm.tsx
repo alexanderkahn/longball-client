@@ -16,6 +16,7 @@ const styles: CSSProperties = {
 
 export interface TeamDetailProps {
     team: Team | null;
+    leagueDisplay: string;
     isEdit: boolean;
     currentView: CurrentView;
 }
@@ -23,6 +24,7 @@ export interface TeamDetailProps {
 export interface TeamDetailFormActions {
     fetchItemDetail: () => void;
     updateLeague: (leagueId: string) => void;
+    updateLeagueDisplay: (leagueDisplay: string) => void;
     updateAbbreviation: (abbreviation: string) => void;
     updateLocation: (location: string) => void;
     updateNickname: (nickname: string) => void;
@@ -56,7 +58,17 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
     }
 
     private getForm() {
-        const {team, isEdit, updateLeague, updateAbbreviation, updateLocation, updateNickname, saveTeam} = this.props;
+        const {
+            team,
+            leagueDisplay,
+            isEdit,
+            // updateLeague,
+            updateLeagueDisplay,
+            updateAbbreviation,
+            updateLocation,
+            updateNickname,
+            saveTeam
+        } = this.props;
         if (!team) {
             return <div>I can't find the requested team</div>;
         } else {
@@ -68,8 +80,8 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
                             disabled={!isEdit}
                             id="league"
                             label="League"
-                            value={team.relationships.league.data.id}
-                            onChange={event => updateLeague(event.target.value)}
+                            value={leagueDisplay}
+                            onChange={event => updateLeagueDisplay(event.target.value)}
                         />
                     </div>
                     <TextField

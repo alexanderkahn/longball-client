@@ -4,15 +4,18 @@ import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../prese
 import { RootState } from '../../../../reducers';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
-import {  FetchedState, Team } from '../../../../models/models';
-import { updateTeamAttribute, updateTeamRelationship } from '../../../../actions/form/formUpdateActions';
+import { FetchedState, Team } from '../../../../models/models';
+import {
+    updateTeamAttribute, updateTeamRelationship,
+    updateTeamRelationshipDisplay
+} from '../../../../actions/form/formUpdateActions';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): TeamDetailProps => {
     const teamId = ownProps.match.params.itemId;
     if (teamId === 'add') {
-        console.info(state.form.team.resource);
         return {
             team: state.form.team.resource,
+            leagueDisplay: state.form.team.relationshipDisplayFields.get('league', ''),
             currentView: {
                 fetchedState: FetchedState.FETCHED
             },
@@ -20,8 +23,11 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
         };
     } else {
         const teamCache = state.resource.teams.data.get(teamId);
+        const team = teamCache ? teamCache.object : null;
+        const league = team ? state.resource.leagues.data.get(team.relationships.league.data.id) : null;
         return {
-            team: teamCache ? teamCache.object : null,
+            team: team,
+            leagueDisplay: league && league.object ? league.object.attributes.name : '',
             currentView: {
                 fetchedState: teamCache ? teamCache.fetchingState : FetchedState.NOT_FETCHED
             },
@@ -37,10 +43,17 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         fetchItemDetail: function () {
             dispatch(fetchTeamDetail(teamId));
         },
-        updateLeague: (leagueId: string) => dispatch(updateTeamRelationship('league', {data: {type: 'leagues', id: leagueId}})),
-    updateAbbreviation: (abbreviation: string) => dispatch(updateTeamAttribute('abbreviation', abbreviation)),
-    updateLocation: (location: string) => dispatch(updateTeamAttribute('location', location)),
-    updateNickname: (nickname: string) => dispatch(updateTeamAttribute('nickname', nickname)),
+        updateLeague: (leagueId: string) => dispatch(updateTeamRelationship('league', {
+            data: {
+                type: 'leagues',
+                id: leagueId
+            }
+        })),
+        updateLeagueDisplay: (leagueDisplay: string) =>
+            dispatch(updateTeamRelationshipDisplay('league', leagueDisplay)),
+        updateAbbreviation: (abbreviation: string) => dispatch(updateTeamAttribute('abbreviation', abbreviation)),
+        updateLocation: (location: string) => dispatch(updateTeamAttribute('location', location)),
+        updateNickname: (nickname: string) => dispatch(updateTeamAttribute('nickname', nickname)),
         saveTeam: function (team: Team) {
             dispatch(saveTeam(team));
         }
