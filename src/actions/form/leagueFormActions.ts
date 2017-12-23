@@ -1,19 +1,24 @@
+import { ResourceType } from '../../models/models';
 
-export enum LeagueFormActionType {
-    UPDATE_LEAGUE_NAME = 'REQUEST_RESOURCE_OBJECT',
+export enum ResourceFormUpdateActionType {
+    UPDATE_ATTRIBUTE = 'UPDATE_ATTRIBUTE',
 }
 
-export interface UpdateLeagueNameAction {
-    type: LeagueFormActionType.UPDATE_LEAGUE_NAME;
-    name: string;
+export interface ResourceFormUpdateAttributeAction {
+    type: ResourceFormUpdateActionType.UPDATE_ATTRIBUTE;
+    resourceType: ResourceType;
+    attribute: string;
+    value: string;
 }
 
-export type LeagueFormAction =
-    | UpdateLeagueNameAction;
+export type ResourceFormUpdateAction =
+    | ResourceFormUpdateAttributeAction;
 
-export function updateLeagueName(name: string): UpdateLeagueNameAction {
+export function updateLeagueName(name: string): ResourceFormUpdateAttributeAction {
     return {
-        type: LeagueFormActionType.UPDATE_LEAGUE_NAME,
-        name
+        type: ResourceFormUpdateActionType.UPDATE_ATTRIBUTE,
+        resourceType: 'leagues',
+        attribute: 'name',
+        value: name
     };
 }

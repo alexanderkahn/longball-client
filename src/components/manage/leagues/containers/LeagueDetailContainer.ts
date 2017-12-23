@@ -11,7 +11,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
     const leagueId = ownProps.match.params.itemId;
     if  (leagueId === 'add') {
         return {
-            league: state.form.league.league,
+            league: state.form.league.resource,
             isEdit: true,
             currentView: {
                 fetchedState: FetchedState.FETCHED
