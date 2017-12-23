@@ -90,7 +90,7 @@ export interface Player {
     person: Person;
 }
 
-interface RelationshipResource {
+export interface RelationshipResource {
     data: ResourceObject;
 }
 

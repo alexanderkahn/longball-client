@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { ChangeEvent, Component, CSSProperties } from 'react';
+import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import { CurrentView, FetchedState, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
-import { isNullOrUndefined } from 'util';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 
 const styles: CSSProperties = {
@@ -23,6 +22,10 @@ export interface TeamDetailProps {
 
 export interface TeamDetailFormActions {
     fetchItemDetail: () => void;
+    updateLeague: (leagueId: string) => void;
+    updateAbbreviation: (abbreviation: string) => void;
+    updateLocation: (location: string) => void;
+    updateNickname: (nickname: string) => void;
     saveTeam: (team: Team) => void;
 }
 
@@ -53,7 +56,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
     }
 
     private getForm() {
-        const {team, isEdit, saveTeam} = this.props;
+        const {team, isEdit, updateLeague, updateAbbreviation, updateLocation, updateNickname, saveTeam} = this.props;
         if (!team) {
             return <div>I can't find the requested team</div>;
         } else {
@@ -66,7 +69,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
                             id="league"
                             label="League"
                             value={team.relationships.league.data.id}
-                            onChange={this.onLeagueChange}
+                            onChange={event => updateLeague(event.target.value)}
                         />
                     </div>
                     <TextField
@@ -75,7 +78,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
                         id="abbreviation"
                         label="Abbreviation"
                         value={team.attributes.abbreviation}
-                        onChange={this.onAbbreviationChange}
+                        onChange={event => updateAbbreviation(event.target.value)}
                     />
                     <TextField
                         fullWidth={true}
@@ -83,7 +86,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
                         id="location"
                         label="Location"
                         value={team.attributes.location}
-                        onChange={this.onLocationChange}
+                        onChange={event => updateLocation(event.target.value)}
                     />
                     <TextField
                         fullWidth={true}
@@ -91,7 +94,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
                         id="nickname"
                         label="Nickname"
                         value={team.attributes.nickname}
-                        onChange={this.onNicknameChange}
+                        onChange={event => updateNickname(event.target.value)}
                     />
                     <SaveDetailFooter
                         isEdit={isEdit}
@@ -99,34 +102,6 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
                     />
                 </form>
             );
-        }
-    }
-
-    private onLeagueChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!isNullOrUndefined(this.props.team)) {
-            this.props.team.relationships.league.data.id = event.target.value;
-            this.forceUpdate();
-        }
-    }
-
-    private onAbbreviationChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!isNullOrUndefined(this.props.team)) {
-            this.props.team.attributes.abbreviation = event.target.value;
-            this.forceUpdate();
-        }
-    }
-
-    private onLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!isNullOrUndefined(this.props.team)) {
-            this.props.team.attributes.location = event.target.value;
-            this.forceUpdate();
-        }
-    }
-
-    private onNicknameChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (!isNullOrUndefined(this.props.team)) {
-            this.props.team.attributes.nickname = event.target.value;
-            this.forceUpdate();
         }
     }
 }

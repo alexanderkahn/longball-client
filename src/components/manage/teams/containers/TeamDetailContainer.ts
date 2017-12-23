@@ -1,34 +1,18 @@
 import { connect, Dispatch } from 'react-redux';
 import { fetchTeamDetail, saveTeam } from '../../../../actions/resource/teamsActions';
 import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../presenters/TeamDetailForm';
-import { RootState } from '../../../../reducers/index';
+import { RootState } from '../../../../reducers';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
-import { deepCopy, FetchedState, Team } from '../../../../models/models';
-
-const emptyTeam: Team = {
-    id: '',
-    type: 'teams',
-    attributes: {
-        abbreviation: '',
-        location: '',
-        nickname: ''
-    },
-    relationships: {
-        league: {
-            data: {
-                type: 'leagues',
-                id: ''
-            },
-        }
-    }
-};
+import {  FetchedState, Team } from '../../../../models/models';
+import { updateTeamAttribute, updateTeamRelationship } from '../../../../actions/form/formUpdateActions';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): TeamDetailProps => {
     const teamId = ownProps.match.params.itemId;
     if (teamId === 'add') {
+        console.info(state.form.team.resource);
         return {
-            team: deepCopy(emptyTeam),
+            team: state.form.team.resource,
             currentView: {
                 fetchedState: FetchedState.FETCHED
             },
@@ -53,6 +37,10 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         fetchItemDetail: function () {
             dispatch(fetchTeamDetail(teamId));
         },
+        updateLeague: (leagueId: string) => dispatch(updateTeamRelationship('league', {data: {type: 'leagues', id: leagueId}})),
+    updateAbbreviation: (abbreviation: string) => dispatch(updateTeamAttribute('abbreviation', abbreviation)),
+    updateLocation: (location: string) => dispatch(updateTeamAttribute('location', location)),
+    updateNickname: (nickname: string) => dispatch(updateTeamAttribute('nickname', nickname)),
         saveTeam: function (team: Team) {
             dispatch(saveTeam(team));
         }

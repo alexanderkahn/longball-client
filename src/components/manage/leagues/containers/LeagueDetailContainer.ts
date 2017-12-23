@@ -5,7 +5,7 @@ import { RootState } from '../../../../reducers';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
 import { FetchedState, League } from '../../../../models/models';
-import { updateLeagueName } from '../../../../actions/form/leagueFormActions';
+import { updateLeagueAttribute } from '../../../../actions/form/formUpdateActions';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): LeagueDetailProps => {
     const leagueId = ownProps.match.params.itemId;
@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
             dispatch(fetchLeagueDetail(leagueId));
         },
         updateName: function (name: string) {
-            dispatch(updateLeagueName(name));
+            dispatch(updateLeagueAttribute('name', name));
         },
         saveLeague: function (league: League) {
             dispatch(saveLeague(league));
