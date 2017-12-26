@@ -4,6 +4,7 @@ import { TextField } from 'material-ui';
 import { CurrentView, FetchedState, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
+import LeaguePicker from './LeaguePicker';
 
 const styles: CSSProperties = {
     root: {
@@ -62,7 +63,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
             team,
             leagueDisplay,
             isEdit,
-            // updateLeague,
+            updateLeague,
             updateLeagueDisplay,
             updateAbbreviation,
             updateLocation,
@@ -74,16 +75,12 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
         } else {
             return (
                 <form style={styles.root}>
-                    <div style={styles.leagueSelector}>
-                        <TextField
-                            fullWidth={true}
-                            disabled={!isEdit}
-                            id="league"
-                            label="League"
-                            value={leagueDisplay}
-                            onChange={event => updateLeagueDisplay(event.target.value)}
-                        />
-                    </div>
+                    <LeaguePicker
+                        leaguePickerDisplay={leagueDisplay}
+                        selectedLeagueId={team.relationships.league.data.id}
+                        onChangeDisplay={updateLeagueDisplay}
+                        onSelectItem={updateLeague}
+                    />
                     <TextField
                         fullWidth={true}
                         disabled={!isEdit}
