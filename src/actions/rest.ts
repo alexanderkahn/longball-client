@@ -11,6 +11,8 @@ export interface MetaResponse {
 export interface CollectionPage {
     totalPages: number;
     number: number;
+    hasPrevious: boolean;
+    hasNext: boolean;
 }
 
 export interface ObjectResponse<T extends ResourceObject> extends MetaResponse {

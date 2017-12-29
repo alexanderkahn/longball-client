@@ -12,14 +12,14 @@ const MANAGE_LEAGUES_BASE_URL = '/manage/leagues';
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageLeaguesProps => {
     const currentPage = getSafePage(state.resource.leagues, ownProps.location);
     return {
-        leagues: getObjectsForPage(state.resource.leagues, currentPage.page),
+        leagues: getObjectsForPage(state.resource.leagues, '', currentPage.page),
         currentView: currentPage,
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageLeaguesActions => {
     return {
-        fetchListItems: (page: number) => () => dispatch(fetchLeagues(page)),
+        fetchListItems: (page: number) => () => dispatch(fetchLeagues('', page)),
         onClickAdd: () => dispatch(push(MANAGE_LEAGUES_BASE_URL + '/add')),
         getPage: (page: number) => () => dispatch(push(MANAGE_LEAGUES_BASE_URL + `?page=${page}`)),
         buildHandleSelectDetail: (id: string) => () => dispatch(push(`${MANAGE_LEAGUES_BASE_URL}/${id}`)),

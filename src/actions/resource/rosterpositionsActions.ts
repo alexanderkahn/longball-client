@@ -22,10 +22,11 @@ function requestRosterPosition(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestRosterPositionCollection(page: number): RequestResourcePageAction {
+function requestRosterPositionCollection(filter: string, page: number): RequestResourcePageAction {
     return {
         type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
+        filter,
         page
     };
 }
@@ -47,6 +48,7 @@ function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPositi
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
+        filter: '',
         data: rosterPositions,
         page: page
     };
@@ -60,9 +62,9 @@ function removeRosterPosition(id: string): RemoveResourceObjectAction {
     };
 }
 
-export function fetchPlayers(page: number) {
+export function fetchPlayers(filter: string, page: number) {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(requestRosterPositionCollection(page));
+        dispatch(requestRosterPositionCollection(filter, page));
         const collection = await fetchCollection<RosterPosition>('rosterpositions', page, ['player']);
         if (!isNullOrUndefined(collection.included)) {
             const people = collection.included.filter(ro => ro.type === 'people') as Array<Person>;

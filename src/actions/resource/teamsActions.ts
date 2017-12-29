@@ -1,6 +1,6 @@
 import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { ResourceType, Team } from '../../models/models';
-import { RootState } from '../../reducers/index';
+import { RootState } from '../../reducers';
 import { Dispatch } from 'redux';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
@@ -20,10 +20,11 @@ function requestTeam(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestTeamCollection(page: number): RequestResourcePageAction {
+function requestTeamCollection(filter: string, page: number): RequestResourcePageAction {
     return {
         type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: TEAMS_RESOURCE_TYPE,
+        filter,
         page
     };
 }
@@ -43,6 +44,7 @@ function receiveTeams(teams: OrderedMap<string, Team>, page: CollectionPage): Re
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: TEAMS_RESOURCE_TYPE,
+        filter: '',
         data: teams,
         page: page
     };
@@ -56,9 +58,9 @@ function removeTeam(id: string): RemoveResourceObjectAction {
     };
 }
 
-export function fetchTeams(page: number): Dispatch<RootState> {
+export function fetchTeams(filter: string, page: number): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(requestTeamCollection(page));
+        dispatch(requestTeamCollection(filter, page));
         const collection = await fetchCollection<Team>('teams', page);
         dispatch(receiveTeams(OrderedMap(collection.data.map(team => [team.id, team])), collection.meta.page));
     };

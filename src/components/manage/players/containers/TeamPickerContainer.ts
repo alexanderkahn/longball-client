@@ -2,11 +2,11 @@ import { RootState } from '../../../../reducers';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import TeamPicker, { TeamPickerActions, TeamPickerProps } from '../presenters/TeamPicker';
-import { ResourceObjectCache } from '../../../../reducers/resource';
+import { ResourceCache } from '../../../../reducers/resource';
 import { ResourceObject } from '../../../../models/models';
 import { List, Map } from 'immutable';
 
-function nonNull<T extends ResourceObject>(resources: Map<string, ResourceObjectCache<T>>): List<T> {
+function nonNull<T extends ResourceObject>(resources: Map<string, ResourceCache<T>>): List<T> {
     return List(List(resources.entries()).filter(notEmpty));
 }
 

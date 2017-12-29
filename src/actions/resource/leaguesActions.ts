@@ -20,10 +20,11 @@ function requestLeague(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestLeagueCollection(page: number): RequestResourcePageAction {
+function requestLeagueCollection(filter: string, page: number): RequestResourcePageAction {
     return {
         type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: LEAGUE_RESOURCE_TYPE,
+        filter,
         page
     };
 }
@@ -43,6 +44,7 @@ function receiveLeagues(leagues: OrderedMap<string, League>, page: CollectionPag
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: LEAGUE_RESOURCE_TYPE,
+        filter: '',
         data: leagues,
         page: page
     };
@@ -56,9 +58,9 @@ function removeLeague(id: string): RemoveResourceObjectAction {
     };
 }
 
-export function fetchLeagues(page: number) {
+export function fetchLeagues(filter: string, page: number) {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(requestLeagueCollection(page));
+        dispatch(requestLeagueCollection(filter, page));
         const collection = await fetchCollection<League>('leagues', page);
         dispatch(receiveLeagues(OrderedMap(collection.data.map(league => [league.id, league])), collection.meta.page));
     };

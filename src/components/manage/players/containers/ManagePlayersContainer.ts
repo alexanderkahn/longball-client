@@ -24,7 +24,7 @@ function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObje
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManagePlayersFormProps => {
     const currentPage = getSafePage(state.resource.rosterPositions, ownProps.location);
-    const rosterPositions = getObjectsForPage(state.resource.rosterPositions, currentPage.page);
+    const rosterPositions = getObjectsForPage(state.resource.rosterPositions, '', currentPage.page);
     return {
         players: getPlayers(rosterPositions, state.resource.people),
         currentView: currentPage
@@ -34,7 +34,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 const mapDispatchToProps = (dispatch: Dispatch<RootState>)
     : ManagePlayersFormActions => {
     return {
-        fetchListItems: (currentPage: number) => () => dispatch(fetchPlayers(currentPage)),
+        fetchListItems: (currentPage: number) => () => dispatch(fetchPlayers('', currentPage)),
         onClickAdd: () => dispatch(push(MANAGE_PLAYERS_BASE_URL + '/add')),
         getPage: (page: number) => () => dispatch(push(MANAGE_PLAYERS_BASE_URL + `?page=${page}`)),
         buildHandleSelectPlayerDetail: (player: Player) => () =>
