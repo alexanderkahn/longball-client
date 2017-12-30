@@ -4,7 +4,7 @@ import { TextField } from 'material-ui';
 import { CurrentView, FetchedState, League, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
-import LeaguePicker from './LeaguePicker';
+import LeaguePicker from './ResourcePickerPresenter';
 
 const styles: CSSProperties = {
     root: {
@@ -27,6 +27,7 @@ export interface TeamDetailFormActions {
     fetchItemDetail: () => void;
     updateLeague: (leagueId: string) => void;
     updateLeagueDisplay: (leagueDisplay: string) => void;
+    getDisplay: (league: League) => string;
     updateAbbreviation: (abbreviation: string) => void;
     updateLocation: (location: string) => void;
     updateNickname: (nickname: string) => void;
@@ -64,6 +65,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
             team,
             leagues,
             leagueDisplay,
+            getDisplay,
             isEdit,
             updateLeague,
             updateLeagueDisplay,
@@ -78,11 +80,13 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
             return (
                 <form style={styles.root}>
                     <LeaguePicker
-                        leagues={leagues}
-                        leaguePickerDisplay={leagueDisplay}
-                        selectedLeagueId={team.relationships.league.data.id}
+                        matchingResources={leagues}
+                        inputDisplayValue={leagueDisplay}
+                        selectedResourceId={team.relationships.league.data.id}
                         onChangeDisplay={updateLeagueDisplay}
-                        onSelectItem={updateLeague}
+                        onSelectResource={updateLeague}
+                        getResourceDisplay={getDisplay}
+                        inputDisplayPlaceholder="League"
                     />
                     <TextField
                         fullWidth={true}
