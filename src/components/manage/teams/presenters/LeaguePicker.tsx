@@ -6,7 +6,7 @@ import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
 
 export interface LeaguePickerProps {
-    // leagues: List<League>;
+    leagues: Array<League>;
     selectedLeagueId: string;
     leaguePickerDisplay: string;
 }
@@ -16,29 +16,12 @@ export interface LeaguePickerActions {
     onSelectItem: (leagueId: string) => void;
 }
 
-const leagues: Array<League> = [
-    {
-        type: 'leagues',
-        id: 'abc',
-        attributes: {
-            name: 'ABC'
-        }
-    },
-    {
-        type: 'leagues',
-        id: 'xyz',
-        attributes: {
-            name: 'XYZ'
-        }
-    }
-];
-
 export default class LeaguePicker extends Component<LeaguePickerProps & LeaguePickerActions> {
     render() {
         return (
             <Downshift
                 inputValue={this.props.leaguePickerDisplay}
-                selectedItem={leagues.find(it => it.id === this.props.selectedLeagueId)}
+                selectedItem={this.props.leagues.find(it => it.id === this.props.selectedLeagueId)}
                 itemToString={this.getItemDisplay}
                 onInputValueChange={(value: string) => this.props.onChangeDisplay(value)}
                 onChange={(selection: League) => this.props.onSelectItem(selection.id)}
@@ -65,6 +48,7 @@ export default class LeaguePicker extends Component<LeaguePickerProps & LeaguePi
                 onChange={props.onChange}
                 id="league"
                 label="League"
+                autoComplete="off"
             />
         );
     }
@@ -88,8 +72,7 @@ export default class LeaguePicker extends Component<LeaguePickerProps & LeaguePi
     }
 
     getSuggestions(inputValue: string | null): Array<League> {
-        // TODO: filter back down to first 5 matches
-        return leagues.filter(league => this.matches(inputValue, league));
+        return this.props.leagues.filter(league => this.matches(inputValue, league)).slice(0, 5);
     }
 
     matches(searchValue: string | null, league: League) {

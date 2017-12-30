@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { CurrentView, FetchedState, Team } from '../../../../models/models';
+import { CurrentView, FetchedState, League, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import LeaguePicker from './LeaguePicker';
@@ -17,6 +17,7 @@ const styles: CSSProperties = {
 
 export interface TeamDetailProps {
     team: Team | null;
+    leagues: Array<League>;
     leagueDisplay: string;
     isEdit: boolean;
     currentView: CurrentView;
@@ -61,6 +62,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
     private getForm() {
         const {
             team,
+            leagues,
             leagueDisplay,
             isEdit,
             updateLeague,
@@ -76,6 +78,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
             return (
                 <form style={styles.root}>
                     <LeaguePicker
+                        leagues={leagues}
                         leaguePickerDisplay={leagueDisplay}
                         selectedLeagueId={team.relationships.league.data.id}
                         onChangeDisplay={updateLeagueDisplay}

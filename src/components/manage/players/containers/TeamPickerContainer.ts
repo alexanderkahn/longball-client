@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import TeamPicker, { TeamPickerActions, TeamPickerProps } from '../presenters/TeamPicker';
 import { ResourceCache } from '../../../../reducers/resource';
 import { ResourceObject } from '../../../../models/models';
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 
-function nonNull<T extends ResourceObject>(resources: Map<string, ResourceCache<T>>): List<T> {
-    return List(List(resources.entries()).filter(notEmpty));
+// FIXME: this belongs in a museum! (or a util file)
+export function nonNull<T extends ResourceObject>(resources: Map<string, ResourceCache<T>>): Array<T> {
+    return resources.valueSeq().toArray().map((it: ResourceCache<T>) => it.object).filter(notEmpty);
 }
 
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {

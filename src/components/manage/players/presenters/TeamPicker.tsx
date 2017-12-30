@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { List } from 'immutable';
 import { Team } from '../../../../models/models';
 import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
 
 export interface TeamPickerProps {
-    teams: List<Team>;
+    teams: Array<Team>;
 }
 
 export interface TeamPickerActions {
@@ -71,7 +70,7 @@ export default class TeamPicker extends Component<TeamPickerProps & TeamPickerAc
                 return false;
             }
             return (!inputValue || this.getItemDisplay(team).toLowerCase().includes(inputValue.toLowerCase()));
-        }).toArray();
+        });
     }
 
     getItemDisplay(obj: any): string {

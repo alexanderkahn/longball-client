@@ -107,7 +107,6 @@ export function getSafePage(state: ResourceObjectState<ResourceObject>, location
 
     // FIXME: this will not work for filtered collections. Need a way to parse out pagenumber from filter.
     const pageGroup = state.pages.get('', safePage);
-    console.info(pageGroup);
     if (!pageGroup) {
         return {
             page: safePage,

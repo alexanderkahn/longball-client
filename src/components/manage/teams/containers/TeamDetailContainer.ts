@@ -9,11 +9,13 @@ import {
     updateTeamAttribute, updateTeamRelationship,
     updateTeamRelationshipDisplay
 } from '../../../../actions/form/formUpdateActions';
+import { nonNull } from '../../players/containers/TeamPickerContainer';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): TeamDetailProps => {
     const teamId = ownProps.match.params.itemId;
     if (teamId === 'add') {
         return {
+            leagues: nonNull(state.resource.leagues.data),
             team: state.form.team.resource,
             leagueDisplay: state.form.team.relationshipDisplayFields.get('league', ''),
             currentView: {
@@ -26,6 +28,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
         const team = teamCache ? teamCache.object : null;
         const league = team ? state.resource.leagues.data.get(team.relationships.league.data.id) : null;
         return {
+            leagues: nonNull(state.resource.leagues.data),
             team: team,
             leagueDisplay: league && league.object ? league.object.attributes.name : '',
             currentView: {
