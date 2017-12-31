@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { CurrentView, FetchedState, League, Team } from '../../../../models/models';
+import { CurrentView, FetchedState, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
-import LeaguePicker from './ResourcePickerPresenter';
+import LeaguePicker from '../containers/LeaguePicker';
 
 const styles: CSSProperties = {
     root: {
@@ -17,17 +17,12 @@ const styles: CSSProperties = {
 
 export interface TeamDetailProps {
     team: Team | null;
-    leagues: Array<League>;
-    leagueDisplay: string;
     isEdit: boolean;
     currentView: CurrentView;
 }
 
 export interface TeamDetailFormActions {
     fetchItemDetail: () => void;
-    updateLeague: (leagueId: string) => void;
-    updateLeagueDisplay: (leagueDisplay: string) => void;
-    getDisplay: (league: League) => string;
     updateAbbreviation: (abbreviation: string) => void;
     updateLocation: (location: string) => void;
     updateNickname: (nickname: string) => void;
@@ -63,12 +58,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
     private getForm() {
         const {
             team,
-            leagues,
-            leagueDisplay,
-            getDisplay,
             isEdit,
-            updateLeague,
-            updateLeagueDisplay,
             updateAbbreviation,
             updateLocation,
             updateNickname,
@@ -79,15 +69,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
         } else {
             return (
                 <form style={styles.root}>
-                    <LeaguePicker
-                        matchingResources={leagues}
-                        inputDisplayValue={leagueDisplay}
-                        selectedResourceId={team.relationships.league.data.id}
-                        onChangeDisplay={updateLeagueDisplay}
-                        onSelectResource={updateLeague}
-                        getResourceDisplay={getDisplay}
-                        inputDisplayPlaceholder="League"
-                    />
+                    <LeaguePicker/>
                     <TextField
                         fullWidth={true}
                         disabled={!isEdit}
