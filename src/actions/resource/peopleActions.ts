@@ -9,7 +9,7 @@ export function receivePeople(people: OrderedMap<string, Person>): ReceiveResour
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: PEOPLE_RESOURCE_TYPE,
-        filter: '',
+        restrictions: new Map(),
         data: people,
         page: {
             number: 0,

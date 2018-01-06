@@ -106,7 +106,7 @@ export function getSafePage(state: ResourceObjectState<ResourceObject>, location
     const safePage = (isNumber(pageNumber) && pageNumber > 0) ? pageNumber : 1;
 
     // FIXME: this will not work for filtered collections. Need a way to parse out pagenumber from filter.
-    const pageGroup = state.pages.get('', safePage);
+    const pageGroup = state.pages.get(new Map(), safePage);
     if (!pageGroup) {
         return {
             page: safePage,
@@ -117,9 +117,9 @@ export function getSafePage(state: ResourceObjectState<ResourceObject>, location
     } else {
         return {
             page: safePage,
-            fetchedState: pageGroup.pageItems.fetchingState,
-            hasPrevious: pageGroup.hasPrevious,
-            hasNext: pageGroup.hasNext,
+            fetchedState: pageGroup.collection.pageItems.fetchingState,
+            hasPrevious: pageGroup.collection.hasPrevious,
+            hasNext: pageGroup.collection.hasNext,
         };
     }
 }

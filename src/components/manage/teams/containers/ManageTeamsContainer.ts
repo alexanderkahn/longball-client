@@ -12,7 +12,7 @@ const MANAGE_TEAMS_BASE_URL = '/manage/teams';
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageTeamsFormProps => {
     const currentPage = getSafePage(state.resource.teams, ownProps.location);
     return {
-        teams: getObjectsForPage(state.resource.teams, '', currentPage.page),
+        teams: getObjectsForPage(state.resource.teams, new Map(), currentPage.page),
         currentView: currentPage,
     };
 };
@@ -20,7 +20,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>)
     : ManageTeamsFormActions => {
     return {
-        fetchListItems: (page: number) => () => dispatch(fetchTeams('', page)),
+        fetchListItems: (page: number) => () => dispatch(fetchTeams(new Map(), page)),
         onClickAdd: () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}/add`)),
         getPage: (page: number) => () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}?page=${page}`)),
         buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}/${team.id}`)),

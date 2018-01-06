@@ -26,7 +26,7 @@ export interface RequestResourceObjectAction {
 export interface RequestResourcePageAction {
     type: ResourceActionType.REQUEST_RESOURCE_PAGE;
     resourceType: ResourceType;
-    filter: string;
+    restrictions: Map<string, string>;
     page: number;
 }
 
@@ -42,7 +42,7 @@ export interface ReceiveResourceObjectAction<T extends ResourceObject> {
 export interface ReceiveResourcePageAction<T extends ResourceObject> {
     type: ResourceActionType.RECEIVE_RESOURCE_PAGE;
     resourceType: ResourceType;
-    filter: string;
+    restrictions: Map<string, string>;
     data: OrderedMap<string, T>;
     page: CollectionPage;
 }

@@ -11,7 +11,7 @@ export function nonNull<T extends ResourceObject>(resources: Map<string, Resourc
     return resources.valueSeq().toArray().map((it: ResourceCache<T>) => it.object).filter(notEmpty);
 }
 
-function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+export function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
     return value !== null && value !== undefined;
 }
 

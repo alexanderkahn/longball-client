@@ -22,11 +22,13 @@ function requestRosterPosition(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestRosterPositionCollection(filter: string, page: number): RequestResourcePageAction {
+// TODO: restrictions should be a store-only concept.
+// This should be a full list of query parameters that can get filtered down later.
+function requestRosterPositionCollection(restrictions: Map<string, string>, page: number): RequestResourcePageAction {
     return {
         type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
-        filter,
+        restrictions: restrictions,
         page
     };
 }
@@ -48,7 +50,7 @@ function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPositi
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
-        filter: '',
+        restrictions: new Map(),
         data: rosterPositions,
         page: page
     };
@@ -62,9 +64,9 @@ function removeRosterPosition(id: string): RemoveResourceObjectAction {
     };
 }
 
-export function fetchPlayers(filter: string, page: number) {
+export function fetchPlayers(restrictions: Map<string, string>, page: number) {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(requestRosterPositionCollection(filter, page));
+        dispatch(requestRosterPositionCollection(restrictions, page));
         const collection = await fetchCollection<RosterPosition>('rosterpositions', page, ['player']);
         if (!isNullOrUndefined(collection.included)) {
             const people = collection.included.filter(ro => ro.type === 'people') as Array<Person>;

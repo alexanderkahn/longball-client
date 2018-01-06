@@ -20,11 +20,11 @@ function requestTeam(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestTeamCollection(filter: string, page: number): RequestResourcePageAction {
+function requestTeamCollection(filter: Map<string, string>, page: number): RequestResourcePageAction {
     return {
         type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: TEAMS_RESOURCE_TYPE,
-        filter,
+        restrictions: filter,
         page
     };
 }
@@ -44,7 +44,7 @@ function receiveTeams(teams: OrderedMap<string, Team>, page: CollectionPage): Re
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: TEAMS_RESOURCE_TYPE,
-        filter: '',
+        restrictions: new Map(),
         data: teams,
         page: page
     };
@@ -58,7 +58,7 @@ function removeTeam(id: string): RemoveResourceObjectAction {
     };
 }
 
-export function fetchTeams(filter: string, page: number): Dispatch<RootState> {
+export function fetchTeams(filter: Map<string, string>, page: number): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(requestTeamCollection(filter, page));
         const collection = await fetchCollection<Team>('teams', page);

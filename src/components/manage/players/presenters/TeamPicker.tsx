@@ -64,7 +64,7 @@ export default class TeamPicker extends Component<TeamPickerProps & TeamPickerAc
     }
 
     getSuggestions(inputValue: string | null): Array<Team> {
-        // TODO: filter back down to first 5 matches
+        // TODO: restrictions back down to first 5 matches
         return this.props.teams.filter(team => {
             if (!inputValue || !team) {
                 return false;
