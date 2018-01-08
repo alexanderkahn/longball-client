@@ -2,6 +2,7 @@ import { parse } from 'querystring';
 import { Location } from 'history';
 import { isNumber } from 'util';
 import { ResourceObjectState } from '../reducers/resource';
+import { PageDescriptor } from '../reducers/resource/page';
 
 export enum FetchedState {
     NOT_FETCHED,
@@ -18,6 +19,7 @@ export interface CurrentView {
     fetchedState: FetchedState;
 }
 
+// TODO: this is essentially the same as PageResultsMeta
 export interface PagedView extends CurrentView {
     page: number;
     hasPrevious: boolean;
@@ -106,7 +108,7 @@ export function getSafePage(state: ResourceObjectState<ResourceObject>, location
     const safePage = (isNumber(pageNumber) && pageNumber > 0) ? pageNumber : 1;
 
     // FIXME: this will not work for filtered collections. Need a way to parse out pagenumber from filter.
-    const pageGroup = state.pages.get(new Map(), safePage);
+    const pageGroup = state.pages.get(new PageDescriptor(safePage));
     if (!pageGroup) {
         return {
             page: safePage,
@@ -117,9 +119,9 @@ export function getSafePage(state: ResourceObjectState<ResourceObject>, location
     } else {
         return {
             page: safePage,
-            fetchedState: pageGroup.collection.pageItems.fetchingState,
-            hasPrevious: pageGroup.collection.hasPrevious,
-            hasNext: pageGroup.collection.hasNext,
+            fetchedState: pageGroup.fetchingState,
+            hasPrevious: pageGroup.object ? pageGroup.object.meta.hasPrevious : false,
+            hasNext: pageGroup.object ? pageGroup.object.meta.hasNext : false,
         };
     }
 }

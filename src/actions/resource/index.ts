@@ -1,6 +1,7 @@
 import { ResourceObject, ResourceType } from '../../models/models';
 import { OrderedMap } from 'immutable';
-import { CollectionPage } from '../rest';
+import { PageResultsMeta } from '../rest';
+import { PageDescriptor } from '../../reducers/resource/page';
 
 export enum ResourceActionType {
     REQUEST_RESOURCE_OBJECT = 'REQUEST_RESOURCE_OBJECT',
@@ -26,8 +27,7 @@ export interface RequestResourceObjectAction {
 export interface RequestResourcePageAction {
     type: ResourceActionType.REQUEST_RESOURCE_PAGE;
     resourceType: ResourceType;
-    restrictions: Map<string, string>;
-    page: number;
+    page: PageDescriptor;
 }
 
 export interface ReceiveResourceObjectAction<T extends ResourceObject> {
@@ -42,9 +42,9 @@ export interface ReceiveResourceObjectAction<T extends ResourceObject> {
 export interface ReceiveResourcePageAction<T extends ResourceObject> {
     type: ResourceActionType.RECEIVE_RESOURCE_PAGE;
     resourceType: ResourceType;
-    restrictions: Map<string, string>;
+    page: PageDescriptor;
+    meta: PageResultsMeta;
     data: OrderedMap<string, T>;
-    page: CollectionPage;
 }
 
 export interface RemoveResourceObjectAction {

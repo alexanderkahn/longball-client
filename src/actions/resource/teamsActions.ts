@@ -1,4 +1,4 @@
-import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
+import { PageResultsMeta, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { ResourceType, Team } from '../../models/models';
 import { RootState } from '../../reducers';
 import { Dispatch } from 'redux';
@@ -9,6 +9,7 @@ import {
     RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
     ResourceActionType, ReceiveResourceObjectAction
 } from './index';
+import { PageDescriptor } from '../../reducers/resource/page';
 
 const TEAMS_RESOURCE_TYPE: ResourceType = 'teams';
 
@@ -20,11 +21,10 @@ function requestTeam(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestTeamCollection(filter: Map<string, string>, page: number): RequestResourcePageAction {
+function requestTeamCollection(page: PageDescriptor): RequestResourcePageAction {
     return {
         type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: TEAMS_RESOURCE_TYPE,
-        restrictions: filter,
         page
     };
 }
@@ -40,13 +40,14 @@ function receiveTeam(id: string, resource: Team | null): ReceiveResourceObjectAc
     };
 }
 
-function receiveTeams(teams: OrderedMap<string, Team>, page: CollectionPage): ReceiveResourcePageAction<Team> {
+function receiveTeams(teams: OrderedMap<string, Team>, meta: PageResultsMeta, page: PageDescriptor)
+: ReceiveResourcePageAction<Team> {
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: TEAMS_RESOURCE_TYPE,
-        restrictions: new Map(),
-        data: teams,
-        page: page
+        page,
+        meta,
+        data: teams
     };
 }
 
@@ -58,11 +59,12 @@ function removeTeam(id: string): RemoveResourceObjectAction {
     };
 }
 
-export function fetchTeams(filter: Map<string, string>, page: number): Dispatch<RootState> {
+export function fetchTeams(page: PageDescriptor): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(requestTeamCollection(filter, page));
+        dispatch(requestTeamCollection(page));
         const collection = await fetchCollection<Team>('teams', page);
-        dispatch(receiveTeams(OrderedMap(collection.data.map(team => [team.id, team])), collection.meta.page));
+        const teams = OrderedMap<string, Team>(collection.data.map(team => [team.id, team]));
+        dispatch(receiveTeams(teams, collection.meta.page, page));
     };
 }
 

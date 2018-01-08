@@ -1,6 +1,7 @@
 import { Person, ResourceType } from '../../models/models';
 import { OrderedMap } from 'immutable';
 import { ReceiveResourcePageAction, RemoveResourceObjectAction, ResourceActionType } from './index';
+import { PageDescriptor } from '../../reducers/resource/page';
 
 const PEOPLE_RESOURCE_TYPE: ResourceType = 'people';
 
@@ -9,14 +10,14 @@ export function receivePeople(people: OrderedMap<string, Person>): ReceiveResour
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: PEOPLE_RESOURCE_TYPE,
-        restrictions: new Map(),
-        data: people,
-        page: {
+        page: new PageDescriptor(0),
+        meta: {
             number: 0,
             totalPages: 0,
             hasPrevious: false,
             hasNext: false,
-        }
+        },
+        data: people
     };
 }
 

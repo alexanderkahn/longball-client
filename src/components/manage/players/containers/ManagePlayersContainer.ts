@@ -5,7 +5,8 @@ import { getSafePage, Person, Player, RosterPosition } from '../../../../models/
 import { RootState } from '../../../../reducers';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
-import { getObjectsForPage, ResourceObjectState } from '../../../../reducers/resource';
+import { ResourceObjectState } from '../../../../reducers/resource';
+import { PageDescriptor } from '../../../../reducers/resource/page';
 
 const MANAGE_PLAYERS_BASE_URL = '/manage/players';
 
@@ -24,7 +25,7 @@ function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObje
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManagePlayersFormProps => {
     const currentPage = getSafePage(state.resource.rosterPositions, ownProps.location);
-    const rosterPositions = getObjectsForPage(state.resource.rosterPositions, new Map(), currentPage.page);
+    const rosterPositions = state.resource.rosterPositions.getNonNullPageItems(new PageDescriptor(currentPage.page));
     return {
         players: getPlayers(rosterPositions, state.resource.people),
         currentView: currentPage
@@ -34,7 +35,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 const mapDispatchToProps = (dispatch: Dispatch<RootState>)
     : ManagePlayersFormActions => {
     return {
-        fetchListItems: (currentPage: number) => () => dispatch(fetchPlayers(new Map(), currentPage)),
+        fetchListItems: (currentPage: number) => () => dispatch(fetchPlayers(new PageDescriptor(currentPage))),
         onClickAdd: () => dispatch(push(MANAGE_PLAYERS_BASE_URL + '/add')),
         getPage: (page: number) => () => dispatch(push(MANAGE_PLAYERS_BASE_URL + `?page=${page}`)),
         buildHandleSelectPlayerDetail: (player: Player) => () =>

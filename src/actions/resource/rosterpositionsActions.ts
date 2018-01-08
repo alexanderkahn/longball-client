@@ -1,4 +1,4 @@
-import { deleteObject, fetchCollection, fetchObject, CollectionPage, postObject } from '../rest';
+import { deleteObject, fetchCollection, fetchObject, PageResultsMeta, postObject } from '../rest';
 import { Person, Player, ResourceType, RosterPosition } from '../../models/models';
 import { receivePeople, removePerson } from './peopleActions';
 import { Dispatch } from 'redux';
@@ -11,6 +11,7 @@ import {
     RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
     ResourceActionType, ReceiveResourceObjectAction
 } from './index';
+import { PageDescriptor } from '../../reducers/resource/page';
 
 const ROSTER_POSITIONS_RESOURCE_TYPE: ResourceType = 'rosterpositions';
 
@@ -22,19 +23,18 @@ function requestRosterPosition(id: string): RequestResourceObjectAction {
     };
 }
 
-// TODO: restrictions should be a store-only concept.
+// TODO: descriptor should be a store-only concept.
 // This should be a full list of query parameters that can get filtered down later.
-function requestRosterPositionCollection(restrictions: Map<string, string>, page: number): RequestResourcePageAction {
+function requestRosterPositionCollection(page: PageDescriptor): RequestResourcePageAction {
     return {
         type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
-        restrictions: restrictions,
-        page
+        page: page,
     };
 }
 
-function receiveRosterPosition(id: string, resource: RosterPosition | null):
-ReceiveResourceObjectAction<RosterPosition> {
+function receiveRosterPosition(id: string, resource: RosterPosition | null)
+: ReceiveResourceObjectAction<RosterPosition> {
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_OBJECT,
         resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
@@ -45,14 +45,15 @@ ReceiveResourceObjectAction<RosterPosition> {
     };
 }
 
-function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>, page: CollectionPage)
-: ReceiveResourcePageAction<RosterPosition> {
+function receiveRosterPositions(rosterPositions: OrderedMap<string, RosterPosition>,
+                                page: PageDescriptor,
+                                meta: PageResultsMeta): ReceiveResourcePageAction<RosterPosition> {
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: ROSTER_POSITIONS_RESOURCE_TYPE,
-        restrictions: new Map(),
+        page: page,
         data: rosterPositions,
-        page: page
+        meta: meta
     };
 }
 
@@ -64,9 +65,9 @@ function removeRosterPosition(id: string): RemoveResourceObjectAction {
     };
 }
 
-export function fetchPlayers(restrictions: Map<string, string>, page: number) {
+export function fetchPlayers(page: PageDescriptor) {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(requestRosterPositionCollection(restrictions, page));
+        dispatch(requestRosterPositionCollection(page));
         const collection = await fetchCollection<RosterPosition>('rosterpositions', page, ['player']);
         if (!isNullOrUndefined(collection.included)) {
             const people = collection.included.filter(ro => ro.type === 'people') as Array<Person>;
@@ -74,8 +75,9 @@ export function fetchPlayers(restrictions: Map<string, string>, page: number) {
         }
         dispatch(receiveRosterPositions(
             OrderedMap(collection.data.map(position => [position.id, position])),
-            collection.meta.page)
-        );
+            page,
+            collection.meta.page,
+        ));
     };
 }
 

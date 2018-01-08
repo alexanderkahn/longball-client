@@ -1,4 +1,4 @@
-import { CollectionPage, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
+import { PageResultsMeta, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { League, ResourceType } from '../../models/models';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/index';
@@ -9,6 +9,7 @@ import {
     RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
     ResourceActionType, ReceiveResourceObjectAction
 } from './index';
+import { PageDescriptor } from '../../reducers/resource/page';
 
 const LEAGUE_RESOURCE_TYPE: ResourceType = 'leagues';
 
@@ -20,12 +21,11 @@ function requestLeague(id: string): RequestResourceObjectAction {
     };
 }
 
-function requestLeagueCollection(restrictions: Map<string, string>, page: number): RequestResourcePageAction {
+function requestLeagueCollection(page: PageDescriptor): RequestResourcePageAction {
     return {
         type: ResourceActionType.REQUEST_RESOURCE_PAGE,
         resourceType: LEAGUE_RESOURCE_TYPE,
-        restrictions: restrictions,
-        page
+        page,
     };
 }
 
@@ -40,13 +40,14 @@ function receiveLeague(id: string, resource: League | null): ReceiveResourceObje
     };
 }
 
-function receiveLeagues(leagues: OrderedMap<string, League>, page: CollectionPage): ReceiveResourcePageAction<League> {
+function receiveLeagues(leagues: OrderedMap<string, League>, page: PageDescriptor, meta: PageResultsMeta)
+: ReceiveResourcePageAction<League> {
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: LEAGUE_RESOURCE_TYPE,
-        restrictions: new Map(),
         data: leagues,
-        page: page
+        meta,
+        page
     };
 }
 
@@ -58,11 +59,12 @@ function removeLeague(id: string): RemoveResourceObjectAction {
     };
 }
 
-export function fetchLeagues(restrictions: Map<string, string>, page: number) {
+export function fetchLeagues(page: PageDescriptor) {
     return async function (dispatch: Dispatch<RootState>) {
-        dispatch(requestLeagueCollection(restrictions, page));
+        dispatch(requestLeagueCollection(page));
         const collection = await fetchCollection<League>('leagues', page);
-        dispatch(receiveLeagues(OrderedMap(collection.data.map(league => [league.id, league])), collection.meta.page));
+        const leagues = OrderedMap<string, League>(collection.data.map((league: League) => [league.id, league]));
+        dispatch(receiveLeagues(leagues, page, collection.meta.page));
     };
 }
 

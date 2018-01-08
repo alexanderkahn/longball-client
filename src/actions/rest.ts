@@ -1,14 +1,15 @@
 import { getIdTokenPromise } from './session';
 import { ResourceObject } from '../models/models';
+import { PageDescriptor } from '../reducers/resource/page';
 
 export interface MetaResponse {
     meta: {
         status: number,
-        page?: CollectionPage
+        page?: PageResultsMeta
     };
 }
 
-export interface CollectionPage {
+export interface PageResultsMeta {
     totalPages: number;
     number: number;
     hasPrevious: boolean;
@@ -26,17 +27,19 @@ export interface ObjectResponse<T extends ResourceObject> extends MetaResponse {
 export interface CollectionResponse<T extends ResourceObject> extends MetaResponse {
     meta: {
         status: number,
-        page: CollectionPage
+        page: PageResultsMeta
     };
     data: Array<T>;
     included?: Array<ResourceObject>;
 }
 
 interface RequestOptions {
-    method: string;
+    method: RequestMethod;
     headers: { [header: string]: {} }; // TODO: can I change this to a map?
     body?: {};
 }
+
+type RequestMethod = 'GET' | 'POST' | 'DELETE';
 
 interface JsonResponse {
     request: {
@@ -119,15 +122,16 @@ function getFormattedUrl(url: string, includes?: Array<string>) {
     return url;
 }
 
-export async function fetchCollection<T extends ResourceObject>(type: string, page: number, includes?: Array<string>)
-: Promise<CollectionResponse<T>> {
-    const adjustedPage = page - 1;
+export async function fetchCollection<T extends ResourceObject>(
+    type: string, page: PageDescriptor, includes?: Array<string>
+): Promise<CollectionResponse<T>> {
+    const adjustedPage = page.pageNumber - 1;
     if (0 > adjustedPage) {
-        throw new Error('Invalid page number for request: ' + page);
+        throw new Error('Invalid page number for request: ' + page.pageNumber);
     }
     const url = getFormattedUrl(`/rest/${type}?page=${adjustedPage}`, includes);
     const collectionResponse = await getJsonGetResponse<CollectionResponse<T>>(url);
-    collectionResponse.meta.page.number = page;
+    collectionResponse.meta.page.number = page.pageNumber;
     return collectionResponse;
 }
 

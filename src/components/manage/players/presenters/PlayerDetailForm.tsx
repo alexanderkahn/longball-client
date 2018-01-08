@@ -121,7 +121,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
 
     // private onTeamChange = (event: ChangeEvent<HTMLInputElement>) => {
     //     if (!isNullOrUndefined(this.props.player)) {
-    //         this.props.player.rosterPosition.relationships.team.collection.id = event.target.value;
+    //         this.props.player.rosterPosition.relationships.team.itemIds.id = event.target.value;
     //         this.forceUpdate();
     //     }
     // }
