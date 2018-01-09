@@ -112,24 +112,33 @@ async function getJsonDeleteResponse(url: string): Promise<{ meta: { status: num
     return response.json as ObjectResponse<ResourceObject>;
 }
 
-function getFormattedUrl(url: string, includes?: Array<string>) {
-    if (includes) {
-        includes.forEach(include => {
-            let operator = url.indexOf('?') >= 0 ? '&' : '?';
-            url += `${operator}include=${include}`;
-        });
+function getFormattedUrl(baseUrl: string, page?: PageDescriptor, includes?: Array<string>) {
+    const params: Array<string> = [];
+    if (page) {
+        const adjustedPage = page.pageNumber - 1;
+        if (0 > adjustedPage) {
+            throw new Error('Invalid page number for request: ' + page.pageNumber);
+        }
+        params.push(`page=${adjustedPage}`);
+        page.filters.forEach((value, key) => params.push(`filter[${key}]=${value}`));
+        page.searches.forEach((value, key) => params.push(`search[${key}]=${value}`));
     }
-    return url;
+
+    if (includes) {
+        includes.forEach(include => params.push(`include=${include}`));
+    }
+
+    const joinedParams = params.join('&');
+    if (joinedParams.length > 0) {
+        baseUrl += `?${joinedParams}`;
+    }
+    return baseUrl;
 }
 
 export async function fetchCollection<T extends ResourceObject>(
     type: string, page: PageDescriptor, includes?: Array<string>
 ): Promise<CollectionResponse<T>> {
-    const adjustedPage = page.pageNumber - 1;
-    if (0 > adjustedPage) {
-        throw new Error('Invalid page number for request: ' + page.pageNumber);
-    }
-    const url = getFormattedUrl(`/rest/${type}?page=${adjustedPage}`, includes);
+    const url = getFormattedUrl(`/rest/${type}`, page, includes);
     const collectionResponse = await getJsonGetResponse<CollectionResponse<T>>(url);
     collectionResponse.meta.page.number = page.pageNumber;
     return collectionResponse;
@@ -137,7 +146,7 @@ export async function fetchCollection<T extends ResourceObject>(
 
 export async function fetchObject<T extends ResourceObject>(type: string, id: string, includes?: Array<string>)
 : Promise<ObjectResponse<T> | null> {
-    const url = getFormattedUrl(`/rest/${type}/${id}`, includes);
+    const url = getFormattedUrl(`/rest/${type}/${id}`, undefined, includes);
     try {
         return await getJsonGetResponse<ObjectResponse<T>>(url);
     } catch (e) {
