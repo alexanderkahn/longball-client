@@ -11,7 +11,7 @@ import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { fetchLeagues } from '../../../../actions/resource/leaguesActions';
 
-function getItemDisplay(obj: League | string | null): string {
+function getLeagueDisplay(obj: League | string | null): string {
     if (!obj) {
         return '';
     } else if (isLeague(obj)) {
@@ -44,7 +44,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ResourcePickerAction
     return {
         fetchSuggestions: (searchTerm: string) =>
             dispatch(fetchLeagues(new PageDescriptor(1, ImmutableMap([['name', searchTerm]])))),
-        getResourceDisplay: getItemDisplay,
+        getResourceDisplay: getLeagueDisplay,
         onChangeDisplay: (leagueDisplay: string) =>
             dispatch(updateTeamRelationshipDisplay('league', leagueDisplay)),
         onSelectResource: (leagueId: string) => dispatch(updateTeamRelationship('league', {

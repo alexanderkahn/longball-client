@@ -1,5 +1,5 @@
 import { combineReducers, Reducer } from 'redux';
-import { League, ResourceObject, Team } from '../../models/models';
+import { League, ResourceObject, RosterPosition, Team } from '../../models/models';
 import { ResourceFormUpdateAction, ResourceFormUpdateActionType } from '../../actions/form/formUpdateActions';
 import { ReceiveResourceObjectAction, ResourceActionType } from '../../actions/resource';
 import * as _ from 'lodash';
@@ -42,10 +42,35 @@ const teamFormState: ResourceFormState<Team> = {
     relationshipDisplayFields: Map()
 };
 
-const resourceFormReducerBuilder = <T extends ResourceObject>(initialState: ResourceFormState<T>) => (
-    state: ResourceFormState<T> = initialState,
-    action: ResourceFormUpdateAction | ReceiveResourceObjectAction<T>
-): ResourceFormState<T> => {
+const rosterPositionFormState: ResourceFormState<RosterPosition> = {
+    resource: {
+        type: 'rosterpositions',
+        id: '',
+        attributes: {
+            jerseyNumber: 1,
+            startDate: '',
+        },
+        relationships: {
+            team: {
+                data: {
+                    type: 'leagues',
+                    id: ''
+                },
+            },
+            player: {
+                data: {
+                    type: 'leagues',
+                    id: ''
+                },
+            }
+        }
+    },
+    relationshipDisplayFields: Map()
+};
+
+const resourceFormReducerBuilder = <T extends ResourceObject>(initialState: ResourceFormState<T>) =>
+    (state: ResourceFormState<T> = initialState,
+     action: ResourceFormUpdateAction | ReceiveResourceObjectAction<T>): ResourceFormState<T> => {
 
     if (action.resourceType !== initialState.resource.type) {
         return state;
@@ -72,9 +97,11 @@ const resourceFormReducerBuilder = <T extends ResourceObject>(initialState: Reso
 export interface FormState {
     league: ResourceFormState<League>;
     team: ResourceFormState<Team>;
+    rosterPosition: ResourceFormState<RosterPosition>;
 }
 
 export const form: Reducer<FormState> = combineReducers({
     league: resourceFormReducerBuilder(leagueFormState),
     team: resourceFormReducerBuilder(teamFormState),
+    rosterPosition: resourceFormReducerBuilder(rosterPositionFormState),
 });

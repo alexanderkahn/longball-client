@@ -8,7 +8,7 @@ import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import { Moment } from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import TeamPickerContainer from '../containers/TeamPickerContainer';
+import TeamPickerContainer from '../containers/TeamPicker';
 
 const styles: CSSProperties = {
     root: {

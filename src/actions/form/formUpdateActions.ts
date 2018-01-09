@@ -32,6 +32,7 @@ export type ResourceFormUpdateAction =
     | ResourceFormUpdateRelationshipAction
     | ResourceFormUpdateRelationshipDisplayAction;
 
+// TODO: looks like these could just pass in which form they want to update. No need for separate methods.
 export function updateLeagueAttribute(attribute: string, value: string): ResourceFormUpdateAttributeAction {
     return {
         type: ResourceFormUpdateActionType.UPDATE_ATTRIBUTE,
@@ -65,6 +66,26 @@ export function updateTeamRelationshipDisplay(relationship: string, value: strin
     return {
         type: ResourceFormUpdateActionType.UPDATE_RELATIONSHIP_DISPLAY,
         resourceType: 'teams',
+        relationship,
+        value
+    };
+}
+
+export function updateRosterPositionRelationship(relationship: string, value: RelationshipResource)
+: ResourceFormUpdateRelationshipAction {
+    return {
+        type: ResourceFormUpdateActionType.UPDATE_RELATIONSHIP,
+        resourceType: 'rosterpositions',
+        relationship,
+        value
+    };
+}
+
+export function updateRosterPositionRelationshipDisplay(relationship: string, value: string)
+: ResourceFormUpdateRelationshipDisplayAction {
+    return {
+        type: ResourceFormUpdateActionType.UPDATE_RELATIONSHIP_DISPLAY,
+        resourceType: 'rosterpositions',
         relationship,
         value
     };
