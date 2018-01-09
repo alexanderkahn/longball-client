@@ -5,24 +5,11 @@ import ResourcePickerPresenter, {
     ResourcePickerProps
 } from '../presenters/ResourcePickerPresenter';
 import { Dispatch } from 'redux';
-import { League } from '../../../../models/models';
-import { nonNull } from '../../players/containers/TeamPickerContainer';
+import { FetchedState, League } from '../../../../models/models';
 import { updateTeamRelationship, updateTeamRelationshipDisplay } from '../../../../actions/form/formUpdateActions';
-
-// TODO: should these four also be handled by state?
-function getSuggestions(inputValue: string, unfilteredLeagues: Array<League>): Array<League> {
-    if (inputValue.length === 0) {
-        return Array();
-    }
-    return unfilteredLeagues.filter(league => matches(inputValue, league)).slice(0, 5);
-}
-
-function matches(searchValue: string, league: League) {
-    if (!league) {
-        return false;
-    }
-    return (!searchValue || getItemDisplay(league).toLowerCase().includes(searchValue.toLowerCase()));
-}
+import { PageDescriptor } from '../../../../reducers/resource/page';
+import { Map as ImmutableMap } from 'immutable';
+import { fetchLeagues } from '../../../../actions/resource/leaguesActions';
 
 function getItemDisplay(obj: League | string | null): string {
     if (!obj) {
@@ -40,16 +27,23 @@ function isLeague(value: League | string | null): value is League {
 
 const mapStateToProps = (state: RootState): ResourcePickerProps<League> => {
     const leagueDisplay = state.form.team.relationshipDisplayFields.get('league', '');
+    const descriptor: PageDescriptor = new PageDescriptor(1, ImmutableMap([['name', leagueDisplay]]));
+    const pageCache = state.resource.leagues.pages.get(descriptor);
     return {
-        matchingResources: getSuggestions(leagueDisplay, nonNull(state.resource.leagues.data)),
+        matchingResources: state.resource.leagues.getNonNullPageItems(descriptor),
         selectedResourceId: state.form.team.resource.relationships.league.data.id,
         inputDisplayValue: leagueDisplay,
-        inputDisplayPlaceholder: 'Leagues'
+        inputDisplayPlaceholder: 'Leagues',
+        currentView: {
+            fetchedState: leagueDisplay.length > 0 ? pageCache.fetchingState : FetchedState.FETCHED
+        }
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): ResourcePickerActions<League> => {
     return {
+        fetchSuggestions: (searchTerm: string) =>
+            dispatch(fetchLeagues(new PageDescriptor(1, ImmutableMap([['name', searchTerm]])))),
         getResourceDisplay: getItemDisplay,
         onChangeDisplay: (leagueDisplay: string) =>
             dispatch(updateTeamRelationshipDisplay('league', leagueDisplay)),

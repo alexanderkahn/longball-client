@@ -15,12 +15,12 @@ export interface User {
     name: string;
 }
 
-export interface CurrentView {
+export interface ViewState {
     fetchedState: FetchedState;
 }
 
 // TODO: this is essentially the same as PageResultsMeta
-export interface PagedView extends CurrentView {
+export interface PagedView extends ViewState {
     page: number;
     hasPrevious: boolean;
     hasNext: boolean;

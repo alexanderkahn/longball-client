@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { CurrentView, FetchedState, Team } from '../../../../models/models';
+import { ViewState, FetchedState, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import LeaguePicker from '../containers/LeaguePicker';
@@ -18,7 +18,7 @@ const styles: CSSProperties = {
 export interface TeamDetailProps {
     team: Team | null;
     isEdit: boolean;
-    currentView: CurrentView;
+    currentView: ViewState;
 }
 
 export interface TeamDetailFormActions {

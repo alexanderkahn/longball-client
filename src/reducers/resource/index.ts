@@ -12,8 +12,15 @@ export interface ResourceState {
 }
 
 export class ResourceCache<T> {
-    readonly fetchingState: FetchedState.FETCHING | FetchedState.FETCHED;
+    readonly fetchingState: FetchedState;
     readonly object: T | null;
+
+    static empty<T>(): ResourceCache<T> {
+        return {
+            fetchingState: FetchedState.NOT_FETCHED,
+            object: null
+        };
+    }
 
     constructor(object?: T) {
         this.fetchingState = object ? FetchedState.FETCHED : FetchedState.FETCHING;
@@ -21,12 +28,49 @@ export class ResourceCache<T> {
     }
 }
 
-export class ResourceObjectState<T extends ResourceObject> {
-    readonly pages: ImmutableMap<PageDescriptor, ResourceCache<PageResult>>;
-    readonly data: ImmutableMap<string, ResourceCache<T>>;
+class CachedStateWrapper<K, V> {
 
-    constructor(pages: ImmutableMap<PageDescriptor, ResourceCache<PageResult>>,
-                data: ImmutableMap<string, ResourceCache<T>>,) {
+    private readonly internal: ImmutableMap<K, ResourceCache<V>> = ImmutableMap();
+
+    constructor(internal?: ImmutableMap<K, ResourceCache<V>>) {
+        if (internal) {
+            this.internal = internal;
+        } else {
+            this.internal = ImmutableMap();
+        }
+    }
+
+    get(key: K): ResourceCache<V> {
+        const value = this.internal.get(key);
+        return value ? value : ResourceCache.empty();
+    }
+
+    set(key: K, value?: V): CachedStateWrapper<K, V> {
+        return new CachedStateWrapper<K, V>(this.internal.set(key, new ResourceCache<V>(value)));
+    }
+
+    merge(other: ImmutableMap<K, V>): CachedStateWrapper<K, V> {
+        const cachedValues = other.map((value) => new ResourceCache(value));
+        return new CachedStateWrapper<K, V>(this.internal.merge(cachedValues));
+    }
+
+    toArray(): Array<V> {
+        const result: Array<V> = [];
+        this.internal.forEach(it => {
+            if (it && it.object) {
+                result.push(it.object);
+            }
+        });
+        return result;
+    }
+}
+
+export class ResourceObjectState<T extends ResourceObject> {
+    readonly pages: CachedStateWrapper<PageDescriptor, PageResult>;
+    readonly data: CachedStateWrapper<string, T>;
+
+    constructor(pages: CachedStateWrapper<PageDescriptor, PageResult>,
+                data: CachedStateWrapper<string, T>) {
         this.pages = pages;
         this.data = data;
     }
@@ -50,7 +94,7 @@ export class ResourceObjectState<T extends ResourceObject> {
 }
 
 export function initialState<T extends ResourceObject>(): ResourceObjectState<T> {
-    return new ResourceObjectState<T>(ImmutableMap(), ImmutableMap());
+    return new ResourceObjectState<T>(new CachedStateWrapper(), new CachedStateWrapper());
 }
 
 const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceType) =>
@@ -63,32 +107,31 @@ const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceTy
             case ResourceActionType.REQUEST_RESOURCE_OBJECT:
                 return new ResourceObjectState(
                     state.pages,
-                    state.data.set(action.id, new ResourceCache())
+                    state.data.set(action.id)
                 );
             case ResourceActionType.REQUEST_RESOURCE_PAGE:
                 return new ResourceObjectState(
-                    state.pages.set(action.page, new ResourceCache()),
+                    state.pages.set(action.page),
                     state.data
                 );
             case ResourceActionType.RECEIVE_RESOURCE_OBJECT:
-                const resourceCache = new ResourceCache(action.data.resource);
                 return new ResourceObjectState(
                     state.pages,
-                    state.data.set(action.data.id, resourceCache)
+                    state.data.set(action.data.id, action.data.resource ? action.data.resource : undefined)
                 );
             case ResourceActionType.RECEIVE_RESOURCE_PAGE:
                 return new ResourceObjectState(
-                    state.pages.set(action.page, new ResourceCache({
+                    state.pages.set(action.page, {
                         descriptor: action.page,
                         meta: action.meta,
                         itemIds: List(action.data.keys())
-                    })),
-                    state.data.merge(action.data.map(it => new ResourceCache(it)))
+                    }),
+                    state.data.merge(action.data)
                 );
             case ResourceActionType.REMOVE_RESOURCE_OBJECT:
                 return new ResourceObjectState(
                     state.pages,
-                    state.data.set(action.removed, new ResourceCache())
+                    state.data.set(action.removed)
                 );
             default:
                 return state;

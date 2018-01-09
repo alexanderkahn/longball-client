@@ -10,7 +10,7 @@ export function receivePeople(people: OrderedMap<string, Person>): ReceiveResour
     return {
         type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
         resourceType: PEOPLE_RESOURCE_TYPE,
-        page: new PageDescriptor(0),
+        page: new PageDescriptor(1),
         meta: {
             number: 0,
             totalPages: 0,

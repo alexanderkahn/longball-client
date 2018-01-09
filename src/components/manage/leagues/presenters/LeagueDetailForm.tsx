@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
-import { CurrentView, FetchedState, League } from '../../../../models/models';
+import { ViewState, FetchedState, League } from '../../../../models/models';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 
 const styles: CSSProperties = {
@@ -17,7 +17,7 @@ const styles: CSSProperties = {
 export interface LeagueDetailProps {
     league: League | null;
     isEdit: boolean;
-    currentView: CurrentView;
+    currentView: ViewState;
 }
 
 export interface LeagueDetailFormActions {

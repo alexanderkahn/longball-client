@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChangeEvent, Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { CurrentView, FetchedState, Player } from '../../../../models/models';
+import { ViewState, FetchedState, Player } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { isNullOrUndefined, isNumber } from 'util';
 import DatePicker from 'react-datepicker';
@@ -25,7 +25,7 @@ const styles: CSSProperties = {
 export interface PlayerDetailProps {
     player: Player | null;
     isEdit: boolean;
-    currentView: CurrentView;
+    currentView: ViewState;
 }
 
 export interface PlayerDetailFormActions {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { ResourceObject } from '../../../../models/models';
+import { ViewState, FetchedState, ResourceObject } from '../../../../models/models';
 import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
@@ -10,16 +10,27 @@ export interface ResourcePickerProps<T extends ResourceObject> {
     selectedResourceId: string;
     inputDisplayValue: string;
     inputDisplayPlaceholder: string;
+    currentView: ViewState;
 }
 
 export interface ResourcePickerActions<T extends ResourceObject> {
     getResourceDisplay: (display: T | string | null) => string;
+    fetchSuggestions: (searchTerm: string) => void;
     onChangeDisplay: (value: string) => void;
     onSelectResource: (resourceId: string) => void;
 }
 
 export default class ResourcePickerPresenter<T extends ResourceObject>
     extends Component<ResourcePickerProps<T> & ResourcePickerActions<T>> {
+
+    componentWillMount() {
+        this.tryFetch();
+    }
+
+    componentDidUpdate() {
+        this.tryFetch();
+    }
+
     render() {
         return (
             <Downshift
@@ -42,7 +53,14 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
         );
     }
 
-    renderInput(props: { value?: string, ref: string, onChange: () => void }) {
+    private tryFetch() {
+        const {currentView, fetchSuggestions, inputDisplayValue} = this.props;
+        if (currentView.fetchedState === FetchedState.NOT_FETCHED) {
+            fetchSuggestions(inputDisplayValue);
+        }
+    }
+
+    private renderInput(props: { value?: string, ref: string, onChange: () => void }) {
         return (
             <TextField
                 value={props.value || ''}
@@ -55,7 +73,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
         );
     }
 
-    renderSuggestion(resource: T, itemProps: {}): JSX.Element {
+    private renderSuggestion(resource: T, itemProps: {}): JSX.Element {
         return (
             <MenuItem {...itemProps} key={resource.id} component="div">
                 {this.props.getResourceDisplay(resource)}
@@ -63,7 +81,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
         );
     }
 
-    renderSuggestionsContainer(children: Array<JSX.Element>) {
+    private renderSuggestionsContainer(children: Array<JSX.Element>) {
         return (
             <Paper>
                 {children}
