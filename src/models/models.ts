@@ -96,11 +96,6 @@ export interface RelationshipResource {
     data: ResourceObject;
 }
 
-// TODO: the functions below don't really have a home right now. Maybe find one for them?
-export const deepCopy = <T>(o: T): T => {
-    return JSON.parse(JSON.stringify(o));
-};
-
 // TODO: this whole function should probably be part of the state object
 export function getSafePage(state: ResourceObjectState<ResourceObject>, location: Location): PagedView {
     const params = parse(location.search.substr(1)) as PagedViewParams;

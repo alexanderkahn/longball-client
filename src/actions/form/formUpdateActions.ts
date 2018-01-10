@@ -71,6 +71,24 @@ export function updateTeamRelationshipDisplay(relationship: string, value: strin
     };
 }
 
+export function updatePersonAttribute(attribute: string, value: string) {
+    return {
+        type: ResourceFormUpdateActionType.UPDATE_ATTRIBUTE,
+        resourceType: 'people',
+        attribute,
+        value
+    };
+}
+
+export function updateRosterPositionAttribute(attribute: string, value: string) {
+    return {
+        type: ResourceFormUpdateActionType.UPDATE_ATTRIBUTE,
+        resourceType: 'rosterpositions',
+        attribute,
+        value
+    };
+}
+
 export function updateRosterPositionRelationship(relationship: string, value: RelationshipResource)
 : ResourceFormUpdateRelationshipAction {
     return {

@@ -1,5 +1,5 @@
 import { combineReducers, Reducer } from 'redux';
-import { League, ResourceObject, RosterPosition, Team } from '../../models/models';
+import { League, Person, ResourceObject, RosterPosition, Team } from '../../models/models';
 import { ResourceFormUpdateAction, ResourceFormUpdateActionType } from '../../actions/form/formUpdateActions';
 import { ReceiveResourceObjectAction, ResourceActionType } from '../../actions/resource';
 import * as _ from 'lodash';
@@ -42,6 +42,18 @@ const teamFormState: ResourceFormState<Team> = {
     relationshipDisplayFields: Map()
 };
 
+const personFormState: ResourceFormState<Person> = {
+    resource: {
+        type: 'people',
+        id: '',
+        attributes: {
+            first: '',
+            last: '',
+        }
+    },
+    relationshipDisplayFields: Map()
+};
+
 const rosterPositionFormState: ResourceFormState<RosterPosition> = {
     resource: {
         type: 'rosterpositions',
@@ -53,13 +65,13 @@ const rosterPositionFormState: ResourceFormState<RosterPosition> = {
         relationships: {
             team: {
                 data: {
-                    type: 'leagues',
+                    type: 'teams',
                     id: ''
                 },
             },
             player: {
                 data: {
-                    type: 'leagues',
+                    type: 'people',
                     id: ''
                 },
             }
@@ -97,11 +109,13 @@ const resourceFormReducerBuilder = <T extends ResourceObject>(initialState: Reso
 export interface FormState {
     league: ResourceFormState<League>;
     team: ResourceFormState<Team>;
+    person: ResourceFormState<Person>;
     rosterPosition: ResourceFormState<RosterPosition>;
 }
 
 export const form: Reducer<FormState> = combineReducers({
     league: resourceFormReducerBuilder(leagueFormState),
     team: resourceFormReducerBuilder(teamFormState),
+    person: resourceFormReducerBuilder(personFormState),
     rosterPosition: resourceFormReducerBuilder(rosterPositionFormState),
 });
