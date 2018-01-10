@@ -6,7 +6,7 @@ import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import 'react-datepicker/dist/react-datepicker.css';
-import TeamPickerContainer from '../containers/TeamPicker';
+import TeamPicker from '../containers/TeamPicker';
 
 const styles: CSSProperties = {
     root: {
@@ -99,7 +99,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                     </form>
                     <form style={styles.root}>
                         <div style={styles.teamSelector}>
-                            <TeamPickerContainer/>
+                            <TeamPicker isEdit={isEdit}/>
                         </div>
                         <TextField
                             fullWidth={true}

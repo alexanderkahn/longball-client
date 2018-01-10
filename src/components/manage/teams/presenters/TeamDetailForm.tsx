@@ -69,7 +69,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
         } else {
             return (
                 <form style={styles.root}>
-                    <LeaguePicker/>
+                    <LeaguePicker isEdit={isEdit}/>
                     <TextField
                         fullWidth={true}
                         disabled={!isEdit}

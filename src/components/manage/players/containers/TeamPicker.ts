@@ -30,7 +30,11 @@ function isTeam(value: Team | string | null): value is Team {
     return value !== null && (<Team> value).type === 'teams';
 }
 
-function mapStateToProps(state: RootState): ResourcePickerProps<Team> {
+interface TeamPickerProps {
+    isEdit: boolean;
+}
+
+function mapStateToProps(state: RootState, ownProps: TeamPickerProps): ResourcePickerProps<Team> {
     const teamDisplay = state.form.rosterPosition.relationshipDisplayFields.get('team', '');
     const suggestionsPage: PageDescriptor = new PageDescriptor(1, ImmutableMap([[SEARCH_TERM, teamDisplay]]));
     const pageCache = state.resource.teams.pages.get(suggestionsPage);
@@ -41,7 +45,8 @@ function mapStateToProps(state: RootState): ResourcePickerProps<Team> {
         inputDisplayPlaceholder: 'Teams',
         currentView: {
             fetchedState: teamDisplay.length > 0 ? pageCache.fetchingState : FetchedState.FETCHED
-        }
+        },
+        isEdit: ownProps.isEdit
     };
 }
 
@@ -60,9 +65,9 @@ function  mapDispatchToProps(dispatch: Dispatch<RootState>): ResourcePickerActio
         })),
     };
 }
-const TeamPickerContainer = connect(
+const TeamPicker = connect(
     mapStateToProps,
     mapDispatchToProps
 )(ResourcePickerPresenter);
 
-export default TeamPickerContainer;
+export default TeamPicker;

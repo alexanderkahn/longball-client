@@ -11,6 +11,7 @@ export interface ResourcePickerProps<T extends ResourceObject> {
     inputDisplayValue: string;
     inputDisplayPlaceholder: string;
     currentView: ViewState;
+    isEdit: boolean;
 }
 
 export interface ResourcePickerActions<T extends ResourceObject> {
@@ -63,6 +64,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     private renderInput(props: { value?: string, ref: string, onChange: () => void }) {
         return (
             <TextField
+                disabled={!this.props.isEdit}
                 value={props.value || ''}
                 inputRef={props.ref}
                 onChange={props.onChange}

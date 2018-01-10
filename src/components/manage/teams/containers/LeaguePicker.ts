@@ -25,7 +25,11 @@ function isLeague(value: League | string | null): value is League {
     return value !== null && (<League> value).type === 'leagues';
 }
 
-const mapStateToProps = (state: RootState): ResourcePickerProps<League> => {
+interface LeaguePickerProps {
+    isEdit: boolean;
+}
+
+const mapStateToProps = (state: RootState, ownProps: LeaguePickerProps): ResourcePickerProps<League> => {
     const leagueDisplay = state.form.team.relationshipDisplayFields.get('league', '');
     const descriptor: PageDescriptor = new PageDescriptor(1, ImmutableMap([['name', leagueDisplay]]));
     const pageCache = state.resource.leagues.pages.get(descriptor);
@@ -36,7 +40,8 @@ const mapStateToProps = (state: RootState): ResourcePickerProps<League> => {
         inputDisplayPlaceholder: 'Leagues',
         currentView: {
             fetchedState: leagueDisplay.length > 0 ? pageCache.fetchingState : FetchedState.FETCHED
-        }
+        },
+        isEdit: ownProps.isEdit
     };
 };
 
