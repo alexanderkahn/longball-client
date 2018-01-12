@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { ViewState, FetchingState, Player } from '../../../../models/models';
+import { FetchingState, Player } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import 'react-datepicker/dist/react-datepicker.css';
 import TeamPicker from '../containers/TeamPicker';
+import { ResourceCache } from '../../../../reducers/resource';
 
 const styles: CSSProperties = {
     root: {
@@ -21,13 +22,14 @@ const styles: CSSProperties = {
 };
 
 export interface PlayerDetailProps {
-    player: Player | null;
+    formPlayer: Player;
+    storedPlayer: ResourceCache<Player>;
     isEdit: boolean;
-    currentView: ViewState;
 }
 
 export interface PlayerDetailFormActions {
     fetchItemDetail: () => void;
+    resetFormItem: (player: Player) => void;
     updateFirstName: (name: string) => void;
     updateLastName: (name: string) => void;
     updateJerseyNumber: (jerseyNumber: string) => void;
@@ -38,32 +40,37 @@ export interface PlayerDetailFormActions {
 export default class PlayerDetailForm extends Component<PlayerDetailProps & PlayerDetailFormActions> {
 
     componentWillMount() {
-        this.tryFetch();
+        this.updateForm();
     }
 
     componentDidUpdate() {
-        this.tryFetch();
+        this.updateForm();
     }
 
     render() {
-        const {currentView} = this.props;
+        const {storedPlayer} = this.props;
         return (
-            <FetchableAsset fetchingState={currentView.fetchedState}>
+            <FetchableAsset fetchingState={storedPlayer.fetchingState}>
                 {this.getForm()}
             </FetchableAsset>
         );
     }
 
-    private tryFetch() {
-        const {currentView, fetchItemDetail} = this.props;
-        if (currentView.fetchedState === FetchingState.NOT_FETCHED) {
+    private updateForm() {
+        const {storedPlayer, formPlayer, fetchItemDetail, resetFormItem} = this.props;
+        if (storedPlayer.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItemDetail();
+        } else if (storedPlayer.object && (
+            storedPlayer.object.rosterPosition.id !== formPlayer.rosterPosition.id ||
+            storedPlayer.object.person.id !== formPlayer.person.id)
+        ) {
+            resetFormItem(storedPlayer.object);
         }
     }
 
     private getForm() {
         const {
-            player,
+            formPlayer,
             isEdit,
             savePlayer,
             updateFirstName,
@@ -71,10 +78,10 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
             updateJerseyNumber,
             updateStartDate
         } = this.props;
-        if (!player) {
+        if (!formPlayer) {
             return <div>I can't find the selected player</div>;
         } else {
-            const {person, rosterPosition} = player;
+            const {person, rosterPosition} = formPlayer;
             return (
                 <div>
                     <form style={styles.root}>
@@ -121,7 +128,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                         />
                         <SaveDetailFooter
                             isEdit={isEdit}
-                            onSave={() => savePlayer(player)}
+                            onSave={() => savePlayer(formPlayer)}
                         />
                     </form>
                 </div>

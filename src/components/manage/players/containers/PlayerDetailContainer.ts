@@ -5,38 +5,47 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../../../reducers';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { FetchingState, Player } from '../../../../models/models';
-import { isNullOrUndefined } from 'util';
-import { updatePersonAttribute, updateRosterPositionAttribute, } from '../../../../actions/form/formUpdateActions';
+import { FetchingState, Person, Player, RosterPosition } from '../../../../models/models';
+import {
+    resetForm, updatePersonAttribute,
+    updateRosterPositionAttribute,
+} from '../../../../actions/form/formUpdateActions';
+import { ResourceCache } from '../../../../reducers/resource';
+
+const emptyPlayer: ResourceCache<Player> = {
+    fetchingState: FetchingState.FETCHED,
+    object: {
+        person: Person.empty(),
+        rosterPosition: RosterPosition.empty()
+    }
+};
+
+const getStorePlayer = function (state: RootState, teamId: string): ResourceCache<Player> {
+    const rosterPosition = state.resource.rosterPositions.data.get(teamId);
+    const person = !rosterPosition.object ? null
+        : state.resource.people.data.get(rosterPosition.object.relationships.player.data.id);
+    const statePlayer = rosterPosition.object && person && person.object ? {
+        rosterPosition: rosterPosition.object,
+        person: person.object,
+    } : null;
+    return {
+        fetchingState: rosterPosition.fetchingState,
+        object: statePlayer
+    };
+};
 
 function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailProps {
     // TODO: lordy this is ugly and bad.
     let teamId = ownProps.match.params.itemId;
-    if (teamId === 'add') {
-        return {
-            player: {
-                person: state.form.person.resource,
-                rosterPosition: state.form.rosterPosition.resource,
-            },
-            isEdit: true,
-            currentView: {
-                fetchedState: FetchingState.FETCHED
-            }
-        };
-    } else {
-        // TODO: maybe this should return an unfetched thing if not found
-        const rosterPositionCache = state.resource.rosterPositions.data.get(teamId);
-        const rosterPosition = rosterPositionCache ? rosterPositionCache.object : null;
-        const person = !rosterPosition ? null
-            : state.resource.people.data.get(rosterPosition.relationships.player.data.id).object;
-        return {
-            player: isNullOrUndefined(rosterPosition) || isNullOrUndefined(person) ? null : {rosterPosition, person},
-            isEdit: false,
-            currentView: {
-                fetchedState: rosterPositionCache ? rosterPositionCache.fetchingState : FetchingState.NOT_FETCHED
-            }
-        };
-    }
+    const isNew = teamId === 'add';
+    return {
+        storedPlayer: isNew ? emptyPlayer : getStorePlayer(state, teamId),
+        formPlayer: {
+            person: state.form.person.resource,
+            rosterPosition: state.form.rosterPosition.resource,
+        },
+        isEdit: isNew,
+    };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>)
@@ -46,6 +55,10 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         fetchItemDetail: function () {
             dispatch(fetchPlayerDetail(playerId));
         },
+        resetFormItem: (player: Player) => {
+            dispatch(resetForm('people', player.person));
+            dispatch(resetForm('rosterpositions', player.rosterPosition));
+        },
         updateFirstName: (firstName: string) =>
             dispatch(updatePersonAttribute('first', firstName)),
         updateLastName: (lastName: string) =>
@@ -54,7 +67,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
             dispatch(updateRosterPositionAttribute('jerseyNumber', jerseyNumber)),
         updateStartDate: (startDate: string) =>
             dispatch(updateRosterPositionAttribute('startDate', startDate)),
-        savePlayer: function(player: Player) {
+        savePlayer: function (player: Player) {
             dispatch(savePlayer(player));
         }
     };
