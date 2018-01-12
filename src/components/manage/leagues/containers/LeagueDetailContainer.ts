@@ -4,15 +4,29 @@ import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '..
 import { RootState } from '../../../../reducers';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { League } from '../../../../models/models';
+import { FetchingState, League } from '../../../../models/models';
 import { resetForm, updateLeagueAttribute } from '../../../../actions/form/formUpdateActions';
+import { ResourceCache } from '../../../../reducers/resource';
+
+// FIXME GOD DAMMIT this cannot be back. At the very least why should it live here?
+const newLeague: ResourceCache<League> = {
+    fetchingState: FetchingState.FETCHED,
+    object: {
+        type: 'leagues',
+        id: '',
+        attributes: {
+            name: ''
+        }
+    }
+};
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): LeagueDetailProps => {
     const leagueId = ownProps.match.params.itemId;
+    const isNewItem = leagueId === 'add';
     return {
         formLeague: state.form.league.resource,
-        storedLeague: state.resource.leagues.data.get(leagueId),
-        isEdit: (leagueId === 'add'),
+        storedLeague: isNewItem ? newLeague : state.resource.leagues.data.get(leagueId),
+        isEdit: isNewItem,
     };
 };
 

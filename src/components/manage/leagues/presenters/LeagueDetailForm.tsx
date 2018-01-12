@@ -49,12 +49,11 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
 
     private updateForm() {
         const {storedLeague, formLeague, fetchItemDetail, resetFormItem} = this.props;
+        console.info(storedLeague);
         if (storedLeague.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItemDetail();
         } else {
             if (storedLeague.object && storedLeague.object.id !== formLeague.id) {
-                console.info('stored', storedLeague.object);
-                console.info('form', formLeague);
                 resetFormItem(storedLeague.object);
             }
         }

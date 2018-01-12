@@ -12,7 +12,7 @@ export class PageDescriptor {
     searches: ImmutableMap<string, string>;
     filters: ImmutableMap<string, string>;
 
-    constructor(page: number, searches?: ImmutableMap<string, string>, filters?: ImmutableMap<string, string>,) {
+    constructor(page: number, searches?: ImmutableMap<string, string>, filters?: ImmutableMap<string, string>) {
         this.pageNumber = page;
         this.searches = searches ? searches : ImmutableMap();
         this.filters = filters ? filters : ImmutableMap();
