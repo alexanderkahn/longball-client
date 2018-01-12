@@ -24,7 +24,6 @@ export interface PagedView extends ViewState {
     page: number;
     hasPrevious: boolean;
     hasNext: boolean;
-
 }
 
 export interface PagedViewParams {
@@ -43,15 +42,26 @@ export type ResourceType =
     | 'rosterpositions'
     | 'people';
 
-export interface League extends ResourceObject {
+export class League implements ResourceObject {
+
     id: string;
     type: 'leagues';
     attributes: {
         name: string
     };
+
+    static empty(): League {
+        return new League('', {name: ''});
+    }
+
+    constructor(id: string, attributes: { name: string }) {
+        this.type = 'leagues';
+        this.id = id;
+        this.attributes = attributes;
+    }
 }
 
-export interface Team extends ResourceObject {
+export class Team implements ResourceObject {
     id: string;
     type: 'teams';
     attributes: {
@@ -62,18 +72,46 @@ export interface Team extends ResourceObject {
     relationships: {
         league: RelationshipResource;
     };
+
+    static empty(): Team {
+        return new Team('', {abbreviation: '', location: '', nickname: ''}, {league: ''});
+    }
+
+    constructor(id: string,
+                attributes: { abbreviation: string, location: string, nickname: string },
+                relationships: { league: string }) {
+        this.type = 'teams';
+        this.id = id;
+        this.attributes = attributes;
+        this.relationships = { league: {
+            data: {
+                type: 'leagues',
+                id: relationships.league
+            }
+            }};
+    }
 }
 
-export interface Person extends ResourceObject {
+export class Person implements ResourceObject {
     id: string;
     type: 'people';
     attributes: {
         first: string,
         last: string
     };
+
+    static empty(): Person {
+        return new Person('', {first: '', last: ''});
+    }
+
+    constructor(id: string, attributes: { first: string, last: string }) {
+        this.type = 'people';
+        this.id = id;
+        this.attributes = attributes;
+    }
 }
 
-export interface RosterPosition extends ResourceObject {
+export class RosterPosition implements ResourceObject {
     id: string;
     type: 'rosterpositions';
     attributes: {
@@ -85,6 +123,22 @@ export interface RosterPosition extends ResourceObject {
         team: RelationshipResource;
         player: RelationshipResource;
     };
+
+    static empty(): RosterPosition {
+        return new RosterPosition('', {jerseyNumber: 0, startDate: ''}, {team: '', player: ''});
+    }
+
+    constructor(id: string,
+                attributes: { jerseyNumber: number, startDate: string, endDate?: string },
+                relationships: { team: string, player: string }) {
+        this.type = 'rosterpositions';
+        this.id = id;
+        this.attributes = attributes;
+        this.relationships = {
+            team: new RelationshipResource('teams', relationships.team),
+            player: new RelationshipResource('people', relationships.player)
+        };
+    }
 }
 
 export interface Player {
@@ -92,8 +146,17 @@ export interface Player {
     person: Person;
 }
 
-export interface RelationshipResource {
+export class RelationshipResource {
     data: ResourceObject;
+
+    constructor(type: ResourceType, id: string) {
+        return {
+            data: {
+                type,
+                id
+            }
+        };
+    }
 }
 
 // TODO: this whole function should probably be part of the state object

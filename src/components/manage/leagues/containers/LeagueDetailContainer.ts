@@ -9,15 +9,11 @@ import { resetForm, updateLeagueAttribute } from '../../../../actions/form/formU
 import { ResourceCache } from '../../../../reducers/resource';
 
 // FIXME GOD DAMMIT this cannot be back. At the very least why should it live here?
+// Once the models all have empty() methods, maybe we can return this from the store,
+// make the form track isEdit and remove the 'add' keyword logic from the container?
 const newLeague: ResourceCache<League> = {
     fetchingState: FetchingState.FETCHED,
-    object: {
-        type: 'leagues',
-        id: '',
-        attributes: {
-            name: ''
-        }
-    }
+    object: League.empty(),
 };
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): LeagueDetailProps => {
