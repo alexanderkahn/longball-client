@@ -31,7 +31,7 @@ export interface PagedViewParams {
 }
 
 // TODO probably move all of these into their respective state reducers
-export interface ResourceObject {
+export abstract class ResourceObject {
     id: string;
     type: ResourceType;
 }

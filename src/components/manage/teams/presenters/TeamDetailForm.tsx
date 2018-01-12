@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { ViewState, FetchingState, Team } from '../../../../models/models';
+import { FetchingState, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import LeaguePicker from '../containers/LeaguePicker';
+import { ResourceCache } from '../../../../reducers/resource';
 
 const styles: CSSProperties = {
     root: {
@@ -16,12 +17,13 @@ const styles: CSSProperties = {
 };
 
 export interface TeamDetailProps {
-    team: Team | null;
+    storedTeam: ResourceCache<Team>;
+    formTeam: Team;
     isEdit: boolean;
-    currentView: ViewState;
 }
 
 export interface TeamDetailFormActions {
+    resetFormItem: (team: Team) => void;
     fetchItemDetail: () => void;
     updateAbbreviation: (abbreviation: string) => void;
     updateLocation: (location: string) => void;
@@ -32,39 +34,41 @@ export interface TeamDetailFormActions {
 export default class TeamDetailForm extends Component<TeamDetailProps & TeamDetailFormActions> {
 
     componentWillMount() {
-        this.tryFetch();
+        this.updateForm();
     }
 
     componentDidUpdate() {
-        this.tryFetch();
+        this.updateForm();
     }
 
     render() {
-        const {currentView} = this.props;
+        const {storedTeam} = this.props;
         return (
-            <FetchableAsset fetchingState={currentView.fetchedState}>
+            <FetchableAsset fetchingState={storedTeam.fetchingState}>
                 {this.getForm()}
             </FetchableAsset>
         );
     }
 
-    private tryFetch() {
-        const {currentView, fetchItemDetail} = this.props;
-        if (currentView.fetchedState === FetchingState.NOT_FETCHED) {
+    private updateForm() {
+        const {storedTeam, formTeam, fetchItemDetail, resetFormItem} = this.props;
+        if (storedTeam.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItemDetail();
+        } else if (storedTeam.object && storedTeam.object.id !== formTeam.id) {
+            resetFormItem(storedTeam.object);
         }
     }
 
     private getForm() {
         const {
-            team,
+            formTeam,
             isEdit,
             updateAbbreviation,
             updateLocation,
             updateNickname,
             saveTeam
         } = this.props;
-        if (!team) {
+        if (!formTeam) {
             return <div>I can't find the requested team</div>;
         } else {
             return (
@@ -75,7 +79,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
                         disabled={!isEdit}
                         id="abbreviation"
                         label="Abbreviation"
-                        value={team.attributes.abbreviation}
+                        value={formTeam.attributes.abbreviation}
                         onChange={event => updateAbbreviation(event.target.value)}
                     />
                     <TextField
@@ -83,7 +87,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
                         disabled={!isEdit}
                         id="location"
                         label="Location"
-                        value={team.attributes.location}
+                        value={formTeam.attributes.location}
                         onChange={event => updateLocation(event.target.value)}
                     />
                     <TextField
@@ -91,12 +95,12 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
                         disabled={!isEdit}
                         id="nickname"
                         label="Nickname"
-                        value={team.attributes.nickname}
+                        value={formTeam.attributes.nickname}
                         onChange={event => updateNickname(event.target.value)}
                     />
                     <SaveDetailFooter
                         isEdit={isEdit}
-                        onSave={() => saveTeam(team)}
+                        onSave={() => saveTeam(formTeam)}
                     />
                 </form>
             );

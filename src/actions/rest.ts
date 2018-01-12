@@ -162,9 +162,6 @@ export async function fetchObject<T extends ResourceObject>(type: string, id: st
 // TODO: why not return ObjectResponse<T>?
 export async function postObject<T extends ResourceObject>(object: T): Promise<T> {
     const url = `/rest/${object.type}`;
-    if (object.type === undefined || url.endsWith('undefined')) {
-        console.info("what the fuck", object);
-    }
     const json = await getJsonPostResponse(url, object);
     return json.data as T;
 }

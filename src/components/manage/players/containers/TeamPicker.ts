@@ -35,7 +35,7 @@ interface TeamPickerProps {
 }
 
 function mapStateToProps(state: RootState, ownProps: TeamPickerProps): ResourcePickerProps<Team> {
-    const teamDisplay = state.form.rosterPosition.relationshipDisplayFields.get('team', '');
+    const teamDisplay = state.form.rosterPosition.relationshipDisplayFields.get('formTeam', '');
     const suggestionsPage: PageDescriptor = new PageDescriptor(1, ImmutableMap([[SEARCH_TERM, teamDisplay]]));
     const pageCache = state.resource.teams.pages.get(suggestionsPage);
     return {
@@ -56,8 +56,8 @@ function  mapDispatchToProps(dispatch: Dispatch<RootState>): ResourcePickerActio
             dispatch(fetchTeams(new PageDescriptor(1, ImmutableMap([[SEARCH_TERM, searchTerm]])))),
         getResourceDisplay: getTeamDisplay,
         onChangeDisplay: (teamDisplay: string) =>
-            dispatch(updateRosterPositionRelationshipDisplay('team', teamDisplay)),
-        onSelectResource: (teamId: string) => dispatch(updateRosterPositionRelationship('team', {
+            dispatch(updateRosterPositionRelationshipDisplay('formTeam', teamDisplay)),
+        onSelectResource: (teamId: string) => dispatch(updateRosterPositionRelationship('formTeam', {
             data: {
                 type: 'teams',
                 id: teamId

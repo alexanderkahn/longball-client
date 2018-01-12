@@ -39,7 +39,7 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
     }
 
     render() {
-        const { storedLeague } = this.props;
+        const {storedLeague} = this.props;
         return (
             <FetchableAsset fetchingState={storedLeague.fetchingState}>
                 {this.getForm()}
@@ -51,10 +51,8 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
         const {storedLeague, formLeague, fetchItemDetail, resetFormItem} = this.props;
         if (storedLeague.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItemDetail();
-        } else {
-            if (storedLeague.object && storedLeague.object.id !== formLeague.id) {
-                resetFormItem(storedLeague.object);
-            }
+        } else if (storedLeague.object && storedLeague.object.id !== formLeague.id) {
+            resetFormItem(storedLeague.object);
         }
     }
 

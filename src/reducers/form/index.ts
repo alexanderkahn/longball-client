@@ -84,32 +84,32 @@ const resourceFormReducerBuilder = <T extends ResourceObject>(initialState: Reso
     (state: ResourceFormState<T> = initialState,
      action: ResourceFormUpdateAction<T> | ReceiveResourceObjectAction<T>): ResourceFormState<T> => {
 
-    if (action.resourceType !== initialState.resource.type) {
-        return state;
-    } else if (action.type === ResourceActionType.RECEIVE_RESOURCE_OBJECT) {
-        return initialState;
-    }
-
-    switch (action.type) {
-        case ResourceFormUpdateActionType.RESET_FORM:
-            return {
-                resource: _.cloneDeep(action.resource),
-                relationshipDisplayFields: Map()
-            };
-        case ResourceFormUpdateActionType.UPDATE_ATTRIBUTE:
-            return _.set(_.cloneDeep(state), `resource.attributes.${action.attribute}`, action.value);
-        case ResourceFormUpdateActionType.UPDATE_RELATIONSHIP:
-            return _.set(_.cloneDeep(state), `resource.relationships.${action.relationship}`, action.value);
-        case ResourceFormUpdateActionType.UPDATE_RELATIONSHIP_DISPLAY:
-            return {
-                ...state,
-                resource: state.resource,
-                relationshipDisplayFields: state.relationshipDisplayFields.set(action.relationship, action.value)
-            };
-        default:
+        if (action.resourceType !== initialState.resource.type) {
             return state;
-    }
-};
+        } else if (action.type === ResourceActionType.RECEIVE_RESOURCE_OBJECT) {
+            return initialState;
+        }
+
+        switch (action.type) {
+            case ResourceFormUpdateActionType.RESET_FORM:
+                return {
+                    resource: _.cloneDeep(action.resource),
+                    relationshipDisplayFields: Map()
+                };
+            case ResourceFormUpdateActionType.UPDATE_ATTRIBUTE:
+                return _.set(_.cloneDeep(state), `resource.attributes.${action.attribute}`, action.value);
+            case ResourceFormUpdateActionType.UPDATE_RELATIONSHIP:
+                return _.set(_.cloneDeep(state), `resource.relationships.${action.relationship}`, action.value);
+            case ResourceFormUpdateActionType.UPDATE_RELATIONSHIP_DISPLAY:
+                return {
+                    ...state,
+                    resource: state.resource,
+                    relationshipDisplayFields: state.relationshipDisplayFields.set(action.relationship, action.value)
+                };
+            default:
+                return state;
+        }
+    };
 
 export interface FormState {
     league: ResourceFormState<League>;
