@@ -1,6 +1,6 @@
 import { combineReducers, Reducer } from 'redux';
 import { List, Map as ImmutableMap } from 'immutable';
-import { FetchedState, League, Person, ResourceObject, ResourceType, RosterPosition, Team } from '../../models/models';
+import { FetchingState, League, Person, ResourceObject, ResourceType, RosterPosition, Team } from '../../models/models';
 import { ResourceActionType, ResourceObjectAction } from '../../actions/resource';
 import { PageDescriptor, PageResult } from './page';
 
@@ -12,18 +12,18 @@ export interface ResourceState {
 }
 
 export class ResourceCache<T> {
-    readonly fetchingState: FetchedState;
+    readonly fetchingState: FetchingState;
     readonly object: T | null;
 
     static empty<T>(): ResourceCache<T> {
         return {
-            fetchingState: FetchedState.NOT_FETCHED,
+            fetchingState: FetchingState.NOT_FETCHED,
             object: null
         };
     }
 
     constructor(object?: T) {
-        this.fetchingState = object ? FetchedState.FETCHED : FetchedState.FETCHING;
+        this.fetchingState = object ? FetchingState.FETCHED : FetchingState.FETCHING;
         this.object = object ? object : null;
     }
 }

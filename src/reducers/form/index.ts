@@ -82,7 +82,7 @@ const rosterPositionFormState: ResourceFormState<RosterPosition> = {
 
 const resourceFormReducerBuilder = <T extends ResourceObject>(initialState: ResourceFormState<T>) =>
     (state: ResourceFormState<T> = initialState,
-     action: ResourceFormUpdateAction | ReceiveResourceObjectAction<T>): ResourceFormState<T> => {
+     action: ResourceFormUpdateAction<T> | ReceiveResourceObjectAction<T>): ResourceFormState<T> => {
 
     if (action.resourceType !== initialState.resource.type) {
         return state;
@@ -91,6 +91,11 @@ const resourceFormReducerBuilder = <T extends ResourceObject>(initialState: Reso
     }
 
     switch (action.type) {
+        case ResourceFormUpdateActionType.RESET_FORM:
+            return {
+                resource: _.cloneDeep(action.resource),
+                relationshipDisplayFields: Map()
+            };
         case ResourceFormUpdateActionType.UPDATE_ATTRIBUTE:
             return _.set(_.cloneDeep(state), `resource.attributes.${action.attribute}`, action.value);
         case ResourceFormUpdateActionType.UPDATE_RELATIONSHIP:

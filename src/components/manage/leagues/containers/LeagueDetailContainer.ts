@@ -4,44 +4,26 @@ import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '..
 import { RootState } from '../../../../reducers';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { FetchedState, League } from '../../../../models/models';
-import { updateLeagueAttribute } from '../../../../actions/form/formUpdateActions';
+import { League } from '../../../../models/models';
+import { resetForm, updateLeagueAttribute } from '../../../../actions/form/formUpdateActions';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): LeagueDetailProps => {
     const leagueId = ownProps.match.params.itemId;
-    if  (leagueId === 'add') {
-        return {
-            league: state.form.league.resource,
-            isEdit: true,
-            currentView: {
-                fetchedState: FetchedState.FETCHED
-            }
-        };
-    } else {
-        const leagueCache = state.resource.leagues.data.get(leagueId);
-        return {
-            league: leagueCache ? leagueCache.object : null,
-            isEdit: false,
-            currentView: {
-                fetchedState: leagueCache ? leagueCache.fetchingState : FetchedState.NOT_FETCHED
-            }
-        };
-    }
+    return {
+        formLeague: state.form.league.resource,
+        storedLeague: state.resource.leagues.data.get(leagueId),
+        isEdit: (leagueId === 'add'),
+    };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>):
-    LeagueDetailFormActions => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>)
+    : LeagueDetailFormActions => {
     const leagueId = ownProps.match.params.itemId;
     return {
-        fetchItemDetail: function() {
-            dispatch(fetchLeagueDetail(leagueId));
-        },
-        updateName: function (name: string) {
-            dispatch(updateLeagueAttribute('name', name));
-        },
-        saveLeague: function (league: League) {
-            dispatch(saveLeague(league));
-        }
+        fetchItemDetail: () => dispatch(fetchLeagueDetail(leagueId)),
+        resetFormItem: (league: League) => dispatch(resetForm('leagues', league)),
+        updateName: (name: string) => dispatch(updateLeagueAttribute('name', name)),
+        saveLeague: (league: League) => dispatch(saveLeague(league))
     };
 };
 

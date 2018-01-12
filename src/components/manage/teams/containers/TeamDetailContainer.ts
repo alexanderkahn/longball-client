@@ -4,7 +4,7 @@ import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../prese
 import { RootState } from '../../../../reducers';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
-import { FetchedState, Team } from '../../../../models/models';
+import { FetchingState, Team } from '../../../../models/models';
 import { updateTeamAttribute } from '../../../../actions/form/formUpdateActions';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): TeamDetailProps => {
@@ -13,7 +13,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
         return {
             team: state.form.team.resource,
             currentView: {
-                fetchedState: FetchedState.FETCHED
+                fetchedState: FetchingState.FETCHED
             },
             isEdit: true
         };
@@ -24,7 +24,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageI
         return {
             team: team,
             currentView: {
-                fetchedState: teamCache ? teamCache.fetchingState : FetchedState.NOT_FETCHED
+                fetchedState: teamCache ? teamCache.fetchingState : FetchingState.NOT_FETCHED
             },
             isEdit: false
         };

@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
-import { ViewState, FetchedState, League } from '../../../../models/models';
+import { FetchingState, League } from '../../../../models/models';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
+import { ResourceCache } from '../../../../reducers/resource';
 
 const styles: CSSProperties = {
     root: {
@@ -15,12 +16,13 @@ const styles: CSSProperties = {
 };
 
 export interface LeagueDetailProps {
-    league: League | null;
+    storedLeague: ResourceCache<League>;
+    formLeague: League;
     isEdit: boolean;
-    currentView: ViewState;
 }
 
 export interface LeagueDetailFormActions {
+    resetFormItem: (league: League) => void;
     fetchItemDetail: () => void;
     updateName: (name: string) => void;
     saveLeague: (league: League) => void;
@@ -29,32 +31,38 @@ export interface LeagueDetailFormActions {
 export default class LeagueDetailForm extends Component<LeagueDetailProps & LeagueDetailFormActions> {
 
     componentWillMount() {
-        this.tryFetch();
+        this.updateForm();
     }
 
     componentDidUpdate() {
-        this.tryFetch();
+        this.updateForm();
     }
 
     render() {
-        const { currentView } = this.props;
+        const { storedLeague } = this.props;
         return (
-            <FetchableAsset isFetching={currentView.fetchedState === FetchedState.FETCHING}>
+            <FetchableAsset fetchingState={storedLeague.fetchingState}>
                 {this.getForm()}
             </FetchableAsset>
         );
     }
 
-    private tryFetch() {
-        const {currentView, fetchItemDetail} = this.props;
-        if (currentView.fetchedState === FetchedState.NOT_FETCHED) {
+    private updateForm() {
+        const {storedLeague, formLeague, fetchItemDetail, resetFormItem} = this.props;
+        if (storedLeague.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItemDetail();
+        } else {
+            if (storedLeague.object && storedLeague.object.id !== formLeague.id) {
+                console.info('stored', storedLeague.object);
+                console.info('form', formLeague);
+                resetFormItem(storedLeague.object);
+            }
         }
     }
 
     private getForm() {
-        const {isEdit, updateName, saveLeague, league} = this.props;
-        if (!league) {
+        const {isEdit, updateName, saveLeague, formLeague, storedLeague} = this.props;
+        if (!storedLeague.object) {
             return <div>I can't find the league you requested!</div>;
         } else {
             return (
@@ -64,12 +72,12 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
                         disabled={!isEdit}
                         id="name"
                         label="Name"
-                        value={league.attributes.name}
+                        value={formLeague.attributes.name}
                         onChange={event => updateName(event.target.value)}
                     />
                     <SaveDetailFooter
                         isEdit={isEdit}
-                        onSave={() => saveLeague(league)}
+                        onSave={() => saveLeague(formLeague)}
                     />
                 </form>
             );

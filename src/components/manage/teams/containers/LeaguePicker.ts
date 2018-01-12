@@ -5,7 +5,7 @@ import ResourcePickerPresenter, {
     ResourcePickerProps
 } from '../presenters/ResourcePickerPresenter';
 import { Dispatch } from 'redux';
-import { FetchedState, League } from '../../../../models/models';
+import { FetchingState, League } from '../../../../models/models';
 import { updateTeamRelationship, updateTeamRelationshipDisplay } from '../../../../actions/form/formUpdateActions';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
@@ -30,7 +30,7 @@ interface LeaguePickerProps {
 }
 
 const mapStateToProps = (state: RootState, ownProps: LeaguePickerProps): ResourcePickerProps<League> => {
-    const leagueDisplay = state.form.team.relationshipDisplayFields.get('league', '');
+    const leagueDisplay = state.form.team.relationshipDisplayFields.get('formLeague', '');
     const descriptor: PageDescriptor = new PageDescriptor(1, ImmutableMap([['name', leagueDisplay]]));
     const pageCache = state.resource.leagues.pages.get(descriptor);
     return {
@@ -39,7 +39,7 @@ const mapStateToProps = (state: RootState, ownProps: LeaguePickerProps): Resourc
         inputDisplayValue: leagueDisplay,
         inputDisplayPlaceholder: 'Leagues',
         currentView: {
-            fetchedState: leagueDisplay.length > 0 ? pageCache.fetchingState : FetchedState.FETCHED
+            fetchedState: leagueDisplay.length > 0 ? pageCache.fetchingState : FetchingState.FETCHED
         },
         isEdit: ownProps.isEdit
     };
@@ -51,8 +51,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ResourcePickerAction
             dispatch(fetchLeagues(new PageDescriptor(1, ImmutableMap([['name', searchTerm]])))),
         getResourceDisplay: getLeagueDisplay,
         onChangeDisplay: (leagueDisplay: string) =>
-            dispatch(updateTeamRelationshipDisplay('league', leagueDisplay)),
-        onSelectResource: (leagueId: string) => dispatch(updateTeamRelationship('league', {
+            dispatch(updateTeamRelationshipDisplay('formLeague', leagueDisplay)),
+        onSelectResource: (leagueId: string) => dispatch(updateTeamRelationship('formLeague', {
             data: {
                 type: 'leagues',
                 id: leagueId

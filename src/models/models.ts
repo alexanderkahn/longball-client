@@ -4,7 +4,7 @@ import { isNumber } from 'util';
 import { ResourceObjectState } from '../reducers/resource';
 import { PageDescriptor } from '../reducers/resource/page';
 
-export enum FetchedState {
+export enum FetchingState {
     NOT_FETCHED,
     FETCHING,
     FETCHED
@@ -16,7 +16,7 @@ export interface User {
 }
 
 export interface ViewState {
-    fetchedState: FetchedState;
+    fetchedState: FetchingState;
 }
 
 // TODO: this is essentially the same as PageResultsMeta
@@ -107,7 +107,7 @@ export function getSafePage(state: ResourceObjectState<ResourceObject>, location
     if (!pageGroup) {
         return {
             page: safePage,
-            fetchedState: FetchedState.NOT_FETCHED,
+            fetchedState: FetchingState.NOT_FETCHED,
             hasPrevious: false,
             hasNext: false,
         };

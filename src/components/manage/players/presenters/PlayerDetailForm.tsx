@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { ViewState, FetchedState, Player } from '../../../../models/models';
+import { ViewState, FetchingState, Player } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
@@ -48,7 +48,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
     render() {
         const {currentView} = this.props;
         return (
-            <FetchableAsset isFetching={currentView.fetchedState === FetchedState.FETCHING}>
+            <FetchableAsset fetchingState={currentView.fetchedState}>
                 {this.getForm()}
             </FetchableAsset>
         );
@@ -56,7 +56,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
 
     private tryFetch() {
         const {currentView, fetchItemDetail} = this.props;
-        if (currentView.fetchedState === FetchedState.NOT_FETCHED) {
+        if (currentView.fetchedState === FetchingState.NOT_FETCHED) {
             fetchItemDetail();
         }
     }

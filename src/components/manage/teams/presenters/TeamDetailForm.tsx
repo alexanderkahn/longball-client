@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { ViewState, FetchedState, Team } from '../../../../models/models';
+import { ViewState, FetchingState, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import LeaguePicker from '../containers/LeaguePicker';
@@ -42,7 +42,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
     render() {
         const {currentView} = this.props;
         return (
-            <FetchableAsset isFetching={currentView.fetchedState === FetchedState.FETCHING}>
+            <FetchableAsset fetchingState={currentView.fetchedState}>
                 {this.getForm()}
             </FetchableAsset>
         );
@@ -50,7 +50,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
 
     private tryFetch() {
         const {currentView, fetchItemDetail} = this.props;
-        if (currentView.fetchedState === FetchedState.NOT_FETCHED) {
+        if (currentView.fetchedState === FetchingState.NOT_FETCHED) {
             fetchItemDetail();
         }
     }

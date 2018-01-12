@@ -1,9 +1,16 @@
-import { RelationshipResource, ResourceType } from '../../models/models';
+import { RelationshipResource, ResourceObject, ResourceType } from '../../models/models';
 
 export enum ResourceFormUpdateActionType {
+    RESET_FORM = 'RESET_FORM',
     UPDATE_ATTRIBUTE = 'UPDATE_ATTRIBUTE',
     UPDATE_RELATIONSHIP = 'UPDATE_RELATIONSHIP',
     UPDATE_RELATIONSHIP_DISPLAY = 'UPDATE_RELATIONSHIP_DISPLAY'
+}
+
+interface ResourceFormResetAction<T extends ResourceObject> {
+    type: ResourceFormUpdateActionType.RESET_FORM;
+    resourceType: ResourceType;
+    resource: T;
 }
 
 interface ResourceFormUpdateAttributeAction {
@@ -27,10 +34,20 @@ interface ResourceFormUpdateRelationshipDisplayAction {
     value: string;
 }
 
-export type ResourceFormUpdateAction =
+export type ResourceFormUpdateAction<T extends ResourceObject> =
+    | ResourceFormResetAction<T>
     | ResourceFormUpdateAttributeAction
     | ResourceFormUpdateRelationshipAction
     | ResourceFormUpdateRelationshipDisplayAction;
+
+export function resetForm<T extends ResourceObject>(resourceType: ResourceType, resource: T)
+: ResourceFormResetAction<T> {
+    return {
+        type: ResourceFormUpdateActionType.RESET_FORM,
+        resourceType,
+        resource
+    };
+}
 
 // TODO: looks like these could just pass in which form they want to update. No need for separate methods.
 export function updateLeagueAttribute(attribute: string, value: string): ResourceFormUpdateAttributeAction {

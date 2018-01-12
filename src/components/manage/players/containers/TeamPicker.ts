@@ -5,7 +5,7 @@ import ResourcePickerPresenter, {
     ResourcePickerActions,
     ResourcePickerProps
 } from '../../teams/presenters/ResourcePickerPresenter';
-import { FetchedState, Team } from '../../../../models/models';
+import { FetchingState, Team } from '../../../../models/models';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { fetchTeams } from '../../../../actions/resource/teamsActions';
@@ -44,7 +44,7 @@ function mapStateToProps(state: RootState, ownProps: TeamPickerProps): ResourceP
         inputDisplayValue: teamDisplay,
         inputDisplayPlaceholder: 'Teams',
         currentView: {
-            fetchedState: teamDisplay.length > 0 ? pageCache.fetchingState : FetchedState.FETCHED
+            fetchedState: teamDisplay.length > 0 ? pageCache.fetchingState : FetchingState.FETCHED
         },
         isEdit: ownProps.isEdit
     };

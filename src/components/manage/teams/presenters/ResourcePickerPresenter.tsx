@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { ViewState, FetchedState, ResourceObject } from '../../../../models/models';
+import { ViewState, FetchingState, ResourceObject } from '../../../../models/models';
 import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
@@ -56,7 +56,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
 
     private tryFetch() {
         const {currentView, fetchSuggestions, inputDisplayValue} = this.props;
-        if (currentView.fetchedState === FetchedState.NOT_FETCHED) {
+        if (currentView.fetchedState === FetchingState.NOT_FETCHED) {
             fetchSuggestions(inputDisplayValue);
         }
     }

@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { Component } from 'react';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
+import { FetchingState } from '../../../../models/models';
 
 interface FetchableAssetProps {
-    isFetching: boolean;
+    fetchingState: FetchingState;
     children: React.ReactNode;
 }
 
 export default class FetchableAsset extends Component<FetchableAssetProps> {
 
     render() {
-        const {isFetching, children } = this.props;
-        if (isFetching) {
+        const {fetchingState, children } = this.props;
+        if (fetchingState !== FetchingState.FETCHED) {
             return (
                 <LoadingProgressIndicator enabled={true}/>
             );
