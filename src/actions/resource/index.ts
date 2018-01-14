@@ -8,6 +8,7 @@ export enum ResourceActionType {
     REQUEST_RESOURCE_PAGE = 'REQUEST_RESOURCE_PAGE',
     RECEIVE_RESOURCE_OBJECT = 'RECEIVE_RESOURCE_OBJECT',
     RECEIVE_RESOURCE_PAGE = 'RECEIVE_RESOURCE_PAGE',
+    RECEIVE_RESOURCE_INCLUDES = 'RECEIVE_RESOURCE_INCLUDES',
     REMOVE_RESOURCE_OBJECT = 'REMOVE_RESOURCE_OBJECT'
 }
 
@@ -16,6 +17,7 @@ export type ResourceObjectAction<T extends ResourceObject> =
     | RequestResourcePageAction
     | ReceiveResourceObjectAction<T>
     | ReceiveResourcePageAction<T>
+    | ReceiveResourceIncludesAction<T>
     | RemoveResourceObjectAction;
 
 export interface RequestResourceObjectAction {
@@ -44,6 +46,12 @@ export interface ReceiveResourcePageAction<T extends ResourceObject> {
     resourceType: ResourceType;
     page: PageDescriptor;
     meta: PageResultsMeta;
+    data: OrderedMap<string, T>;
+}
+
+export interface ReceiveResourceIncludesAction<T extends ResourceObject> {
+    type: ResourceActionType.RECEIVE_RESOURCE_INCLUDES;
+    resourceType: ResourceType;
     data: OrderedMap<string, T>;
 }
 

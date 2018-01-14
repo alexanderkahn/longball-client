@@ -131,6 +131,11 @@ const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceTy
                     }),
                     state.data.merge(action.data)
                 );
+            case ResourceActionType.RECEIVE_RESOURCE_INCLUDES:
+                return new ResourceObjectState(
+                    state.pages,
+                    state.data.merge(action.data)
+                );
             case ResourceActionType.REMOVE_RESOURCE_OBJECT:
                 return new ResourceObjectState(
                     state.pages,

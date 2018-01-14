@@ -1,22 +1,13 @@
 import { Person, ResourceType } from '../../models/models';
 import { OrderedMap } from 'immutable';
-import { ReceiveResourcePageAction, RemoveResourceObjectAction, ResourceActionType } from './index';
-import { PageDescriptor } from '../../reducers/resource/page';
+import { ReceiveResourceIncludesAction, RemoveResourceObjectAction, ResourceActionType } from './index';
 
 const PEOPLE_RESOURCE_TYPE: ResourceType = 'people';
 
-// FIXME: shouldn't have to fake a page here. Maybe instead of dispatching a separate action it can watch the includes
-export function receivePeople(people: OrderedMap<string, Person>): ReceiveResourcePageAction<Person> {
+export function receivePeople(people: OrderedMap<string, Person>): ReceiveResourceIncludesAction<Person> {
     return {
-        type: ResourceActionType.RECEIVE_RESOURCE_PAGE,
+        type: ResourceActionType.RECEIVE_RESOURCE_INCLUDES,
         resourceType: PEOPLE_RESOURCE_TYPE,
-        page: new PageDescriptor(1),
-        meta: {
-            number: 0,
-            totalPages: 0,
-            hasPrevious: false,
-            hasNext: false,
-        },
         data: people
     };
 }

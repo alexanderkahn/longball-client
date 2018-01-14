@@ -87,6 +87,7 @@ const resourceFormReducerBuilder = <T extends ResourceObject>(initialState: Reso
         if (action.resourceType !== initialState.resource.type) {
             return state;
         } else if (action.type === ResourceActionType.RECEIVE_RESOURCE_OBJECT) {
+            // TODO I think I can get rid of this conditional? We have a specific RESET_FORM action now.
             return initialState;
         }
 
