@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchLeagueDetail, saveLeague } from '../../../../actions/resource/leaguesActions';
+import { fetchLeague, saveLeague } from '../../../../actions/resource/leaguesActions';
 import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '../presenters/LeagueDetailForm';
 import { RootState } from '../../../../reducers';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     : LeagueDetailFormActions => {
     const leagueId = ownProps.match.params.itemId;
     return {
-        fetchItemDetail: () => dispatch(fetchLeagueDetail(leagueId)),
+        fetchItem: () => dispatch(fetchLeague(leagueId)),
         resetFormItem: (league: League) => dispatch(resetForm('leagues', league)),
         updateName: (name: string) => dispatch(updateLeagueAttribute('name', name)),
         saveLeague: (league: League) => dispatch(saveLeague(league))

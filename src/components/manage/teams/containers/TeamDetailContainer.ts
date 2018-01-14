@@ -1,5 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
-import { fetchTeamDetail, saveTeam } from '../../../../actions/resource/teamsActions';
+import { fetchTeam, saveTeam } from '../../../../actions/resource/teamsActions';
 import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../presenters/TeamDetailForm';
 import { RootState } from '../../../../reducers';
 import { RouteComponentProps } from 'react-router';
@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     : TeamDetailFormActions => {
     const teamId = ownProps.match.params.itemId;
     return {
-        fetchItemDetail: () => dispatch(fetchTeamDetail(teamId)),
+        fetchItem: () => dispatch(fetchTeam(teamId)),
         resetFormItem: (team: Team) => dispatch(resetForm('teams', team)),
         updateAbbreviation: (abbreviation: string) => dispatch(updateTeamAttribute('abbreviation', abbreviation)),
         updateLocation: (location: string) => dispatch(updateTeamAttribute('location', location)),

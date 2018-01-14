@@ -81,7 +81,7 @@ export function fetchPlayers(page: PageDescriptor) {
     };
 }
 
-export function fetchPlayerDetail(playerId: string) {
+export function fetchPlayer(playerId: string) {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(requestRosterPosition(playerId));
         const object = await fetchObject<RosterPosition>('rosterpositions', playerId, ['player']);

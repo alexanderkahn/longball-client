@@ -24,7 +24,7 @@ export interface TeamDetailProps {
 
 export interface TeamDetailFormActions {
     resetFormItem: (team: Team) => void;
-    fetchItemDetail: () => void;
+    fetchItem: () => void;
     updateAbbreviation: (abbreviation: string) => void;
     updateLocation: (location: string) => void;
     updateNickname: (nickname: string) => void;
@@ -51,9 +51,9 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
     }
 
     private updateForm() {
-        const {storedTeam, formTeam, fetchItemDetail, resetFormItem} = this.props;
+        const {storedTeam, formTeam, fetchItem, resetFormItem} = this.props;
         if (storedTeam.fetchingState === FetchingState.NOT_FETCHED) {
-            fetchItemDetail();
+            fetchItem();
         } else if (storedTeam.object && storedTeam.object.id !== formTeam.id) {
             resetFormItem(storedTeam.object);
         }

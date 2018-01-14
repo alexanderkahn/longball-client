@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { fetchPlayerDetail, savePlayer } from '../../../../actions/resource/rosterpositionsActions';
+import { fetchPlayer, savePlayer } from '../../../../actions/resource/rosterpositionsActions';
 import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailProps } from '../presenters/PlayerDetailForm';
 import { Dispatch } from 'redux';
 import { RootState } from '../../../../reducers';
@@ -52,8 +52,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     : PlayerDetailFormActions => {
     const playerId = ownProps.match.params.itemId;
     return {
-        fetchItemDetail: function () {
-            dispatch(fetchPlayerDetail(playerId));
+        fetchItem: function () {
+            dispatch(fetchPlayer(playerId));
         },
         resetFormItem: (player: Player) => {
             dispatch(resetForm('people', player.person));

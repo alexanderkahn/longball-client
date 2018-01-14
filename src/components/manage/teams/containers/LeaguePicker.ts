@@ -9,7 +9,7 @@ import { League } from '../../../../models/models';
 import { updateTeamRelationship, updateTeamRelationshipDisplay } from '../../../../actions/form/formUpdateActions';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
-import { fetchLeagueDetail, fetchLeagues } from '../../../../actions/resource/leaguesActions';
+import { fetchLeague, fetchLeagues } from '../../../../actions/resource/leaguesActions';
 
 function getLeagueDisplay(obj: League | string | null): string {
     if (!obj) {
@@ -51,7 +51,7 @@ const mapStateToProps = (state: RootState, ownProps: LeaguePickerProps): Resourc
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): ResourcePickerActions<League> => {
     return {
         populateDisplayValue: (value: string) => dispatch(updateTeamRelationshipDisplay('league', value)),
-        fetchMatchingResource: (id: string) => dispatch(fetchLeagueDetail(id)),
+        fetchMatchingResource: (id: string) => dispatch(fetchLeague(id)),
         fetchSuggestions: (searchTerm: string) =>
             dispatch(fetchLeagues(new PageDescriptor(1, ImmutableMap([['name', searchTerm]])))),
         parseDisplayValue: getLeagueDisplay,

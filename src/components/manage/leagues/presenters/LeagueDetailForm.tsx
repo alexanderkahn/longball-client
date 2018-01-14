@@ -23,7 +23,7 @@ export interface LeagueDetailProps {
 
 export interface LeagueDetailFormActions {
     resetFormItem: (league: League) => void;
-    fetchItemDetail: () => void;
+    fetchItem: () => void;
     updateName: (name: string) => void;
     saveLeague: (league: League) => void;
 }
@@ -48,9 +48,9 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
     }
 
     private updateForm() {
-        const {storedLeague, formLeague, fetchItemDetail, resetFormItem} = this.props;
+        const {storedLeague, formLeague, fetchItem, resetFormItem} = this.props;
         if (storedLeague.fetchingState === FetchingState.NOT_FETCHED) {
-            fetchItemDetail();
+            fetchItem();
         } else if (storedLeague.object && storedLeague.object.id !== formLeague.id) {
             resetFormItem(storedLeague.object);
         }

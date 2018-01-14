@@ -28,7 +28,7 @@ export interface PlayerDetailProps {
 }
 
 export interface PlayerDetailFormActions {
-    fetchItemDetail: () => void;
+    fetchItem: () => void;
     resetFormItem: (player: Player) => void;
     updateFirstName: (name: string) => void;
     updateLastName: (name: string) => void;
@@ -57,9 +57,9 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
     }
 
     private updateForm() {
-        const {storedPlayer, formPlayer, fetchItemDetail, resetFormItem} = this.props;
+        const {storedPlayer, formPlayer, fetchItem, resetFormItem} = this.props;
         if (storedPlayer.fetchingState === FetchingState.NOT_FETCHED) {
-            fetchItemDetail();
+            fetchItem();
         } else if (storedPlayer.object && (
             storedPlayer.object.rosterPosition.id !== formPlayer.rosterPosition.id ||
             storedPlayer.object.person.id !== formPlayer.person.id)

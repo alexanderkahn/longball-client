@@ -8,7 +8,7 @@ import ResourcePickerPresenter, {
 import { Team } from '../../../../models/models';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
-import { fetchTeamDetail, fetchTeams } from '../../../../actions/resource/teamsActions';
+import { fetchTeam, fetchTeams } from '../../../../actions/resource/teamsActions';
 import {
     updateRosterPositionRelationship,
     updateRosterPositionRelationshipDisplay
@@ -56,7 +56,7 @@ function  mapDispatchToProps(dispatch: Dispatch<RootState>): ResourcePickerActio
     return {
         populateDisplayValue: (value: string) =>
             dispatch(updateRosterPositionRelationshipDisplay('team', value)),
-        fetchMatchingResource: (id: string) => dispatch(fetchTeamDetail(id)),
+        fetchMatchingResource: (id: string) => dispatch(fetchTeam(id)),
         fetchSuggestions: (searchTerm: string) =>
             dispatch(fetchTeams(new PageDescriptor(1, ImmutableMap([[SEARCH_TERM, searchTerm]])))),
         parseDisplayValue: getTeamDisplay,

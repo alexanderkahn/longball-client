@@ -68,7 +68,7 @@ export function fetchTeams(page: PageDescriptor): Dispatch<RootState> {
     };
 }
 
-export function fetchTeamDetail(teamId: string): Dispatch<RootState> {
+export function fetchTeam(teamId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(requestTeam(teamId));
         const object = await fetchObject<Team>('teams', teamId);
