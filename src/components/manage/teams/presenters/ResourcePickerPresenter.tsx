@@ -1,22 +1,25 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { ViewState, FetchingState, ResourceObject } from '../../../../models/models';
+import { FetchingState, ResourceObject } from '../../../../models/models';
 import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
+import { ResourceCache } from '../../../../reducers/resource';
 
 export interface ResourcePickerProps<T extends ResourceObject> {
-    matchingResources: Array<T>;
-    selectedResourceId: string;
+    matchingResources: ResourceCache<Array<T>>;
+    selectedResourceId: string | null;
+    selectedResource: ResourceCache<T> | null;
     inputDisplayValue: string;
     inputDisplayPlaceholder: string;
-    currentView: ViewState;
     isEdit: boolean;
 }
 
 export interface ResourcePickerActions<T extends ResourceObject> {
-    getResourceDisplay: (display: T | string | null) => string;
+    populateDisplayValue: (display: string) => void;
+    fetchMatchingResource: (resourceId: string) => void;
     fetchSuggestions: (searchTerm: string) => void;
+    parseDisplayValue: (display: T | string | null) => string;
     onChangeDisplay: (value: string) => void;
     onSelectResource: (resourceId: string) => void;
 }
@@ -25,28 +28,33 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     extends Component<ResourcePickerProps<T> & ResourcePickerActions<T>> {
 
     componentWillMount() {
-        this.tryFetch();
+        this.updatePicker();
     }
 
     componentDidUpdate() {
-        this.tryFetch();
+        this.updatePicker();
     }
 
     render() {
+        const { inputDisplayValue, matchingResources, selectedResource, parseDisplayValue  } = this.props;
         return (
             <Downshift
-                inputValue={this.props.inputDisplayValue}
-                selectedItem={this.props.matchingResources.find(it => it.id === this.props.selectedResourceId)}
-                itemToString={this.props.getResourceDisplay}
+                inputValue={inputDisplayValue || ''}
+                selectedItem={selectedResource && matchingResources.object
+                    ? matchingResources.object.find(it => it === selectedResource.object)
+                    : null
+                }
+                itemToString={parseDisplayValue}
                 onInputValueChange={(value: string) => this.props.onChangeDisplay(value)}
                 onChange={(selection: T) => this.props.onSelectResource(selection.id)}
                 render={({isOpen, getInputProps, getItemProps}) => (
                     <div>
                         {this.renderInput(getInputProps({placeholder: this.props.inputDisplayPlaceholder}))}
                         {isOpen ? this.renderSuggestionsContainer(
-                            this.props.matchingResources.map((resource: T) =>
-                                this.renderSuggestion(resource, getItemProps({item: resource}))
-                            )
+                            this.props.matchingResources.object ?
+                                this.props.matchingResources.object.map((resource: T) =>
+                                    this.renderSuggestion(resource, getItemProps({item: resource}))
+                            ) : []
                         ) : null}
                     </div>
                 )}
@@ -54,10 +62,15 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
         );
     }
 
-    private tryFetch() {
-        const {currentView, fetchSuggestions, inputDisplayValue} = this.props;
-        if (currentView.fetchedState === FetchingState.NOT_FETCHED) {
-            fetchSuggestions(inputDisplayValue);
+    private updatePicker() {
+        if (this.props.selectedResourceId && this.props.selectedResource
+            && this.props.selectedResource.fetchingState === FetchingState.NOT_FETCHED) {
+            this.props.fetchMatchingResource(this.props.selectedResourceId);
+        } else if (this.props.selectedResource && this.props.selectedResource.object && !this.props.inputDisplayValue) {
+            this.props.populateDisplayValue(this.props.parseDisplayValue(this.props.selectedResource.object));
+        } else if (this.props.matchingResources.fetchingState === FetchingState.NOT_FETCHED
+            && this.props.inputDisplayValue.length > 0) {
+            this.props.fetchSuggestions(this.props.inputDisplayValue ? this.props.inputDisplayValue : '');
         }
     }
 
@@ -78,7 +91,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     private renderSuggestion(resource: T, itemProps: {}): JSX.Element {
         return (
             <MenuItem {...itemProps} key={resource.id} component="div">
-                {this.props.getResourceDisplay(resource)}
+                {this.props.parseDisplayValue(resource)}
             </MenuItem>
         );
     }

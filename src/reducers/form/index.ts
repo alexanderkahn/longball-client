@@ -101,10 +101,11 @@ const resourceFormReducerBuilder = <T extends ResourceObject>(initialState: Reso
             case ResourceFormUpdateActionType.UPDATE_RELATIONSHIP:
                 return _.set(_.cloneDeep(state), `resource.relationships.${action.relationship}`, action.value);
             case ResourceFormUpdateActionType.UPDATE_RELATIONSHIP_DISPLAY:
+                const displayFields = state.relationshipDisplayFields.set(action.relationship, action.value);
                 return {
                     ...state,
                     resource: state.resource,
-                    relationshipDisplayFields: state.relationshipDisplayFields.set(action.relationship, action.value)
+                    relationshipDisplayFields: displayFields
                 };
             default:
                 return state;

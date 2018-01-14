@@ -11,6 +11,8 @@ export interface ResourceState {
     readonly rosterPositions: ResourceObjectState<RosterPosition>;
 }
 
+// TODO: putting an ID in here would clean up a lot of code in ResourcePickerPresenter
+// TODO: splitting out NOT_FETCHED and FETCHING (no object) from FETCHED (required object) would simplify a lot of logic
 export class ResourceCache<T> {
     readonly fetchingState: FetchingState;
     readonly object: T | null;
@@ -75,6 +77,7 @@ export class ResourceObjectState<T extends ResourceObject> {
         this.data = data;
     }
 
+    // TODO: return fetched state here? Nothing to indicate whether it's "legitimately" empty
     getNonNullPageItems(page: PageDescriptor): Array<T> {
         const pageResult = this.pages.get(page);
         if (!pageResult || !pageResult.object) {

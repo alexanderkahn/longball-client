@@ -5,10 +5,10 @@ import ResourcePickerPresenter, {
     ResourcePickerActions,
     ResourcePickerProps
 } from '../../teams/presenters/ResourcePickerPresenter';
-import { FetchingState, Team } from '../../../../models/models';
+import { Team } from '../../../../models/models';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
-import { fetchTeams } from '../../../../actions/resource/teamsActions';
+import { fetchTeamDetail, fetchTeams } from '../../../../actions/resource/teamsActions';
 import {
     updateRosterPositionRelationship,
     updateRosterPositionRelationshipDisplay
@@ -35,29 +35,34 @@ interface TeamPickerProps {
 }
 
 function mapStateToProps(state: RootState, ownProps: TeamPickerProps): ResourcePickerProps<Team> {
-    const teamDisplay = state.form.rosterPosition.relationshipDisplayFields.get('formTeam', '');
+    const teamDisplay = state.form.rosterPosition.relationshipDisplayFields.get('team', '');
     const suggestionsPage: PageDescriptor = new PageDescriptor(1, ImmutableMap([[SEARCH_TERM, teamDisplay]]));
     const pageCache = state.resource.teams.pages.get(suggestionsPage);
+    const selectedTeamId = state.form.rosterPosition.resource.relationships.team.data.id;
     return {
-        matchingResources: state.resource.teams.getNonNullPageItems(suggestionsPage),
-        selectedResourceId: state.form.rosterPosition.resource.relationships.team.data.id,
+        matchingResources: {
+            fetchingState: pageCache.fetchingState,
+            object: state.resource.teams.getNonNullPageItems(suggestionsPage)
+        },
+        selectedResourceId: selectedTeamId,
+        selectedResource: state.resource.teams.data.get(selectedTeamId),
         inputDisplayValue: teamDisplay,
         inputDisplayPlaceholder: 'Teams',
-        currentView: {
-            fetchedState: teamDisplay.length > 0 ? pageCache.fetchingState : FetchingState.FETCHED
-        },
         isEdit: ownProps.isEdit
     };
 }
 
 function  mapDispatchToProps(dispatch: Dispatch<RootState>): ResourcePickerActions<Team> {
     return {
+        populateDisplayValue: (value: string) =>
+            dispatch(updateRosterPositionRelationshipDisplay('team', value)),
+        fetchMatchingResource: (id: string) => dispatch(fetchTeamDetail(id)),
         fetchSuggestions: (searchTerm: string) =>
             dispatch(fetchTeams(new PageDescriptor(1, ImmutableMap([[SEARCH_TERM, searchTerm]])))),
-        getResourceDisplay: getTeamDisplay,
+        parseDisplayValue: getTeamDisplay,
         onChangeDisplay: (teamDisplay: string) =>
-            dispatch(updateRosterPositionRelationshipDisplay('formTeam', teamDisplay)),
-        onSelectResource: (teamId: string) => dispatch(updateRosterPositionRelationship('formTeam', {
+            dispatch(updateRosterPositionRelationshipDisplay('team', teamDisplay)),
+        onSelectResource: (teamId: string) => dispatch(updateRosterPositionRelationship('team', {
             data: {
                 type: 'teams',
                 id: teamId

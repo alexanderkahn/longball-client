@@ -68,6 +68,7 @@ export function fetchLeagues(page: PageDescriptor) {
     };
 }
 
+// TODO: rename these "detail" methods, that doesn't make any sense
 export function fetchLeagueDetail(leagueId: string): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(requestLeague(leagueId));
