@@ -6,7 +6,7 @@ import AddIcon from 'material-ui-icons/Add';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
-import { PageResult } from '../../../../reducers/resource/page';
+import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
 
 const styles: CSSProperties = {
@@ -20,7 +20,7 @@ const styles: CSSProperties = {
 
 interface ManagementListProps<T> {
     title: string;
-    currentView: ResourceCache<PageResult<T>>;
+    currentView: ResourceCache<PageDescriptor, PageResult<T>>;
     renderChild: (child: T) => JSX.Element;
     onClickAdd: () => void;
     getPage: (page: number) => () => void;

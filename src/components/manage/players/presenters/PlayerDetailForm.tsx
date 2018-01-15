@@ -23,7 +23,7 @@ const styles: CSSProperties = {
 
 export interface PlayerDetailProps {
     formPlayer: Player;
-    storedPlayer: ResourceCache<Player>;
+    storedPlayer: ResourceCache<string, Player>;
     isEdit: boolean;
 }
 
@@ -60,7 +60,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         const {storedPlayer, formPlayer, fetchItem, resetFormItem} = this.props;
         if (storedPlayer.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItem();
-        } else if (isPresent(storedPlayer) && (
+        } else if (isPresent<string, Player>(storedPlayer) && (
             storedPlayer.object.rosterPosition.id !== formPlayer.rosterPosition.id ||
             storedPlayer.object.person.id !== formPlayer.person.id)
         ) {

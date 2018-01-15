@@ -3,15 +3,15 @@ import ManagementList from '../../shared/presenters/ManagementList';
 import LeagueListItem from './LeagueListItem';
 import { Component } from 'react';
 import { League } from '../../../../reducers/resource/league';
-import { isPresent, ResourceCache } from '../../../../reducers/resource';
-import { PageResult } from '../../../../reducers/resource/page';
+import { ResourceCache } from '../../../../reducers/resource';
+import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 
 export interface ManageLeaguesProps {
-    leagues: ResourceCache<PageResult<League>>;
+    leagues: ResourceCache<PageDescriptor, PageResult<League>>;
 }
 
 export interface ManageLeaguesActions {
-    fetchListItems: (page: number) => () => void;
+    fetchListItems: (page: PageDescriptor) => () => void;
     onClickAdd: () => void;
     getPage: (page: number) => () => void;
     buildHandleSelectDetail: (league: League) => () => void;
@@ -23,15 +23,13 @@ export default class ManageLeaguesForm extends Component<ManageLeaguesProps & Ma
     render() {
         const {leagues, onClickAdd, getPage, fetchListItems, buildHandleSelectDetail, buildHandleDeleteLeague}
         = this.props;
-        const presentPage = isPresent(leagues) ? leagues.object : null;
         return (
             <ManagementList
                 title="Leagues"
                 currentView={leagues}
                 onClickAdd={onClickAdd}
                 getPage={getPage}
-                // TODO we should always know the requested page even if it isn't present. This might break shit.
-                fetchListItems={fetchListItems(presentPage ? presentPage.meta.number : 1)}
+                fetchListItems={fetchListItems(leagues.id)}
                 renderChild={this.buildLeagueListItemRenderer(buildHandleSelectDetail, buildHandleDeleteLeague)}
             />
         );

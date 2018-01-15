@@ -36,16 +36,20 @@ interface TeamPickerProps {
 }
 
 // TODO: this needs to die. See notes on getNonNullPageItems
-export function getMatchingResources<T>(pageCache: ResourceCache<PageResult<string>>, nonNullPageItems: T)
-: ResourceCache<T> {
+export function getMatchingResources<T>(
+    pageCache: ResourceCache<PageDescriptor, PageResult<string>>,
+    nonNullPageItems: T
+): ResourceCache<PageDescriptor, T> {
     switch (pageCache.fetchingState) {
         case FetchingState.FETCHED:
             return {
+                id: pageCache.id,
                 fetchingState: FetchingState.FETCHED,
                 object: nonNullPageItems
             };
         default:
             return {
+                id: pageCache.id,
                 fetchingState: pageCache.fetchingState
             };
     }
@@ -58,7 +62,6 @@ function mapStateToProps(state: RootState, ownProps: TeamPickerProps): ResourceP
     const selectedTeamId = state.form.rosterPosition.resource.relationships.team.data.id;
     return {
         matchingResources: getMatchingResources(pageCache, state.resource.teams.getNonNullPageItems(suggestionsPage)),
-        selectedResourceId: selectedTeamId,
         selectedResource: state.resource.teams.data.get(selectedTeamId),
         inputDisplayValue: teamDisplay,
         inputDisplayPlaceholder: 'Teams',

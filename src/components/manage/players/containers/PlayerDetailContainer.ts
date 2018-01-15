@@ -13,7 +13,8 @@ import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/re
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
 
-const emptyPlayer: ResourceCache<Player> = {
+const emptyPlayer: ResourceCache<string, Player> = {
+    id: 'add',
     fetchingState: FetchingState.FETCHED,
     object: {
         person: Person.empty(),
@@ -21,31 +22,34 @@ const emptyPlayer: ResourceCache<Player> = {
     }
 };
 
-const getStorePlayer = function (state: RootState, teamId: string): ResourceCache<Player> {
-    const rosterPosition = state.resource.rosterPositions.data.get(teamId);
-    const person = !isPresent(rosterPosition) ? null
+const getStorePlayer = function (state: RootState, rosterPositionId: string): ResourceCache<string, Player> {
+    const rosterPosition = state.resource.rosterPositions.data.get(rosterPositionId);
+    const person = !isPresent<string, RosterPosition>(rosterPosition) ? null
         : state.resource.people.data.get(rosterPosition.object.relationships.player.data.id);
-    const statePlayer = isPresent(rosterPosition) && isPresent(person) ? {
+    const statePlayer = isPresent<string, RosterPosition>(rosterPosition) && isPresent<string, Person>(person) ? {
         rosterPosition: rosterPosition.object,
         person: person.object,
     } : null;
-    return toResourceCache(rosterPosition.fetchingState, statePlayer);
+    return toResourceCache(rosterPosition.fetchingState, rosterPositionId, statePlayer);
 };
 
 // TODO: get rid of this. Look into whether we really need to build the player for this view.
-function toResourceCache<T>(fetchingState: FetchingState, object: T | null): ResourceCache<T> {
+function toResourceCache<T>(fetchingState: FetchingState, id: string, object: T | null): ResourceCache<string, T> {
     if (fetchingState === FetchingState.FETCHED && object !== null) {
         return {
+            id,
             fetchingState,
             object
         };
     } else if (fetchingState === FetchingState.FETCHED) {
         return {
+            id,
             fetchingState,
             object: null
         };
     } else {
         return {
+            id,
             fetchingState
         };
     }

@@ -17,7 +17,7 @@ const styles: CSSProperties = {
 };
 
 export interface TeamDetailProps {
-    storedTeam: ResourceCache<Team>;
+    storedTeam: ResourceCache<string, Team>;
     formTeam: Team;
     isEdit: boolean;
 }
@@ -54,7 +54,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
         const {storedTeam, formTeam, fetchItem, resetFormItem} = this.props;
         if (storedTeam.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItem();
-        } else if (isPresent(storedTeam) && storedTeam.object.id !== formTeam.id) {
+        } else if (isPresent<string, Team>(storedTeam) && storedTeam.object.id !== formTeam.id) {
             resetFormItem(storedTeam.object);
         }
     }

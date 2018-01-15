@@ -16,7 +16,7 @@ const styles: CSSProperties = {
 };
 
 export interface LeagueDetailProps {
-    storedLeague: ResourceCache<League>;
+    storedLeague: ResourceCache<string, League>;
     formLeague: League;
     isEdit: boolean;
 }
@@ -51,7 +51,7 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
         const {storedLeague, formLeague, fetchItem, resetFormItem} = this.props;
         if (storedLeague.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItem();
-        } else if (isPresent(storedLeague) && storedLeague.object.id !== formLeague.id) {
+        } else if (isPresent<string, League>(storedLeague) && storedLeague.object.id !== formLeague.id) {
             resetFormItem(storedLeague.object);
         }
     }

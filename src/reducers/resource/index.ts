@@ -44,32 +44,34 @@ export interface ResourceState {
     readonly rosterPositions: ResourceObjectState<RosterPosition>;
 }
 
-// TODO: putting an ID in here would clean up a lot of code in ResourcePickerPresenter
-interface UnknownItemCache {
+interface UnknownItemCache<K> {
+    readonly id: K;
     readonly fetchingState: FetchingState.NOT_FETCHED | FetchingState.FETCHING;
 }
 
-interface AbsentItemCache {
+interface AbsentItemCache<K> {
+    readonly id: K;
     readonly fetchingState: FetchingState.FETCHED;
     readonly object: null;
 }
 
-interface PresentItemCache<T> {
+interface PresentItemCache<K, V> {
+    readonly id: K;
     readonly fetchingState: FetchingState.FETCHED;
-    readonly object: T;
+    readonly object: V;
 }
 
-export type ResourceCache<T> = UnknownItemCache | AbsentItemCache | PresentItemCache<T>;
+export type ResourceCache<K, V> = UnknownItemCache<K> | AbsentItemCache<K> | PresentItemCache<K, V>;
 
-export function isPresent<T>(value: ResourceCache<T> | null): value is PresentItemCache<T> {
+export function isPresent<K, V>(value: ResourceCache<K, V> | null): value is PresentItemCache<K, V> {
     return value !== null && value.fetchingState === FetchingState.FETCHED && value.object !== null;
 }
 
 class CachedStateWrapper<K, V> {
 
-    private readonly internal: ImmutableMap<K, ResourceCache<V>> = ImmutableMap();
+    private readonly internal: ImmutableMap<K, ResourceCache<K, V>> = ImmutableMap();
 
-    constructor(internal?: ImmutableMap<K, ResourceCache<V>>) {
+    constructor(internal?: ImmutableMap<K, ResourceCache<K, V>>) {
         if (internal) {
             this.internal = internal;
         } else {
@@ -77,32 +79,34 @@ class CachedStateWrapper<K, V> {
         }
     }
 
-    get(key: K): ResourceCache<V> {
+    get(key: K): ResourceCache<K, V> {
         const value = this.internal.get(key);
-        return value ? value : {fetchingState: FetchingState.NOT_FETCHED};
+        return value ? value : {id: key, fetchingState: FetchingState.NOT_FETCHED};
     }
 
     setOneFetching(key: K): CachedStateWrapper<K, V> {
-        return new CachedStateWrapper<K, V>(this.internal.set(key, {fetchingState: FetchingState.FETCHING}));
+        return new CachedStateWrapper<K, V>(this.internal.set(key, {id: key, fetchingState: FetchingState.FETCHING}));
     }
 
     setOneFetched(key: K, value: V | null): CachedStateWrapper<K, V> {
-        return new CachedStateWrapper<K, V>(this.internal.set(key, this.toCache(value)));
+        return new CachedStateWrapper<K, V>(this.internal.set(key, this.toCache(key, value)));
     }
 
     setAllFetched(other: ImmutableMap<K, V>): CachedStateWrapper<K, V> {
-        const cachedValues = other.map((value) => this.toCache(value));
+        const cachedValues = other.map((value, key) => this.toCache(<K> key, value));
         return new CachedStateWrapper<K, V>(this.internal.merge(cachedValues));
     }
 
-    private toCache(value: V | undefined | null): ResourceCache<V> {
+    private toCache(key: K, value: V | undefined | null): ResourceCache<K, V> {
         if (value) {
             return {
+                id: key,
                 fetchingState: FetchingState.FETCHED,
                 object: value
             };
         } else {
             return {
+                id: key,
                 fetchingState: FetchingState.FETCHED,
                 object: null
             };

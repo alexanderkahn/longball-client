@@ -18,7 +18,7 @@ function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObje
 
     rosterPositions.forEach((rosterPosition) => {
         const person = !rosterPosition ? null : people.data.get(rosterPosition.relationships.player.data.id);
-        if (rosterPosition && isPresent(person)) {
+        if (rosterPosition && isPresent<string, Person>(person)) {
             players.push({rosterPosition, person: person.object});
         }
     });
@@ -38,7 +38,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 const mapDispatchToProps = (dispatch: Dispatch<RootState>)
     : ManagePlayersFormActions => {
     return {
-        fetchListItems: (currentPage: number) => () => dispatch(fetchPlayers(new PageDescriptor(currentPage))),
+        fetchListItems: (currentPage: PageDescriptor) => () => dispatch(fetchPlayers(currentPage)),
         onClickAdd: () => dispatch(push(MANAGE_PLAYERS_BASE_URL + '/add')),
         getPage: (page: number) => () => dispatch(push(MANAGE_PLAYERS_BASE_URL + `?page=${page}`)),
         buildHandleSelectPlayerDetail: (player: Player) => () =>

@@ -21,7 +21,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManageLeaguesActions => {
     return {
-        fetchListItems: (page: number) => () => dispatch(fetchLeagues(new PageDescriptor(page))),
+        fetchListItems: (page: PageDescriptor) => () => dispatch(fetchLeagues(page)),
         onClickAdd: () => dispatch(push(MANAGE_LEAGUES_BASE_URL + '/add')),
         getPage: (page: number) => () => dispatch(push(MANAGE_LEAGUES_BASE_URL + `?page=${page}`)),
         buildHandleSelectDetail: (league: League) => () => dispatch(push(`${MANAGE_LEAGUES_BASE_URL}/${league.id}`)),

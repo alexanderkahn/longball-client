@@ -13,10 +13,13 @@ import { List } from 'immutable';
 const MANAGE_TEAMS_BASE_URL = '/manage/teams';
 
 // TODO: lookit all this bullshit
-export function getResourcePageResult<T>(pageResults: ResourceCache<PageResult<string>>, nonNullPageItems: Array<T>)
-: ResourceCache<PageResult<T>> {
-        if (isPresent(pageResults)) {
+export function getResourcePageResult<T>(
+    pageResults: ResourceCache<PageDescriptor, PageResult<string>>,
+    nonNullPageItems: Array<T>
+): ResourceCache<PageDescriptor, PageResult<T>> {
+        if (isPresent<PageDescriptor, PageResult<string>>(pageResults)) {
             return {
+                id: pageResults.id,
                 fetchingState: FetchingState.FETCHED,
                 object: {
                     descriptor: pageResults.object.descriptor,
@@ -26,11 +29,13 @@ export function getResourcePageResult<T>(pageResults: ResourceCache<PageResult<s
             };
         } else if (pageResults.fetchingState === FetchingState.FETCHED) {
             return {
+                id: pageResults.id,
                 fetchingState: FetchingState.FETCHED,
                 object: null
             };
         } else {
             return {
+                id: pageResults.id,
                 fetchingState: pageResults.fetchingState
             };
         }
@@ -47,7 +52,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): M
 const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>)
     : ManageTeamsFormActions => {
     return {
-        fetchListItems: (page: number) => () => dispatch(fetchTeams(new PageDescriptor(page))),
+        fetchListItems: (page: PageDescriptor) => () => dispatch(fetchTeams(page)),
         onClickAdd: () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}/add`)),
         getPage: (page: number) => () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}?page=${page}`)),
         buildHandleSelectTeamDetail: (team: Team) => () => dispatch(push(`${MANAGE_TEAMS_BASE_URL}/${team.id}`)),

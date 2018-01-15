@@ -4,11 +4,11 @@ import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
 import { FetchingState, isPresent, ResourceCache, ResourceObject } from '../../../../reducers/resource';
+import { PageDescriptor } from '../../../../reducers/resource/page';
 
 export interface ResourcePickerProps<T extends ResourceObject> {
-    matchingResources: ResourceCache<Array<T>>;
-    selectedResourceId: string | null;
-    selectedResource: ResourceCache<T> | null;
+    matchingResources: ResourceCache<PageDescriptor, T[]>;
+    selectedResource: ResourceCache<string, T> | null;
     inputDisplayValue: string;
     inputDisplayPlaceholder: string;
     isEdit: boolean;
@@ -40,7 +40,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
         return (
             <Downshift
                 inputValue={inputDisplayValue || ''}
-                selectedItem={isPresent(selectedResource) && isPresent(matchingResources)
+                selectedItem={(isPresent(selectedResource) && isPresent<PageDescriptor, T[]>(matchingResources))
                     ? matchingResources.object.find(it => it === selectedResource.object)
                     : null
                 }
@@ -50,7 +50,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
                 render={({isOpen, getInputProps, getItemProps}) => (
                     <div>
                         {this.renderInput(getInputProps({placeholder: inputDisplayPlaceholder}))}
-                        {isOpen && isPresent(matchingResources)
+                        {isOpen && isPresent<PageDescriptor, T[]>(matchingResources)
                             ? this.renderSuggestionsContainer(matchingResources.object.map((resource: T) =>
                                 this.renderSuggestion(resource, getItemProps({item: resource}))
                             )) : null}
@@ -61,10 +61,10 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     }
 
     private updatePicker() {
-        const { selectedResourceId, selectedResource, fetchMatchingResource: fetchSelectedResource, inputDisplayValue,
+        const { selectedResource, fetchMatchingResource: fetchSelectedResource, inputDisplayValue,
             populateDisplayValue, parseDisplayValue, matchingResources, fetchSuggestions} = this.props;
-        if (selectedResourceId && selectedResource && selectedResource.fetchingState === FetchingState.NOT_FETCHED) {
-            fetchSelectedResource(selectedResourceId);
+        if (selectedResource && !isPresent(selectedResource)) {
+            fetchSelectedResource(selectedResource.id);
         } else if (isPresent(selectedResource) && !inputDisplayValue) {
             populateDisplayValue(parseDisplayValue(selectedResource.object));
         } else if (matchingResources.fetchingState === FetchingState.NOT_FETCHED && inputDisplayValue.length > 0) {

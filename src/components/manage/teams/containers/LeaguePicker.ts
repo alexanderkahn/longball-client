@@ -37,7 +37,6 @@ const mapStateToProps = (state: RootState, ownProps: LeaguePickerProps): Resourc
     const pageCache = state.resource.leagues.pages.get(descriptor);
     return {
         matchingResources: getMatchingResources(pageCache, state.resource.leagues.getNonNullPageItems(descriptor)),
-        selectedResourceId,
         selectedResource:
     state.resource.leagues.data.get(selectedResourceId),
         inputDisplayValue: leagueDisplay,

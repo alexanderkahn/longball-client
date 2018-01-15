@@ -8,7 +8,8 @@ import { resetForm, updateTeamAttribute } from '../../../../actions/form/formUpd
 import { FetchingState, ResourceCache } from '../../../../reducers/resource';
 import { Team } from '../../../../reducers/resource/team';
 
-const newTeam: ResourceCache<Team> = {
+const newTeam: ResourceCache<string, Team> = {
+    id: 'add',
     fetchingState: FetchingState.FETCHED,
     object: Team.empty()
 };
