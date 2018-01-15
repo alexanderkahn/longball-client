@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
-import { FetchingState, ResourceCache, ResourceObject } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache, ResourceObject } from '../../../../reducers/resource';
 
 export interface ResourcePickerProps<T extends ResourceObject> {
     matchingResources: ResourceCache<Array<T>>;
@@ -35,26 +35,25 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     }
 
     render() {
-        const { inputDisplayValue, matchingResources, selectedResource, parseDisplayValue  } = this.props;
+        const {inputDisplayValue, inputDisplayPlaceholder, matchingResources, selectedResource, parseDisplayValue,
+            onChangeDisplay, onSelectResource} = this.props;
         return (
             <Downshift
                 inputValue={inputDisplayValue || ''}
-                selectedItem={selectedResource && matchingResources.object
+                selectedItem={isPresent(selectedResource) && isPresent(matchingResources)
                     ? matchingResources.object.find(it => it === selectedResource.object)
                     : null
                 }
                 itemToString={parseDisplayValue}
-                onInputValueChange={(value: string) => this.props.onChangeDisplay(value)}
-                onChange={(selection: T) => this.props.onSelectResource(selection.id)}
+                onInputValueChange={(value: string) => onChangeDisplay(value)}
+                onChange={(selection: T) => onSelectResource(selection.id)}
                 render={({isOpen, getInputProps, getItemProps}) => (
                     <div>
-                        {this.renderInput(getInputProps({placeholder: this.props.inputDisplayPlaceholder}))}
-                        {isOpen ? this.renderSuggestionsContainer(
-                            this.props.matchingResources.object ?
-                                this.props.matchingResources.object.map((resource: T) =>
-                                    this.renderSuggestion(resource, getItemProps({item: resource}))
-                            ) : []
-                        ) : null}
+                        {this.renderInput(getInputProps({placeholder: inputDisplayPlaceholder}))}
+                        {isOpen && isPresent(matchingResources)
+                            ? this.renderSuggestionsContainer(matchingResources.object.map((resource: T) =>
+                                this.renderSuggestion(resource, getItemProps({item: resource}))
+                            )) : null}
                     </div>
                 )}
             />
@@ -62,14 +61,14 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     }
 
     private updatePicker() {
-        if (this.props.selectedResourceId && this.props.selectedResource
-            && this.props.selectedResource.fetchingState === FetchingState.NOT_FETCHED) {
-            this.props.fetchMatchingResource(this.props.selectedResourceId);
-        } else if (this.props.selectedResource && this.props.selectedResource.object && !this.props.inputDisplayValue) {
-            this.props.populateDisplayValue(this.props.parseDisplayValue(this.props.selectedResource.object));
-        } else if (this.props.matchingResources.fetchingState === FetchingState.NOT_FETCHED
-            && this.props.inputDisplayValue.length > 0) {
-            this.props.fetchSuggestions(this.props.inputDisplayValue ? this.props.inputDisplayValue : '');
+        const { selectedResourceId, selectedResource, fetchMatchingResource: fetchSelectedResource, inputDisplayValue,
+            populateDisplayValue, parseDisplayValue, matchingResources, fetchSuggestions} = this.props;
+        if (selectedResourceId && selectedResource && selectedResource.fetchingState === FetchingState.NOT_FETCHED) {
+            fetchSelectedResource(selectedResourceId);
+        } else if (isPresent(selectedResource) && !inputDisplayValue) {
+            populateDisplayValue(parseDisplayValue(selectedResource.object));
+        } else if (matchingResources.fetchingState === FetchingState.NOT_FETCHED && inputDisplayValue.length > 0) {
+            fetchSuggestions(inputDisplayValue ? inputDisplayValue : '');
         }
     }
 

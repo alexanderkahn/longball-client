@@ -3,11 +3,11 @@ import ManagementList from '../../shared/presenters/ManagementList';
 import PlayerListItem from './PlayerListItem';
 import { Component } from 'react';
 import { Player } from '../../../../reducers/resource/rosterPosition';
-import { PagedView } from '../../../../reducers/resource/page';
+import { PageResult } from '../../../../reducers/resource/page';
+import { isPresent, ResourceCache } from '../../../../reducers/resource';
 
 export interface ManagePlayersFormProps {
-    players: Array<Player>;
-    currentView: PagedView;
+    players: ResourceCache<PageResult<Player>>;
 }
 
 export interface ManagePlayersFormActions {
@@ -20,29 +20,34 @@ export interface ManagePlayersFormActions {
 
 export default class ManagePlayersForm extends Component<ManagePlayersFormProps & ManagePlayersFormActions> {
     render() {
-        const {currentView, fetchListItems, onClickAdd, getPage} = this.props;
+        const {
+            players, fetchListItems, onClickAdd, getPage, buildHandleSelectPlayerDetail, buildHandleDeletePlayer
+        } = this.props;
+        const presentPage = isPresent(players) ? players.object : null;
         return (
             <ManagementList
                 title="Players"
-                currentView={currentView}
-                fetchListItems={fetchListItems(currentView.page)}
+                currentView={players}
+                // TODO we should always know the requested page even if it isn't present. This might break shit.
+                fetchListItems={fetchListItems(presentPage ? presentPage.meta.number : 1)}
                 onClickAdd={onClickAdd}
                 getPage={getPage}
-            >
-                {this.getChildListItems()}
-            </ManagementList>
+                renderChild={this.buildPlayerListItemRenderer(buildHandleSelectPlayerDetail, buildHandleDeletePlayer)}
+            />
         );
     }
 
-    getChildListItems(): Array<JSX.Element> {
-        const {players, buildHandleSelectPlayerDetail, buildHandleDeletePlayer} = this.props;
-        return players.map(player => (
-            <PlayerListItem
-                player={player}
-                handleSelectPlayerDetail={buildHandleSelectPlayerDetail(player)}
-                handleDeletePlayer={buildHandleDeletePlayer(player)}
-                key={player.rosterPosition.id}
-            />
-        ));
+    buildPlayerListItemRenderer(selectBuilder: (player: Player) => () => void,
+                                deleteBuilder: (player: Player) => () => void): (player: Player) => JSX.Element {
+        return (player: Player) => {
+            return (
+                <PlayerListItem
+                    player={player}
+                    handleSelectPlayerDetail={selectBuilder(player)}
+                    handleDeletePlayer={deleteBuilder(player)}
+                    key={player.rosterPosition.id}
+                />
+            );
+        };
     }
 }

@@ -45,22 +45,24 @@ export interface ResourceState {
 }
 
 // TODO: putting an ID in here would clean up a lot of code in ResourcePickerPresenter
-// TODO: splitting out NOT_FETCHED and FETCHING (no object) from FETCHED (required object) would simplify a lot of logic
-export class ResourceCache<T> {
-    readonly fetchingState: FetchingState;
-    readonly object: T | null;
+interface UnknownItemCache {
+    readonly fetchingState: FetchingState.NOT_FETCHED | FetchingState.FETCHING;
+}
 
-    static empty<T>(): ResourceCache<T> {
-        return {
-            fetchingState: FetchingState.NOT_FETCHED,
-            object: null
-        };
-    }
+interface AbsentItemCache {
+    readonly fetchingState: FetchingState.FETCHED;
+    readonly object: null;
+}
 
-    constructor(object?: T) {
-        this.fetchingState = object ? FetchingState.FETCHED : FetchingState.FETCHING;
-        this.object = object ? object : null;
-    }
+interface PresentItemCache<T> {
+    readonly fetchingState: FetchingState.FETCHED;
+    readonly object: T;
+}
+
+export type ResourceCache<T> = UnknownItemCache | AbsentItemCache | PresentItemCache<T>;
+
+export function isPresent<T>(value: ResourceCache<T> | null): value is PresentItemCache<T> {
+    return value !== null && value.fetchingState === FetchingState.FETCHED && value.object !== null;
 }
 
 class CachedStateWrapper<K, V> {
@@ -77,50 +79,60 @@ class CachedStateWrapper<K, V> {
 
     get(key: K): ResourceCache<V> {
         const value = this.internal.get(key);
-        return value ? value : ResourceCache.empty();
+        return value ? value : {fetchingState: FetchingState.NOT_FETCHED};
     }
 
-    set(key: K, value?: V): CachedStateWrapper<K, V> {
-        return new CachedStateWrapper<K, V>(this.internal.set(key, new ResourceCache<V>(value)));
+    setOneFetching(key: K): CachedStateWrapper<K, V> {
+        return new CachedStateWrapper<K, V>(this.internal.set(key, {fetchingState: FetchingState.FETCHING}));
     }
 
-    merge(other: ImmutableMap<K, V>): CachedStateWrapper<K, V> {
-        const cachedValues = other.map((value) => new ResourceCache(value));
+    setOneFetched(key: K, value: V | null): CachedStateWrapper<K, V> {
+        return new CachedStateWrapper<K, V>(this.internal.set(key, this.toCache(value)));
+    }
+
+    setAllFetched(other: ImmutableMap<K, V>): CachedStateWrapper<K, V> {
+        const cachedValues = other.map((value) => this.toCache(value));
         return new CachedStateWrapper<K, V>(this.internal.merge(cachedValues));
     }
 
-    toArray(): Array<V> {
-        const result: Array<V> = [];
-        this.internal.forEach(it => {
-            if (it && it.object) {
-                result.push(it.object);
-            }
-        });
-        return result;
+    private toCache(value: V | undefined | null): ResourceCache<V> {
+        if (value) {
+            return {
+                fetchingState: FetchingState.FETCHED,
+                object: value
+            };
+        } else {
+            return {
+                fetchingState: FetchingState.FETCHED,
+                object: null
+            };
+        }
     }
 }
 
 export class ResourceObjectState<T extends ResourceObject> {
-    readonly pages: CachedStateWrapper<PageDescriptor, PageResult>;
+    readonly pages: CachedStateWrapper<PageDescriptor, PageResult<string>>;
     readonly data: CachedStateWrapper<string, T>;
 
-    constructor(pages: CachedStateWrapper<PageDescriptor, PageResult>,
+    constructor(pages: CachedStateWrapper<PageDescriptor, PageResult<string>>,
                 data: CachedStateWrapper<string, T>) {
         this.pages = pages;
         this.data = data;
     }
 
     // TODO: return fetched state here? Nothing to indicate whether it's "legitimately" empty
+    // TODO: you know what? I'm thinking pages returned from the store should just always have the associated items
+    // TODO: a more general "filter all the nulls out of this list" function could still be quite useful
     getNonNullPageItems(page: PageDescriptor): Array<T> {
         const pageResult = this.pages.get(page);
-        if (!pageResult || !pageResult.object) {
+        if (!pageResult || pageResult.fetchingState !== FetchingState.FETCHED || !pageResult.object) {
             return Array();
         } else {
-            const ids = pageResult.object.itemIds;
+            const ids = pageResult.object.contents;
             const objects = Array<T>();
             for (const id of ids.toArray()) {
                 const record = this.data.get(id);
-                if (record !== null && record.object !== null) {
+                if (record.fetchingState === FetchingState.FETCHED && record.object !== null) {
                     objects.push(record.object as T);
                 }
             }
@@ -143,36 +155,36 @@ const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceTy
             case ResourceActionType.REQUEST_RESOURCE_OBJECT:
                 return new ResourceObjectState(
                     state.pages,
-                    state.data.set(action.id)
+                    state.data.setOneFetching(action.id)
                 );
             case ResourceActionType.REQUEST_RESOURCE_PAGE:
                 return new ResourceObjectState(
-                    state.pages.set(action.page),
+                    state.pages.setOneFetching(action.page),
                     state.data
                 );
             case ResourceActionType.RECEIVE_RESOURCE_OBJECT:
                 return new ResourceObjectState(
                     state.pages,
-                    state.data.set(action.data.id, action.data.resource ? action.data.resource : undefined)
+                    state.data.setOneFetched(action.data.id, action.data.resource)
                 );
             case ResourceActionType.RECEIVE_RESOURCE_PAGE:
                 return new ResourceObjectState(
-                    state.pages.set(action.page, {
+                    state.pages.setOneFetched(action.page, {
                         descriptor: action.page,
                         meta: action.meta,
-                        itemIds: List(action.data.keys())
+                        contents: List(action.data.keys())
                     }),
-                    state.data.merge(action.data)
+                    state.data.setAllFetched(action.data)
                 );
             case ResourceActionType.RECEIVE_RESOURCE_INCLUDES:
                 return new ResourceObjectState(
                     state.pages,
-                    state.data.merge(action.data)
+                    state.data.setAllFetched(action.data)
                 );
             case ResourceActionType.REMOVE_RESOURCE_OBJECT:
                 return new ResourceObjectState(
                     state.pages,
-                    state.data.set(action.removed)
+                    state.data.setOneFetched(action.removed, null)
                 );
             default:
                 return state;

@@ -1,5 +1,5 @@
 import { OrderedMap } from 'immutable';
-import { PageResultsMeta } from '../rest';
+import { PageResultsMeta } from '../../reducers/resource/page';
 import { PageDescriptor } from '../../reducers/resource/page';
 import { ResourceObject, ResourceType } from '../../reducers/resource';
 

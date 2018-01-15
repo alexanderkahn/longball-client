@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import 'react-datepicker/dist/react-datepicker.css';
 import TeamPicker from '../containers/TeamPicker';
-import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
 import { Player } from '../../../../reducers/resource/rosterPosition';
 
 const styles: CSSProperties = {
@@ -60,7 +60,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         const {storedPlayer, formPlayer, fetchItem, resetFormItem} = this.props;
         if (storedPlayer.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItem();
-        } else if (storedPlayer.object && (
+        } else if (isPresent(storedPlayer) && (
             storedPlayer.object.rosterPosition.id !== formPlayer.rosterPosition.id ||
             storedPlayer.object.person.id !== formPlayer.person.id)
         ) {

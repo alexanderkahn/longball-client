@@ -1,4 +1,4 @@
-import { PageResultsMeta, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
+import { deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/index';
 import { replace } from 'react-router-redux';
@@ -8,7 +8,7 @@ import {
     RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
     ResourceActionType, ReceiveResourceObjectAction
 } from './index';
-import { PageDescriptor } from '../../reducers/resource/page';
+import { PageDescriptor, PageResultsMeta } from '../../reducers/resource/page';
 import { ResourceType } from '../../reducers/resource';
 import { League } from '../../reducers/resource/league';
 

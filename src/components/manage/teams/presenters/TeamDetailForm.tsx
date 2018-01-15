@@ -4,7 +4,7 @@ import { TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import LeaguePicker from '../containers/LeaguePicker';
-import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
 import { Team } from '../../../../reducers/resource/team';
 
 const styles: CSSProperties = {
@@ -54,7 +54,7 @@ export default class TeamDetailForm extends Component<TeamDetailProps & TeamDeta
         const {storedTeam, formTeam, fetchItem, resetFormItem} = this.props;
         if (storedTeam.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItem();
-        } else if (storedTeam.object && storedTeam.object.id !== formTeam.id) {
+        } else if (isPresent(storedTeam) && storedTeam.object.id !== formTeam.id) {
             resetFormItem(storedTeam.object);
         }
     }

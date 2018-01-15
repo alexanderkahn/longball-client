@@ -1,5 +1,5 @@
 import { getIdTokenPromise } from './session';
-import { PageDescriptor } from '../reducers/resource/page';
+import { PageDescriptor, PageResultsMeta } from '../reducers/resource/page';
 import { ResourceObject } from '../reducers/resource';
 
 export interface MetaResponse {
@@ -7,13 +7,6 @@ export interface MetaResponse {
         status: number,
         page?: PageResultsMeta
     };
-}
-
-export interface PageResultsMeta {
-    totalPages: number;
-    number: number;
-    hasPrevious: boolean;
-    hasNext: boolean;
 }
 
 export interface ObjectResponse<T extends ResourceObject> extends MetaResponse {

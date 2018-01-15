@@ -3,11 +3,11 @@ import ManagementList from '../../shared/presenters/ManagementList';
 import TeamListItem from './TeamListItem';
 import { Component } from 'react';
 import { Team } from '../../../../reducers/resource/team';
-import { PagedView } from '../../../../reducers/resource/page';
+import { isPresent, ResourceCache } from '../../../../reducers/resource';
+import { PageResult } from '../../../../reducers/resource/page';
 
 export interface ManageTeamsFormProps {
-    teams: Array<Team>;
-    currentView: PagedView;
+    teams: ResourceCache<PageResult<Team>>;
 }
 
 export interface ManageTeamsFormActions {
@@ -21,29 +21,33 @@ export interface ManageTeamsFormActions {
 export default class ManageTeamsForm extends Component<ManageTeamsFormProps & ManageTeamsFormActions> {
 
     render() {
-        const {currentView, fetchListItems, getPage, onClickAdd} = this.props;
+        const {teams, fetchListItems, getPage, onClickAdd,
+            buildHandleSelectTeamDetail, buildHandleDeleteTeam} = this.props;
+        const presentPage = isPresent(teams) ? teams.object : null;
         return (
             <ManagementList
                 title="Teams"
-                currentView={currentView}
-                fetchListItems={fetchListItems(currentView.page)}
+                currentView={teams}
+                // TODO we should always know the requested page even if it isn't present. This might break shit.
+                fetchListItems={fetchListItems(presentPage ? presentPage.meta.number : 1)}
                 getPage={getPage}
                 onClickAdd={onClickAdd}
-            >
-                {this.getChildListItems()}
-            </ManagementList>
+                renderChild={this.buildTeamListItemRenderer(buildHandleSelectTeamDetail, buildHandleDeleteTeam)}
+            />
         );
     }
 
-    getChildListItems(): Array<JSX.Element> {
-        const {teams, buildHandleSelectTeamDetail, buildHandleDeleteTeam} = this.props;
-        return teams.map(team => (
-            <TeamListItem
-                team={team}
-                key={team.id}
-                handleSelectTeamDetail={buildHandleSelectTeamDetail(team)}
-                handleDeleteTeam={buildHandleDeleteTeam(team)}
-            />
-        ));
+    buildTeamListItemRenderer(selectBuilder: (team: Team) => () => void, deleteBuilder: (team: Team) => () => void)
+    : (team: Team) => JSX.Element {
+        return (team: Team) => {
+            return (
+                <TeamListItem
+                    key={team.id}
+                    team={team}
+                    handleSelectTeamDetail={selectBuilder(team)}
+                    handleDeleteTeam={deleteBuilder(team)}
+                />
+            );
+        };
     }
 }

@@ -9,7 +9,7 @@ import {
     resetForm, updatePersonAttribute,
     updateRosterPositionAttribute,
 } from '../../../../actions/form/formUpdateActions';
-import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
 
@@ -23,17 +23,33 @@ const emptyPlayer: ResourceCache<Player> = {
 
 const getStorePlayer = function (state: RootState, teamId: string): ResourceCache<Player> {
     const rosterPosition = state.resource.rosterPositions.data.get(teamId);
-    const person = !rosterPosition.object ? null
+    const person = !isPresent(rosterPosition) ? null
         : state.resource.people.data.get(rosterPosition.object.relationships.player.data.id);
-    const statePlayer = rosterPosition.object && person && person.object ? {
+    const statePlayer = isPresent(rosterPosition) && isPresent(person) ? {
         rosterPosition: rosterPosition.object,
         person: person.object,
     } : null;
-    return {
-        fetchingState: rosterPosition.fetchingState,
-        object: statePlayer
-    };
+    return toResourceCache(rosterPosition.fetchingState, statePlayer);
 };
+
+// TODO: get rid of this. Look into whether we really need to build the player for this view.
+function toResourceCache<T>(fetchingState: FetchingState, object: T | null): ResourceCache<T> {
+    if (fetchingState === FetchingState.FETCHED && object !== null) {
+        return {
+            fetchingState,
+            object
+        };
+    } else if (fetchingState === FetchingState.FETCHED) {
+        return {
+            fetchingState,
+            object: null
+        };
+    } else {
+        return {
+            fetchingState
+        };
+    }
+}
 
 function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailProps {
     // TODO: lordy this is ugly and bad.

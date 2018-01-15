@@ -10,6 +10,7 @@ import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { fetchLeague, fetchLeagues } from '../../../../actions/resource/leaguesActions';
 import { League } from '../../../../reducers/resource/league';
+import { getMatchingResources } from '../../players/containers/TeamPicker';
 
 function getLeagueDisplay(obj: League | string | null): string {
     if (!obj) {
@@ -35,10 +36,7 @@ const mapStateToProps = (state: RootState, ownProps: LeaguePickerProps): Resourc
     const selectedResourceId = state.form.team.resource.relationships.league.data.id;
     const pageCache = state.resource.leagues.pages.get(descriptor);
     return {
-        matchingResources: {
-            fetchingState: pageCache.fetchingState,
-            object: state.resource.leagues.getNonNullPageItems(descriptor)
-        },
+        matchingResources: getMatchingResources(pageCache, state.resource.leagues.getNonNullPageItems(descriptor)),
         selectedResourceId,
         selectedResource:
     state.resource.leagues.data.get(selectedResourceId),

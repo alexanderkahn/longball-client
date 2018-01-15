@@ -6,8 +6,8 @@ import AddIcon from 'material-ui-icons/Add';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
-import { PagedView } from '../../../../reducers/resource/page';
-import { FetchingState } from '../../../../reducers/resource';
+import { PageResult } from '../../../../reducers/resource/page';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
 
 const styles: CSSProperties = {
     title: {
@@ -18,16 +18,16 @@ const styles: CSSProperties = {
     },
 };
 
-interface ManagementListProps {
+interface ManagementListProps<T> {
     title: string;
-    currentView: PagedView;
-    children: Array<JSX.Element>;
+    currentView: ResourceCache<PageResult<T>>;
+    renderChild: (child: T) => JSX.Element;
     onClickAdd: () => void;
     getPage: (page: number) => () => void;
     fetchListItems: () => void;
 }
 
-export default class ManagementList extends Component<ManagementListProps> {
+export default class ManagementList<T> extends Component<ManagementListProps<T>> {
 
     componentWillMount() {
         this.tryFetch();
@@ -38,31 +38,32 @@ export default class ManagementList extends Component<ManagementListProps> {
     }
 
     render() {
-        const {title, currentView, onClickAdd, getPage, children} = this.props;
-
+        const {title, currentView, onClickAdd, getPage, renderChild} = this.props;
+        const page = isPresent(currentView) ? currentView.object : null;
         return (
+
             <form>
                 <DialogTitle style={styles.title}>{title}</DialogTitle>
                 <span>
                     <PagingButton
                         ariaLabel="previous"
-                        enabled={currentView.hasPrevious}
-                        onClick={getPage(currentView.page - 1)}
+                        enabled={page ? page.meta.hasPrevious : false}
+                        onClick={getPage(page ? page.meta.number - 1 : 1)}
                     >
                         <ChevronLeftIcon/>
                     </PagingButton>
                     <PagingButton
                         ariaLabel="next"
-                        enabled={currentView.hasNext}
-                        onClick={getPage(currentView.page + 1)}
+                        enabled={page ? page.meta.hasNext : false}
+                        onClick={getPage(page ? page.meta.number + 1 : 1)}
                     >
                         <ChevronRightIcon/>
                     </PagingButton>
                 </span>
                 <List>
-                    {children}
+                    {page ? page.contents.toArray().map(renderChild) : []}
                 </List>
-                <LoadingProgressIndicator enabled={currentView.fetchedState === FetchingState.FETCHING}/>
+                <LoadingProgressIndicator enabled={currentView.fetchingState === FetchingState.FETCHING}/>
                 <Button
                     fab={true}
                     color="accent"
@@ -77,9 +78,9 @@ export default class ManagementList extends Component<ManagementListProps> {
     }
 
     private tryFetch() {
-        const props = this.props;
-        if (props.currentView.fetchedState === FetchingState.NOT_FETCHED) {
-            this.props.fetchListItems();
+        const {currentView, fetchListItems} = this.props;
+        if (currentView.fetchingState === FetchingState.NOT_FETCHED) {
+            fetchListItems();
         }
     }
 }

@@ -3,47 +3,51 @@ import ManagementList from '../../shared/presenters/ManagementList';
 import LeagueListItem from './LeagueListItem';
 import { Component } from 'react';
 import { League } from '../../../../reducers/resource/league';
-import { PagedView } from '../../../../reducers/resource/page';
+import { isPresent, ResourceCache } from '../../../../reducers/resource';
+import { PageResult } from '../../../../reducers/resource/page';
 
 export interface ManageLeaguesProps {
-    leagues: Array<League>;
-    currentView: PagedView;
+    leagues: ResourceCache<PageResult<League>>;
 }
 
 export interface ManageLeaguesActions {
     fetchListItems: (page: number) => () => void;
     onClickAdd: () => void;
     getPage: (page: number) => () => void;
-    buildHandleSelectDetail: (id: string) => () => void;
+    buildHandleSelectDetail: (league: League) => () => void;
     buildHandleDeleteLeague: (league: League) => () => void;
 }
 
 export default class ManageLeaguesForm extends Component<ManageLeaguesProps & ManageLeaguesActions> {
 
     render() {
-        const {currentView, onClickAdd, getPage, fetchListItems} = this.props;
+        const {leagues, onClickAdd, getPage, fetchListItems, buildHandleSelectDetail, buildHandleDeleteLeague}
+        = this.props;
+        const presentPage = isPresent(leagues) ? leagues.object : null;
         return (
             <ManagementList
                 title="Leagues"
-                currentView={currentView}
+                currentView={leagues}
                 onClickAdd={onClickAdd}
                 getPage={getPage}
-                fetchListItems={fetchListItems(currentView.page)}
-            >
-                {this.getChildListItems()}
-            </ManagementList>
+                // TODO we should always know the requested page even if it isn't present. This might break shit.
+                fetchListItems={fetchListItems(presentPage ? presentPage.meta.number : 1)}
+                renderChild={this.buildLeagueListItemRenderer(buildHandleSelectDetail, buildHandleDeleteLeague)}
+            />
         );
     }
 
-    getChildListItems(): Array<JSX.Element> {
-        const {leagues, buildHandleSelectDetail, buildHandleDeleteLeague} = this.props;
-        return leagues.map(league => (
-            <LeagueListItem
-                league={league}
-                handleSelectLeagueDetail={buildHandleSelectDetail(league.id)}
-                handleDeleteLeague={buildHandleDeleteLeague(league)}
-                key={league.id}
-            />
-        ));
+    buildLeagueListItemRenderer(selectBuilder: (league: League) => () => void,
+                                deleteBuilder: (league: League) => () => void): (league: League) => JSX.Element {
+        return (league: League) => {
+            return (
+                <LeagueListItem
+                    key={league.id}
+                    league={league}
+                    handleSelectLeagueDetail={selectBuilder(league)}
+                    handleDeleteLeague={deleteBuilder(league)}
+                />
+            );
+        };
     }
 }

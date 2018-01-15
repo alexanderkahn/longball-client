@@ -3,7 +3,7 @@ import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
-import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
 import { League } from '../../../../reducers/resource/league';
 
 const styles: CSSProperties = {
@@ -51,14 +51,14 @@ export default class LeagueDetailForm extends Component<LeagueDetailProps & Leag
         const {storedLeague, formLeague, fetchItem, resetFormItem} = this.props;
         if (storedLeague.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItem();
-        } else if (storedLeague.object && storedLeague.object.id !== formLeague.id) {
+        } else if (isPresent(storedLeague) && storedLeague.object.id !== formLeague.id) {
             resetFormItem(storedLeague.object);
         }
     }
 
     private getForm() {
         const {isEdit, updateName, saveLeague, formLeague, storedLeague} = this.props;
-        if (!storedLeague.object) {
+        if (!isPresent(storedLeague)) {
             return <div>I can't find the league you requested!</div>;
         } else {
             return (

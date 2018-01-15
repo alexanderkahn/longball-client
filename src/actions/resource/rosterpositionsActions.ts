@@ -1,4 +1,4 @@
-import { deleteObject, fetchCollection, fetchObject, PageResultsMeta, postObject } from '../rest';
+import { deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { receivePeople, removePerson } from './peopleActions';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/index';
@@ -10,7 +10,7 @@ import {
     RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
     ResourceActionType, ReceiveResourceObjectAction
 } from './index';
-import { PageDescriptor } from '../../reducers/resource/page';
+import { PageDescriptor, PageResultsMeta } from '../../reducers/resource/page';
 import { ResourceType } from '../../reducers/resource';
 import { Player, RosterPosition } from '../../reducers/resource/rosterPosition';
 import { Person } from '../../reducers/resource/person';
