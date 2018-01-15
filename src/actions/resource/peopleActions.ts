@@ -1,6 +1,7 @@
-import { Person, ResourceType } from '../../models/models';
 import { OrderedMap } from 'immutable';
 import { ReceiveResourceIncludesAction, RemoveResourceObjectAction, ResourceActionType } from './index';
+import { ResourceType } from '../../reducers/resource';
+import { Person } from '../../reducers/resource/person';
 
 const PEOPLE_RESOURCE_TYPE: ResourceType = 'people';
 

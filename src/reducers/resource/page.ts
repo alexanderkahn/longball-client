@@ -1,5 +1,6 @@
 import { List, Map as ImmutableMap } from 'immutable';
 import { PageResultsMeta } from '../../actions/rest';
+import { ViewState } from '../../models/models';
 
 export interface PageResult {
     descriptor: PageDescriptor;
@@ -23,4 +24,15 @@ export class PageDescriptor {
             && this.searches.equals(other.searches)
             && this.filters.equals(other.filters);
     }
+}
+
+// TODO: this is essentially the same as PageResultsMeta. Should be able to get rid of it.
+export interface PagedView extends ViewState {
+    page: number;
+    hasPrevious: boolean;
+    hasNext: boolean;
+}
+
+export interface PagedViewParams {
+    page?: string;
 }

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { FetchingState, Player } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import 'react-datepicker/dist/react-datepicker.css';
 import TeamPicker from '../containers/TeamPicker';
-import { ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { Player } from '../../../../reducers/resource/rosterPosition';
 
 const styles: CSSProperties = {
     root: {

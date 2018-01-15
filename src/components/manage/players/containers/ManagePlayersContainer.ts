@@ -1,12 +1,14 @@
 import { connect, Dispatch } from 'react-redux';
 import { deletePlayer, fetchPlayers } from '../../../../actions/resource/rosterpositionsActions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
-import { getSafePage, Person, Player, RosterPosition } from '../../../../models/models';
+import { getSafePage } from '../../../../models/models';
 import { RootState } from '../../../../reducers';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
 import { ResourceObjectState } from '../../../../reducers/resource';
 import { PageDescriptor } from '../../../../reducers/resource/page';
+import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
+import { Person } from '../../../../reducers/resource/person';
 
 const MANAGE_PLAYERS_BASE_URL = '/manage/players';
 

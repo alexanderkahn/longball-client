@@ -1,5 +1,4 @@
 import { deleteObject, fetchCollection, fetchObject, PageResultsMeta, postObject } from '../rest';
-import { Person, Player, ResourceType, RosterPosition } from '../../models/models';
 import { receivePeople, removePerson } from './peopleActions';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/index';
@@ -12,6 +11,9 @@ import {
     ResourceActionType, ReceiveResourceObjectAction
 } from './index';
 import { PageDescriptor } from '../../reducers/resource/page';
+import { ResourceType } from '../../reducers/resource';
+import { Player, RosterPosition } from '../../reducers/resource/rosterPosition';
+import { Person } from '../../reducers/resource/person';
 
 const ROSTER_POSITIONS_RESOURCE_TYPE: ResourceType = 'rosterpositions';
 

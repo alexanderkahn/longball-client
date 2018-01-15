@@ -1,8 +1,9 @@
 import * as React from 'react';
 import ManagementList from '../../shared/presenters/ManagementList';
-import { PagedView, Player } from '../../../../models/models';
 import PlayerListItem from './PlayerListItem';
 import { Component } from 'react';
+import { Player } from '../../../../reducers/resource/rosterPosition';
+import { PagedView } from '../../../../reducers/resource/page';
 
 export interface ManagePlayersFormProps {
     players: Array<Player>;

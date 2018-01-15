@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
-import { FetchingState, Team } from '../../../../models/models';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import LeaguePicker from '../containers/LeaguePicker';
-import { ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { Team } from '../../../../reducers/resource/team';
 
 const styles: CSSProperties = {
     root: {

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
-import { FetchingState, League } from '../../../../models/models';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
-import { ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { League } from '../../../../reducers/resource/league';
 
 const styles: CSSProperties = {
     root: {

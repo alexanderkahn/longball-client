@@ -5,11 +5,11 @@ import ResourcePickerPresenter, {
     ResourcePickerProps
 } from '../presenters/ResourcePickerPresenter';
 import { Dispatch } from 'redux';
-import { League } from '../../../../models/models';
 import { updateTeamRelationship, updateTeamRelationshipDisplay } from '../../../../actions/form/formUpdateActions';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { fetchLeague, fetchLeagues } from '../../../../actions/resource/leaguesActions';
+import { League } from '../../../../reducers/resource/league';
 
 function getLeagueDisplay(obj: League | string | null): string {
     if (!obj) {

@@ -6,7 +6,8 @@ import AddIcon from 'material-ui-icons/Add';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
-import { FetchingState, PagedView } from '../../../../models/models';
+import { PagedView } from '../../../../reducers/resource/page';
+import { FetchingState } from '../../../../reducers/resource';
 
 const styles: CSSProperties = {
     title: {

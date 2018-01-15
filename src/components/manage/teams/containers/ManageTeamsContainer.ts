@@ -3,9 +3,10 @@ import { deleteTeam, fetchTeams } from '../../../../actions/resource/teamsAction
 import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '../presenters/ManageTeamsForm';
 import { RootState } from '../../../../reducers';
 import { push } from 'react-router-redux';
-import { getSafePage, Team } from '../../../../models/models';
+import { getSafePage } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
 import { PageDescriptor } from '../../../../reducers/resource/page';
+import { Team } from '../../../../reducers/resource/team';
 
 const MANAGE_TEAMS_BASE_URL = '/manage/teams';
 

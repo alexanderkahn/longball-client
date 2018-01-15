@@ -1,9 +1,13 @@
 import { combineReducers, Reducer } from 'redux';
-import { League, Person, ResourceObject, RosterPosition, Team } from '../../models/models';
 import { ResourceFormUpdateAction, ResourceFormUpdateActionType } from '../../actions/form/formUpdateActions';
 import { ReceiveResourceObjectAction, ResourceActionType } from '../../actions/resource';
 import * as _ from 'lodash';
 import { Map } from 'immutable';
+import { ResourceObject } from '../resource';
+import { League } from '../resource/league';
+import { Team } from '../resource/team';
+import { Person } from '../resource/person';
+import { RosterPosition } from '../resource/rosterPosition';
 
 interface ResourceFormState<T extends ResourceObject> {
     readonly resource: T;

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import ManagementList from '../../shared/presenters/ManagementList';
-import { League, PagedView } from '../../../../models/models';
 import LeagueListItem from './LeagueListItem';
 import { Component } from 'react';
+import { League } from '../../../../reducers/resource/league';
+import { PagedView } from '../../../../reducers/resource/page';
 
 export interface ManageLeaguesProps {
     leagues: Array<League>;

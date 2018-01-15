@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import { Avatar, ListItemSecondaryAction } from 'material-ui';
-import { Player } from '../../../../models/models';
 import { Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
+import { Player } from '../../../../reducers/resource/rosterPosition';
 
 interface PlayerListItemProps {
     player: Player;

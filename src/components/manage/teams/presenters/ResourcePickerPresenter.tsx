@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { FetchingState, ResourceObject } from '../../../../models/models';
 import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
-import { ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, ResourceCache, ResourceObject } from '../../../../reducers/resource';
 
 export interface ResourcePickerProps<T extends ResourceObject> {
     matchingResources: ResourceCache<Array<T>>;

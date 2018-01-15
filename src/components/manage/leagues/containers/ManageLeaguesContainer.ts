@@ -3,10 +3,11 @@ import { deleteLeague, fetchLeagues } from '../../../../actions/resource/leagues
 import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../presenters/ManageLeaguesForm';
 import { RootState } from '../../../../reducers';
 import { push } from 'react-router-redux';
-import { getSafePage, League } from '../../../../models/models';
+import { getSafePage } from '../../../../models/models';
 import { RouteComponentProps } from 'react-router';
 // import { getObjectsForPage } from '../../../../reducers/resource/index';
 import { PageDescriptor } from '../../../../reducers/resource/page';
+import { League } from '../../../../reducers/resource/league';
 
 const MANAGE_LEAGUES_BASE_URL = '/manage/leagues';
 

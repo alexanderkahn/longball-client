@@ -1,7 +1,7 @@
-import { ResourceObject, ResourceType } from '../../models/models';
 import { OrderedMap } from 'immutable';
 import { PageResultsMeta } from '../rest';
 import { PageDescriptor } from '../../reducers/resource/page';
+import { ResourceObject, ResourceType } from '../../reducers/resource';
 
 export enum ResourceActionType {
     REQUEST_RESOURCE_OBJECT = 'REQUEST_RESOURCE_OBJECT',

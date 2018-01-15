@@ -1,6 +1,6 @@
 import { getIdTokenPromise } from './session';
-import { ResourceObject } from '../models/models';
 import { PageDescriptor } from '../reducers/resource/page';
+import { ResourceObject } from '../reducers/resource';
 
 export interface MetaResponse {
     meta: {
@@ -68,6 +68,7 @@ class UnexpectedServerResponseError extends Error {
 async function fetchJson(url: string, options: RequestOptions): Promise<JsonResponse> {
     const token = await getIdTokenPromise();
     options.headers.Authorization = 'Bearer ' + token;
+    // FIXME: what's this error about?
     const response = await fetch(url, options);
     const json = await response.json();
     return {request: {url, options}, status: response.status, headers: response.headers, json};

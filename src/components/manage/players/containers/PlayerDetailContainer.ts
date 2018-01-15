@@ -5,12 +5,13 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../../../reducers';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { FetchingState, Person, Player, RosterPosition } from '../../../../models/models';
 import {
     resetForm, updatePersonAttribute,
     updateRosterPositionAttribute,
 } from '../../../../actions/form/formUpdateActions';
-import { ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
+import { Person } from '../../../../reducers/resource/person';
 
 const emptyPlayer: ResourceCache<Player> = {
     fetchingState: FetchingState.FETCHED,

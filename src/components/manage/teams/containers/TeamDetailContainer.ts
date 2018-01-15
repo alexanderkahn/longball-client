@@ -4,9 +4,9 @@ import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../prese
 import { RootState } from '../../../../reducers';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
-import { FetchingState, Team } from '../../../../models/models';
 import { resetForm, updateTeamAttribute } from '../../../../actions/form/formUpdateActions';
-import { ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { Team } from '../../../../reducers/resource/team';
 
 const newTeam: ResourceCache<Team> = {
     fetchingState: FetchingState.FETCHED,

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import { Icon, ListItemSecondaryAction } from 'material-ui';
-import { League } from '../../../../models/models';
 import { Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
+import { League } from '../../../../reducers/resource/league';
 
 interface LeagueListItemProps {
     league: League;

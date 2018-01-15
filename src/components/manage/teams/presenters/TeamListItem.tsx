@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import { Icon, ListItemSecondaryAction } from 'material-ui';
-import { Team } from '../../../../models/models';
 import { Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
+import { Team } from '../../../../reducers/resource/team';
 
 interface TeamListItemProps {
     team: Team;

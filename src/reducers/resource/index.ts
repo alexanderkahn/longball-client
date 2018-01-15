@@ -1,8 +1,41 @@
 import { combineReducers, Reducer } from 'redux';
 import { List, Map as ImmutableMap } from 'immutable';
-import { FetchingState, League, Person, ResourceObject, ResourceType, RosterPosition, Team } from '../../models/models';
 import { ResourceActionType, ResourceObjectAction } from '../../actions/resource';
 import { PageDescriptor, PageResult } from './page';
+import { League } from './league';
+import { Team } from './team';
+import { Person } from './person';
+import { RosterPosition } from './rosterPosition';
+
+export enum FetchingState {
+    NOT_FETCHED,
+    FETCHING,
+    FETCHED
+}
+
+export type ResourceType =
+    | 'leagues'
+    | 'teams'
+    | 'rosterpositions'
+    | 'people';
+
+export abstract class ResourceObject {
+    id: string;
+    type: ResourceType;
+}
+
+export class RelationshipResource {
+    data: ResourceObject;
+
+    constructor(type: ResourceType, id: string) {
+        return {
+            data: {
+                type,
+                id
+            }
+        };
+    }
+}
 
 export interface ResourceState {
     readonly leagues: ResourceObjectState<League>;

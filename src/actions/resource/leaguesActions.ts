@@ -1,5 +1,4 @@
 import { PageResultsMeta, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
-import { League, ResourceType } from '../../models/models';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/index';
 import { replace } from 'react-router-redux';
@@ -10,6 +9,8 @@ import {
     ResourceActionType, ReceiveResourceObjectAction
 } from './index';
 import { PageDescriptor } from '../../reducers/resource/page';
+import { ResourceType } from '../../reducers/resource';
+import { League } from '../../reducers/resource/league';
 
 const LEAGUE_RESOURCE_TYPE: ResourceType = 'leagues';
 

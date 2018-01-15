@@ -1,5 +1,4 @@
 import { PageResultsMeta, deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
-import { ResourceType, Team } from '../../models/models';
 import { RootState } from '../../reducers';
 import { Dispatch } from 'redux';
 import { replace } from 'react-router-redux';
@@ -10,6 +9,8 @@ import {
     ResourceActionType, ReceiveResourceObjectAction
 } from './index';
 import { PageDescriptor } from '../../reducers/resource/page';
+import { ResourceType } from '../../reducers/resource';
+import { Team } from '../../reducers/resource/team';
 
 const TEAMS_RESOURCE_TYPE: ResourceType = 'teams';
 

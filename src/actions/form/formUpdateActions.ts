@@ -1,4 +1,4 @@
-import { RelationshipResource, ResourceObject, ResourceType } from '../../models/models';
+import { RelationshipResource, ResourceObject, ResourceType } from '../../reducers/resource';
 
 export enum ResourceFormUpdateActionType {
     RESET_FORM = 'RESET_FORM',

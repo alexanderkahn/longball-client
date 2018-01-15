@@ -5,7 +5,6 @@ import ResourcePickerPresenter, {
     ResourcePickerActions,
     ResourcePickerProps
 } from '../../teams/presenters/ResourcePickerPresenter';
-import { Team } from '../../../../models/models';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { fetchTeam, fetchTeams } from '../../../../actions/resource/teamsActions';
@@ -13,6 +12,7 @@ import {
     updateRosterPositionRelationship,
     updateRosterPositionRelationshipDisplay
 } from '../../../../actions/form/formUpdateActions';
+import { Team } from '../../../../reducers/resource/team';
 
 const SEARCH_TERM = 'location,_,nickname';
 

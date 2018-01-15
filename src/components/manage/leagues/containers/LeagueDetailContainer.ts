@@ -4,9 +4,9 @@ import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '..
 import { RootState } from '../../../../reducers';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { FetchingState, League } from '../../../../models/models';
 import { resetForm, updateLeagueAttribute } from '../../../../actions/form/formUpdateActions';
-import { ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { League } from '../../../../reducers/resource/league';
 
 // FIXME GOD DAMMIT this cannot be back. At the very least why should it live here?
 // Once the models all have empty() methods, maybe we can return this from the store,

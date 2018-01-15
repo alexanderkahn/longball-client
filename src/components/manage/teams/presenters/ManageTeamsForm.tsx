@@ -1,8 +1,9 @@
 import * as React from 'react';
 import ManagementList from '../../shared/presenters/ManagementList';
-import { PagedView, Team } from '../../../../models/models';
 import TeamListItem from './TeamListItem';
 import { Component } from 'react';
+import { Team } from '../../../../reducers/resource/team';
+import { PagedView } from '../../../../reducers/resource/page';
 
 export interface ManageTeamsFormProps {
     teams: Array<Team>;
