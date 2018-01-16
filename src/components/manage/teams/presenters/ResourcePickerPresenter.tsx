@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
-import { FetchingState, isPresent, ResourceCache, ResourceObject } from '../../../../reducers/resource';
+import { FetchingState, isAbsent, isPresent, ResourceCache, ResourceObject } from '../../../../reducers/resource';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 
 export interface ResourcePickerProps<T extends ResourceObject> {
@@ -63,12 +63,14 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     private updatePicker() {
         const { selectedResource, fetchMatchingResource: fetchSelectedResource, inputDisplayValue,
             populateDisplayValue, parseDisplayValue, matchingResources, fetchSuggestions} = this.props;
-        if (selectedResource && !isPresent(selectedResource)) {
+        if (selectedResource && isAbsent(selectedResource)) {
+            console.info('fetching again', selectedResource.fetchingState);
+            console.info('heres the thing', selectedResource.id);
             fetchSelectedResource(selectedResource.id);
         } else if (isPresent(selectedResource) && !inputDisplayValue) {
             populateDisplayValue(parseDisplayValue(selectedResource.object));
         } else if (matchingResources.fetchingState === FetchingState.NOT_FETCHED && inputDisplayValue.length > 0) {
-            fetchSuggestions(inputDisplayValue ? inputDisplayValue : '');
+            fetchSuggestions(inputDisplayValue);
         }
     }
 

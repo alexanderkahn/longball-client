@@ -67,6 +67,10 @@ export function isPresent<K, V>(value: ResourceCache<K, V> | null): value is Pre
     return value !== null && value.fetchingState === FetchingState.FETCHED && value.object !== null;
 }
 
+export function isAbsent<K, V>(value: ResourceCache<K, V> | null): value is AbsentItemCache<K> {
+    return value !== null && value.fetchingState === FetchingState.NOT_FETCHED;
+}
+
 class CachedStateWrapper<K, V> {
 
     private readonly internal: ImmutableMap<K, ResourceCache<K, V>> = ImmutableMap();
