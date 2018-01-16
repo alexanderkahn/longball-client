@@ -64,8 +64,6 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
         const { selectedResource, fetchMatchingResource: fetchSelectedResource, inputDisplayValue,
             populateDisplayValue, parseDisplayValue, matchingResources, fetchSuggestions} = this.props;
         if (selectedResource && isAbsent(selectedResource)) {
-            console.info('fetching again', selectedResource.fetchingState);
-            console.info('heres the thing', selectedResource.id);
             fetchSelectedResource(selectedResource.id);
         } else if (isPresent(selectedResource) && !inputDisplayValue) {
             populateDisplayValue(parseDisplayValue(selectedResource.object));

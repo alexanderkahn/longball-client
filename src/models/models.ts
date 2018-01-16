@@ -1,6 +1,5 @@
 import { parse } from 'querystring';
 import { Location } from 'history';
-import { FetchingState } from '../reducers/resource';
 import { PageDescriptor } from '../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { isNumber } from 'util';
@@ -20,13 +19,13 @@ export function parseQueryParameters(location: Location): PageDescriptor {
     return new PageDescriptor(pageNumber, searches, filters);
 }
 
-// FIXME: request can have multiple filters of the same type. Need to filter these out (business logic does not allow)
 function getParameterCollection(params: {}, parameterKey: 'filter'|'search'): ImmutableMap<string, string> {
     const prefix = `${parameterKey}[`;
     const suffix = ']';
     const paramsWithValues = Object.getOwnPropertyNames(params)
         .filter(it => it.startsWith(prefix) && it.endsWith(suffix))
         .map((key: string) => [key, params[key]])
-        .map(([key, value]) => [key.slice(prefix.length, key.length - suffix.length), value]);
+        .map(([key, value]) => [key.slice(prefix.length, key.length - suffix.length), value])
+        .filter(value => typeof value === 'string');
     return ImmutableMap(paramsWithValues);
 }
