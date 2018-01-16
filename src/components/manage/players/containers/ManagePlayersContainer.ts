@@ -28,7 +28,7 @@ function getPlayers(rosterPositions: Array<RosterPosition>, people: ResourceObje
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManagePlayersFormProps => {
     const currentPage = parseQueryParameters(ownProps.location);
-    const pageResults = state.resource.teams.pages.get(currentPage);
+    const pageResults = state.resource.rosterPositions.pages.get(currentPage);
     const rosterPositions = state.resource.rosterPositions.getNonNullPageItems(currentPage);
     return {
         players: getResourcePageResult(pageResults, getPlayers(rosterPositions, state.resource.people))
