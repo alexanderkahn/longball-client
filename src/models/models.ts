@@ -10,33 +10,6 @@ export interface User {
     name: string;
 }
 
-// TODO: can we get rid of this?
-export interface ViewState {
-    fetchedState: FetchingState;
-}
-
-// // TODO: this whole function should probably be part of the state object
-// export function getSafePage(state: ResourceObjectState<ResourceObject>, location: Location): PagedView {
-//     const pageDescriptor = parseQueryParameters(location);
-//
-//     const pageGroup = state.pages.get(pageDescriptor);
-//     if (!pageGroup) {
-//         return {
-//             page: pageDescriptor.pageNumber,
-//             fetchedState: FetchingState.NOT_FETCHED,
-//             hasPrevious: false,
-//             hasNext: false,
-//         };
-//     } else {
-//         return {
-//             page: pageDescriptor.pageNumber,
-//             fetchedState: pageGroup.fetchingState,
-//             hasPrevious: pageGroup.object ? pageGroup.object.meta.hasPrevious : false,
-//             hasNext: pageGroup.object ? pageGroup.object.meta.hasNext : false,
-//         };
-//     }
-// }
-
 export function parseQueryParameters(location: Location): PageDescriptor {
     const params = parse(location.search.substr(1));
 
