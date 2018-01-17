@@ -26,9 +26,9 @@ export interface CollectionResponse<T extends ResourceObject> extends MetaRespon
     included?: Array<ResourceObject>;
 }
 
-interface RequestOptions {
+interface RequestOptions extends RequestInit {
     method: RequestMethod;
-    headers: { [header: string]: {} }; // TODO: can I change this to a map?
+    headers: Array<Array<string>>;
     body?: {};
 }
 
@@ -67,7 +67,7 @@ class UnexpectedServerResponseError extends Error {
 
 async function fetchJson(url: string, options: RequestOptions): Promise<JsonResponse> {
     const token = await getIdTokenPromise();
-    options.headers.Authorization = 'Bearer ' + token;
+    options.headers.push(['Authorization', 'Bearer ' + token]);
     // FIXME: what's this error about?
     const response = await fetch(url, options);
     const json = await response.json();
@@ -77,7 +77,7 @@ async function fetchJson(url: string, options: RequestOptions): Promise<JsonResp
 async function getJsonGetResponse<T>(url: string): Promise<T> {
     const response = await fetchJson(url, {
         method: 'GET',
-        headers: {}
+        headers: []
     });
     if (response.status === 200) {
         return response.json as T;
@@ -91,7 +91,7 @@ async function getJsonGetResponse<T>(url: string): Promise<T> {
 
 async function getJsonPostResponse<T extends ResourceObject>(url: string, body: T): Promise<ObjectResponse<T>> {
     const response = await fetchJson(url, {
-        headers: {'Content-Type': 'application/json'},
+        headers: [['Content-Type', 'application/json']],
         method: 'POST',
         body: JSON.stringify({data: body})
     });
@@ -104,7 +104,7 @@ async function getJsonPostResponse<T extends ResourceObject>(url: string, body: 
 
 async function getJsonDeleteResponse(url: string): Promise<{ meta: { status: number } }> {
     const response = await fetchJson(url, {
-        headers: {},
+        headers: [],
         method: 'DELETE'
     });
     if (response.status !== 200) {
