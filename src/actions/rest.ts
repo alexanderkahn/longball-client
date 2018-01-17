@@ -44,6 +44,13 @@ interface JsonResponse {
     json: {};
 }
 
+class InvalidRequestError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'InvalidRequestError';
+    }
+}
+
 class NotFoundServerResponseError extends Error {
     constructor(message: string) {
         super(message);
@@ -140,6 +147,9 @@ export async function fetchCollection<T extends ResourceObject>(
 
 export async function fetchObject<T extends ResourceObject>(type: string, id: string, includes?: Array<string>)
 : Promise<ObjectResponse<T> | null> {
+    if (id.trim().length < 1) {
+        throw new InvalidRequestError('Object ID is missing or invalid. Request type: ' + type);
+    }
     const url = getFormattedUrl(`/rest/${type}/${id}`, undefined, includes);
     try {
         return await getJsonGetResponse<ObjectResponse<T>>(url);

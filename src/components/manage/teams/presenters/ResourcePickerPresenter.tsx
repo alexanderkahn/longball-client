@@ -61,10 +61,10 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     }
 
     private updatePicker() {
-        const { selectedResource, fetchMatchingResource: fetchSelectedResource, inputDisplayValue,
-            populateDisplayValue, parseDisplayValue, matchingResources, fetchSuggestions} = this.props;
-        if (selectedResource && isAbsent(selectedResource)) {
-            fetchSelectedResource(selectedResource.id);
+        const { selectedResource, fetchMatchingResource, inputDisplayValue, populateDisplayValue, parseDisplayValue,
+            matchingResources, fetchSuggestions} = this.props;
+        if (selectedResource && isAbsent(selectedResource) && selectedResource.id.length > 1) {
+            fetchMatchingResource(selectedResource.id);
         } else if (isPresent(selectedResource) && !inputDisplayValue) {
             populateDisplayValue(parseDisplayValue(selectedResource.object));
         } else if (matchingResources.fetchingState === FetchingState.NOT_FETCHED && inputDisplayValue.length > 0) {
