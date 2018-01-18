@@ -3,7 +3,7 @@ import ManagementList from '../../shared/presenters/ManagementList';
 import TeamListItem from './TeamListItem';
 import { Component } from 'react';
 import { Team } from '../../../../reducers/resource/team';
-import { ResourceCache } from '../../../../reducers/resource';
+import { ResourceCache } from '../../../../reducers/resource/cache';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 
 export interface ManageTeamsFormProps {

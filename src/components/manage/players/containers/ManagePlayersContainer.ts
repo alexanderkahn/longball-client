@@ -4,12 +4,13 @@ import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } f
 import { RootState } from '../../../../reducers';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
-import { isPresent, ResourceObjectState } from '../../../../reducers/resource';
+import { ResourceObjectState } from '../../../../reducers/resource';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
 import { parseQueryParameters } from '../../../../models/models';
 import { getResourcePageResult } from '../../teams/containers/ManageTeamsContainer';
+import { isPresent } from '../../../../reducers/resource/cache';
 
 const MANAGE_PLAYERS_BASE_URL = '/manage/players';
 

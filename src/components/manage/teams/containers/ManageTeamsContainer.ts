@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 import { Team } from '../../../../reducers/resource/team';
 import { parseQueryParameters } from '../../../../models/models';
-import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { List } from 'immutable';
 
 const MANAGE_TEAMS_BASE_URL = '/manage/teams';

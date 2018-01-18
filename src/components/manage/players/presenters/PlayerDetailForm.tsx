@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import 'react-datepicker/dist/react-datepicker.css';
 import TeamPicker from '../containers/TeamPicker';
-import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { Player } from '../../../../reducers/resource/rosterPosition';
 
 const styles: CSSProperties = {

@@ -13,7 +13,7 @@ import {
     updateRosterPositionRelationshipDisplay
 } from '../../../../actions/form/formUpdateActions';
 import { Team } from '../../../../reducers/resource/team';
-import { FetchingState, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, ResourceCache } from '../../../../reducers/resource/cache';
 
 const SEARCH_TERM = 'location,_,nickname';
 

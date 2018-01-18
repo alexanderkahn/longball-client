@@ -4,7 +4,7 @@ import { TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import LeaguePicker from '../containers/LeaguePicker';
-import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { Team } from '../../../../reducers/resource/team';
 
 const styles: CSSProperties = {

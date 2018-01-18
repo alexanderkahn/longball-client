@@ -3,7 +3,7 @@ import ManagementList from '../../shared/presenters/ManagementList';
 import LeagueListItem from './LeagueListItem';
 import { Component } from 'react';
 import { League } from '../../../../reducers/resource/league';
-import { ResourceCache } from '../../../../reducers/resource';
+import { ResourceCache } from '../../../../reducers/resource/cache';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 
 export interface ManageLeaguesProps {

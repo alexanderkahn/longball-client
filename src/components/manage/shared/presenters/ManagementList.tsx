@@ -7,7 +7,7 @@ import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 
 const styles: CSSProperties = {
     title: {

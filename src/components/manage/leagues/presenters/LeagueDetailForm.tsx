@@ -3,7 +3,7 @@ import { Component, CSSProperties } from 'react';
 import { TextField } from 'material-ui';
 import FetchableAsset from '../../shared/presenters/FetchableAsset';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
-import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { League } from '../../../../reducers/resource/league';
 
 const styles: CSSProperties = {

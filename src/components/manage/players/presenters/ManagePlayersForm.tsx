@@ -4,7 +4,7 @@ import PlayerListItem from './PlayerListItem';
 import { Component } from 'react';
 import { Player } from '../../../../reducers/resource/rosterPosition';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { ResourceCache } from '../../../../reducers/resource';
+import { ResourceCache } from '../../../../reducers/resource/cache';
 
 export interface ManagePlayersFormProps {
     players: ResourceCache<PageDescriptor, PageResult<Player>>;

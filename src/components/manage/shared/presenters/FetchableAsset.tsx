@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import LoadingProgressIndicator from '../../../shared/presenters/LoadingProgressIndicator';
-import { FetchingState } from '../../../../reducers/resource';
+import { FetchingState } from '../../../../reducers/resource/cache';
 
 interface FetchableAssetProps {
     fetchingState: FetchingState;

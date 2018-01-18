@@ -9,9 +9,10 @@ import {
     resetForm, updatePersonAttribute,
     updateRosterPositionAttribute,
 } from '../../../../actions/form/formUpdateActions';
-import { FetchingState, isPresent, NEW_RESOURCE_FORM_ROUTE, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
+import { NEW_RESOURCE_FORM_ROUTE } from '../../../../reducers/resource';
 
 const getStorePlayer = function (state: RootState, rosterPositionId: string): ResourceCache<string, Player> {
     const rosterPosition = state.resource.rosterPositions.data.get(rosterPositionId);
