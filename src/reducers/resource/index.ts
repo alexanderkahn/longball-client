@@ -2,10 +2,10 @@ import { combineReducers, Reducer } from 'redux';
 import * as Immutable from 'immutable';
 import { ResourceActionType, ResourceObjectAction } from '../../actions/resource';
 import { PageDescriptor, PageResult } from './page';
-import { League } from './league';
-import { Team } from './team';
-import { Person } from './person';
-import { RosterPosition } from './rosterPosition';
+import { blankLeague, League } from './league';
+import { blankTeam, Team } from './team';
+import { blankPerson, Person } from './person';
+import { blankRosterPosition, RosterPosition } from './rosterPosition';
 import * as _ from 'lodash';
 
 export const NEW_RESOURCE_FORM_ROUTE = 'add';
@@ -22,22 +22,13 @@ export type ResourceType =
     | 'rosterpositions'
     | 'people';
 
-export abstract class ResourceObject {
+export interface ResourceObject {
     id: string;
     type: ResourceType;
 }
 
-export class RelationshipResource {
+export interface RelationshipResource {
     data: ResourceObject;
-
-    constructor(type: ResourceType, id: string) {
-        return {
-            data: {
-                type,
-                id
-            }
-        };
-    }
 }
 
 export interface ResourceState {
@@ -219,10 +210,10 @@ const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceTy
     }
 };
 
-const leagues = resourceReducerBuilder<League>('leagues', League.empty());
-const teams = resourceReducerBuilder<Team>('teams', Team.empty());
-const people = resourceReducerBuilder<Person>('people', Person.empty());
-const rosterPositions = resourceReducerBuilder<RosterPosition>('rosterpositions', RosterPosition.empty());
+const leagues = resourceReducerBuilder<League>('leagues', blankLeague);
+const teams = resourceReducerBuilder<Team>('teams', blankTeam);
+const people = resourceReducerBuilder<Person>('people', blankPerson);
+const rosterPositions = resourceReducerBuilder<RosterPosition>('rosterpositions', blankRosterPosition);
 
 export const resource: Reducer<ResourceState> = combineReducers<ResourceState>({
     leagues,
