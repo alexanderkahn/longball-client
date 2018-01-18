@@ -68,7 +68,6 @@ class UnexpectedServerResponseError extends Error {
 async function fetchJson(url: string, options: RequestOptions): Promise<JsonResponse> {
     const token = await getIdTokenPromise();
     options.headers.push(['Authorization', 'Bearer ' + token]);
-    // FIXME: what's this error about?
     const response = await fetch(url, options);
     const json = await response.json();
     return {request: {url, options}, status: response.status, headers: response.headers, json};

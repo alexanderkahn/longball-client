@@ -9,18 +9,9 @@ import {
     resetForm, updatePersonAttribute,
     updateRosterPositionAttribute,
 } from '../../../../actions/form/formUpdateActions';
-import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource';
+import { FetchingState, isPresent, NEW_RESOURCE_FORM_ROUTE, ResourceCache } from '../../../../reducers/resource';
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
-
-const emptyPlayer: ResourceCache<string, Player> = {
-    id: 'add',
-    fetchingState: FetchingState.FETCHED,
-    object: {
-        person: Person.empty(),
-        rosterPosition: RosterPosition.empty()
-    }
-};
 
 const getStorePlayer = function (state: RootState, rosterPositionId: string): ResourceCache<string, Player> {
     const rosterPosition = state.resource.rosterPositions.data.get(rosterPositionId);
@@ -56,11 +47,10 @@ function toResourceCache<T>(fetchingState: FetchingState, id: string, object: T 
 }
 
 function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailProps {
-    // TODO: lordy this is ugly and bad.
     let teamId = ownProps.match.params.itemId;
-    const isNew = teamId === 'add';
+    const isNew = teamId === NEW_RESOURCE_FORM_ROUTE;
     return {
-        storedPlayer: isNew ? emptyPlayer : getStorePlayer(state, teamId),
+        storedPlayer: getStorePlayer(state, teamId),
         formPlayer: {
             person: state.form.person.resource,
             rosterPosition: state.form.rosterPosition.resource,

@@ -5,20 +5,15 @@ import { RootState } from '../../../../reducers';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { resetForm, updateTeamAttribute } from '../../../../actions/form/formUpdateActions';
-import { FetchingState, ResourceCache } from '../../../../reducers/resource';
 import { Team } from '../../../../reducers/resource/team';
+import { NEW_RESOURCE_FORM_ROUTE } from '../../../../reducers/resource';
 
-const newTeam: ResourceCache<string, Team> = {
-    id: 'add',
-    fetchingState: FetchingState.FETCHED,
-    object: Team.empty()
-};
-
+// FIXME: isEdit should probably be stored in state somewhere (in form? Seems like a form prop to me)
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): TeamDetailProps => {
     const teamId = ownProps.match.params.itemId;
-    const isNew = teamId === 'add';
+    const isNew = teamId === NEW_RESOURCE_FORM_ROUTE;
     return {
-        storedTeam: isNew ? newTeam : state.resource.teams.data.get(teamId),
+        storedTeam: state.resource.teams.data.get(teamId),
         formTeam: state.form.team.resource,
         isEdit: isNew
     };

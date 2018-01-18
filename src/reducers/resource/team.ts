@@ -1,4 +1,4 @@
-import { RelationshipResource, ResourceObject } from './index';
+import { NEW_RESOURCE_FORM_ROUTE, RelationshipResource, ResourceObject } from './index';
 
 export class Team implements ResourceObject {
     id: string;
@@ -13,7 +13,7 @@ export class Team implements ResourceObject {
     };
 
     static empty(): Team {
-        return new Team('', {abbreviation: '', location: '', nickname: ''}, {league: ''});
+        return new Team(NEW_RESOURCE_FORM_ROUTE, {abbreviation: '', location: '', nickname: ''}, {league: ''});
     }
 
     constructor(id: string,

@@ -1,4 +1,4 @@
-import { ResourceObject } from './index';
+import { NEW_RESOURCE_FORM_ROUTE, ResourceObject } from './index';
 
 export class League implements ResourceObject {
 
@@ -8,8 +8,9 @@ export class League implements ResourceObject {
         name: string
     };
 
+    // TODO: rename this method, pull it out of the class (for all resourceobjects)
     static empty(): League {
-        return new League('', {name: ''});
+        return new League(NEW_RESOURCE_FORM_ROUTE, {name: ''});
     }
 
     constructor(id: string, attributes: { name: string }) {

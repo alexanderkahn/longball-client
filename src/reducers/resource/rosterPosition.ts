@@ -1,5 +1,5 @@
 import { Person } from './person';
-import { RelationshipResource, ResourceObject } from './index';
+import { NEW_RESOURCE_FORM_ROUTE, RelationshipResource, ResourceObject } from './index';
 
 export class RosterPosition implements ResourceObject {
     id: string;
@@ -14,8 +14,14 @@ export class RosterPosition implements ResourceObject {
         player: RelationshipResource;
     };
 
+    // TODO the pre-canned relationship to the 'person' is weird. Try and figure out a way to decouple these.
+    // It's needed for now because that's how the person object is loaded into the form in PlayerDetailContainer
     static empty(): RosterPosition {
-        return new RosterPosition('', {jerseyNumber: 0, startDate: ''}, {team: '', player: ''});
+        return new RosterPosition(
+            NEW_RESOURCE_FORM_ROUTE,
+            {jerseyNumber: 0, startDate: ''},
+            {team: '', player: NEW_RESOURCE_FORM_ROUTE}
+            );
     }
 
     constructor(id: string,

@@ -1,4 +1,4 @@
-import { ResourceObject } from './index';
+import { NEW_RESOURCE_FORM_ROUTE, ResourceObject } from './index';
 
 export class Person implements ResourceObject {
     id: string;
@@ -9,7 +9,7 @@ export class Person implements ResourceObject {
     };
 
     static empty(): Person {
-        return new Person('', {first: '', last: ''});
+        return new Person(NEW_RESOURCE_FORM_ROUTE, {first: '', last: ''});
     }
 
     constructor(id: string, attributes: { first: string, last: string }) {

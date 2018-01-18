@@ -1,11 +1,14 @@
 import { combineReducers, Reducer } from 'redux';
-import { List, Map as ImmutableMap } from 'immutable';
+import * as Immutable from 'immutable';
 import { ResourceActionType, ResourceObjectAction } from '../../actions/resource';
 import { PageDescriptor, PageResult } from './page';
 import { League } from './league';
 import { Team } from './team';
 import { Person } from './person';
 import { RosterPosition } from './rosterPosition';
+import * as _ from 'lodash';
+
+export const NEW_RESOURCE_FORM_ROUTE = 'add';
 
 export enum FetchingState {
     NOT_FETCHED,
@@ -73,32 +76,35 @@ export function isAbsent<K, V>(value: ResourceCache<K, V> | null): value is Abse
 
 class CachedStateWrapper<K, V> {
 
-    private readonly internal: ImmutableMap<K, ResourceCache<K, V>> = ImmutableMap();
+    private readonly internal: Immutable.Map<K, ResourceCache<K, V>>;
+    private readonly synthetic: Immutable.Map<K, ResourceCache<K, V>>;
 
-    constructor(internal?: ImmutableMap<K, ResourceCache<K, V>>) {
-        if (internal) {
-            this.internal = internal;
-        } else {
-            this.internal = ImmutableMap();
-        }
+    constructor(synthetic: Immutable.Map<K, ResourceCache<K, V>>, internal: Immutable.Map<K, ResourceCache<K, V>>) {
+        this.synthetic = synthetic;
+        this.internal = internal;
     }
 
     get(key: K): ResourceCache<K, V> {
-        const value = this.internal.get(key);
-        return value ? value : {id: key, fetchingState: FetchingState.NOT_FETCHED};
+        const syntheticValue = this.synthetic.get(key);
+        if (syntheticValue) {
+            return _.cloneDeep(syntheticValue);
+        }
+        return this.internal.get(key, {id: key, fetchingState: FetchingState.NOT_FETCHED});
     }
 
     setOneFetching(key: K): CachedStateWrapper<K, V> {
-        return new CachedStateWrapper<K, V>(this.internal.set(key, {id: key, fetchingState: FetchingState.FETCHING}));
+        return new CachedStateWrapper<K, V>(this.synthetic, this.internal.set(
+            key, {id: key, fetchingState: FetchingState.FETCHING})
+        );
     }
 
     setOneFetched(key: K, value: V | null): CachedStateWrapper<K, V> {
-        return new CachedStateWrapper<K, V>(this.internal.set(key, this.toCache(key, value)));
+        return new CachedStateWrapper<K, V>(this.synthetic, this.internal.set(key, this.toCache(key, value)));
     }
 
-    setAllFetched(other: ImmutableMap<K, V>): CachedStateWrapper<K, V> {
+    setAllFetched(other: Immutable.Map<K, V>): CachedStateWrapper<K, V> {
         const cachedValues = other.map((value, key) => this.toCache(<K> key, value));
-        return new CachedStateWrapper<K, V>(this.internal.merge(cachedValues));
+        return new CachedStateWrapper<K, V>(this.synthetic, this.internal.merge(cachedValues));
     }
 
     private toCache(key: K, value: V | undefined | null): ResourceCache<K, V> {
@@ -149,60 +155,74 @@ export class ResourceObjectState<T extends ResourceObject> {
     }
 }
 
-export function initialState<T extends ResourceObject>(): ResourceObjectState<T> {
-    return new ResourceObjectState<T>(new CachedStateWrapper(), new CachedStateWrapper());
+export function initialState<T extends ResourceObject>(defaultResource: T): ResourceObjectState<T> {
+    return new ResourceObjectState<T>(
+        new CachedStateWrapper<PageDescriptor, PageResult<string>>(
+            Immutable.Map(), Immutable.Map()
+        ),
+        new CachedStateWrapper<string, T>(
+            Immutable.Map<string, ResourceCache<string, T>>([[defaultResource.id, {
+                id: defaultResource.id,
+                fetchingState: FetchingState.FETCHED,
+                object: defaultResource
+            }]]),
+            Immutable.Map()
+        )
+    );
 }
 
-const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceType) =>
-    (state: ResourceObjectState<T> = initialState(), action: ResourceObjectAction<T>): ResourceObjectState<T> => {
-        if (action.resourceType !== typeFilter) {
+const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceType, addResource: T) => (
+    state: ResourceObjectState<T> = initialState(addResource),
+    action: ResourceObjectAction<T>
+): ResourceObjectState<T> => {
+    if (action.resourceType !== typeFilter) {
+        return state;
+    }
+
+    switch (action.type) {
+        case ResourceActionType.REQUEST_RESOURCE_OBJECT:
+            return new ResourceObjectState(
+                state.pages,
+                state.data.setOneFetching(action.id)
+            );
+        case ResourceActionType.REQUEST_RESOURCE_PAGE:
+            return new ResourceObjectState(
+                state.pages.setOneFetching(action.page),
+                state.data
+            );
+        case ResourceActionType.RECEIVE_RESOURCE_OBJECT:
+            return new ResourceObjectState(
+                state.pages,
+                state.data.setOneFetched(action.data.id, action.data.resource)
+            );
+        case ResourceActionType.RECEIVE_RESOURCE_PAGE:
+            return new ResourceObjectState(
+                state.pages.setOneFetched(action.page, {
+                    descriptor: action.page,
+                    meta: action.meta,
+                    contents: Immutable.List(action.data.keys())
+                }),
+                state.data.setAllFetched(action.data)
+            );
+        case ResourceActionType.RECEIVE_RESOURCE_INCLUDES:
+            return new ResourceObjectState(
+                state.pages,
+                state.data.setAllFetched(action.data)
+            );
+        case ResourceActionType.REMOVE_RESOURCE_OBJECT:
+            return new ResourceObjectState(
+                state.pages,
+                state.data.setOneFetched(action.removed, null)
+            );
+        default:
             return state;
-        }
+    }
+};
 
-        switch (action.type) {
-            case ResourceActionType.REQUEST_RESOURCE_OBJECT:
-                return new ResourceObjectState(
-                    state.pages,
-                    state.data.setOneFetching(action.id)
-                );
-            case ResourceActionType.REQUEST_RESOURCE_PAGE:
-                return new ResourceObjectState(
-                    state.pages.setOneFetching(action.page),
-                    state.data
-                );
-            case ResourceActionType.RECEIVE_RESOURCE_OBJECT:
-                return new ResourceObjectState(
-                    state.pages,
-                    state.data.setOneFetched(action.data.id, action.data.resource)
-                );
-            case ResourceActionType.RECEIVE_RESOURCE_PAGE:
-                return new ResourceObjectState(
-                    state.pages.setOneFetched(action.page, {
-                        descriptor: action.page,
-                        meta: action.meta,
-                        contents: List(action.data.keys())
-                    }),
-                    state.data.setAllFetched(action.data)
-                );
-            case ResourceActionType.RECEIVE_RESOURCE_INCLUDES:
-                return new ResourceObjectState(
-                    state.pages,
-                    state.data.setAllFetched(action.data)
-                );
-            case ResourceActionType.REMOVE_RESOURCE_OBJECT:
-                return new ResourceObjectState(
-                    state.pages,
-                    state.data.setOneFetched(action.removed, null)
-                );
-            default:
-                return state;
-        }
-    };
-
-const leagues = resourceReducerBuilder<League>('leagues');
-const teams = resourceReducerBuilder<Team>('teams');
-const people = resourceReducerBuilder<Person>('people');
-const rosterPositions = resourceReducerBuilder<RosterPosition>('rosterpositions');
+const leagues = resourceReducerBuilder<League>('leagues', League.empty());
+const teams = resourceReducerBuilder<Team>('teams', Team.empty());
+const people = resourceReducerBuilder<Person>('people', Person.empty());
+const rosterPositions = resourceReducerBuilder<RosterPosition>('rosterpositions', RosterPosition.empty());
 
 export const resource: Reducer<ResourceState> = combineReducers<ResourceState>({
     leagues,
