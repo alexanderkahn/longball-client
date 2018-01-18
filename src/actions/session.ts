@@ -20,7 +20,7 @@ provider.addScope('https://www.googleapis.com/auth/plus.login');
 
 export function watchForAuthChanges(): Dispatch<RootState> {
     return function (dispatch: Dispatch<{}>) {
-        dispatch(attemptVerifyAuthentication()); // TODO: this should not happen on every request
+        dispatch(attemptVerifyAuthentication());
         firebase.auth().onAuthStateChanged(function(user: User) {
             if (user && user.displayName) {
                 dispatch(receiveAuthentication({name: user.displayName}));

@@ -27,7 +27,6 @@ export default class ManageTeamsForm extends Component<ManageTeamsFormProps & Ma
             <ManagementList
                 title="Teams"
                 currentView={teams}
-                // TODO we should always know the requested page even if it isn't present. This might break shit.
                 fetchListItems={fetchListItems(teams.id)}
                 getPage={getPage}
                 onClickAdd={onClickAdd}

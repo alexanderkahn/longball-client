@@ -1,7 +1,7 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { receivePeople, removePerson } from './peopleActions';
 import { Dispatch } from 'redux';
-import { RootState } from '../../reducers/index';
+import { RootState } from '../../reducers';
 import { isNullOrUndefined } from 'util';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
@@ -25,8 +25,6 @@ function requestRosterPosition(id: string): RequestResourceObjectAction {
     };
 }
 
-// TODO: descriptor should be a store-only concept.
-// This should be a full list of query parameters that can get filtered down later.
 function requestRosterPositionCollection(page: PageDescriptor): RequestResourcePageAction {
     return {
         type: ResourceActionType.REQUEST_RESOURCE_PAGE,
