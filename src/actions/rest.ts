@@ -1,6 +1,6 @@
 import { getIdTokenPromise } from './session';
 import { PageDescriptor, PageResultsMeta } from '../reducers/resource/page';
-import { ResourceObject } from '../reducers/resource';
+import { ResourceObject } from '../reducers/resource/resourceReducer';
 
 export interface MetaResponse {
     meta: {

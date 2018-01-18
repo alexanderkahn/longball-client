@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { fetchPlayer, savePlayer } from '../../../../actions/resource/rosterpositionsActions';
 import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailProps } from '../presenters/PlayerDetailForm';
 import { Dispatch } from 'redux';
-import { RootState } from '../../../../reducers';
+import { RootState } from '../../../../reducers/rootReducer';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
 import {
@@ -12,7 +12,7 @@ import {
 import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
-import { NEW_RESOURCE_FORM_ROUTE } from '../../../../reducers/resource';
+import { NEW_RESOURCE_FORM_ROUTE } from '../../../../reducers/resource/resourceReducer';
 
 const getStorePlayer = function (state: RootState, rosterPositionId: string): ResourceCache<string, Player> {
     const rosterPosition = state.resource.rosterPositions.data.get(rosterPositionId);

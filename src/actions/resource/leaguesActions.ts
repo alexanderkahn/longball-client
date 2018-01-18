@@ -1,15 +1,15 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { Dispatch } from 'redux';
-import { RootState } from '../../reducers/index';
+import { RootState } from '../../reducers/rootReducer';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 import {
     ReceiveResourcePageAction,
     RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
     ResourceActionType, ReceiveResourceObjectAction
-} from './index';
+} from './resourceActions';
 import { PageDescriptor, PageResultsMeta } from '../../reducers/resource/page';
-import { ResourceType } from '../../reducers/resource';
+import { ResourceType } from '../../reducers/resource/resourceReducer';
 import { League } from '../../reducers/resource/league';
 
 const LEAGUE_RESOURCE_TYPE: ResourceType = 'leagues';

@@ -1,6 +1,6 @@
 import { combineReducers, Reducer } from 'redux';
 import * as Immutable from 'immutable';
-import { ResourceActionType, ResourceObjectAction } from '../../actions/resource';
+import { ResourceActionType, ResourceObjectAction } from '../../actions/resource/resourceActions';
 import { PageDescriptor, PageResult } from './page';
 import { blankLeague, League } from './league';
 import { blankTeam, Team } from './team';

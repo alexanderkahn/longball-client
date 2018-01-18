@@ -1,9 +1,9 @@
 import { combineReducers, Reducer } from 'redux';
 import { ResourceFormUpdateAction, ResourceFormUpdateActionType } from '../../actions/form/formUpdateActions';
-import { ReceiveResourceObjectAction, ResourceActionType } from '../../actions/resource';
+import { ReceiveResourceObjectAction, ResourceActionType } from '../../actions/resource/resourceActions';
 import * as _ from 'lodash';
 import { Map } from 'immutable';
-import { ResourceObject } from '../resource';
+import { ResourceObject } from '../resource/resourceReducer';
 import { League } from '../resource/league';
 import { Team } from '../resource/team';
 import { Person } from '../resource/person';

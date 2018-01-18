@@ -1,9 +1,9 @@
 import { auth, AuthState } from './auth';
-import { resource, ResourceState } from './resource';
+import { resource, ResourceState } from './resource/resourceReducer';
 import { combineReducers, Reducer } from 'redux';
 import { easterEgg, EasterEggState } from './easterEgg';
 import { routerReducer } from 'react-router-redux';
-import { form, FormState } from './form';
+import { form, FormState } from './form/formReducer';
 
 export interface RootState {
     auth: AuthState;

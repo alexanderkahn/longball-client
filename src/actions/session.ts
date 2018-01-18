@@ -2,7 +2,7 @@ import { receiveAuthentication, tryResolveAuthentication } from './auth';
 import { Dispatch } from 'react-redux';
 import * as firebase from 'firebase';
 import { User } from 'firebase';
-import { RootState } from '../reducers/index';
+import { RootState } from '../reducers/rootReducer';
 
 const config = {
     apiKey: 'AIzaSyDKd4LVFbOySsyC3a4fyps7klanKMH34jc',

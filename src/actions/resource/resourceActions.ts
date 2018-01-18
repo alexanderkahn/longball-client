@@ -1,7 +1,7 @@
 import { OrderedMap } from 'immutable';
 import { PageResultsMeta } from '../../reducers/resource/page';
 import { PageDescriptor } from '../../reducers/resource/page';
-import { ResourceObject, ResourceType } from '../../reducers/resource';
+import { ResourceObject, ResourceType } from '../../reducers/resource/resourceReducer';
 
 export enum ResourceActionType {
     REQUEST_RESOURCE_OBJECT = 'REQUEST_RESOURCE_OBJECT',

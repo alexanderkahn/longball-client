@@ -1,7 +1,7 @@
 import { connect, Dispatch } from 'react-redux';
 import Header from '../presenters/Header';
 import { incrementCreditsClick, resetCreditsClick } from '../../../actions/easteregg';
-import { RootState } from '../../../reducers/index';
+import { RootState } from '../../../reducers/rootReducer';
 
 const mapStateToProps = (state: RootState) => {
     return {

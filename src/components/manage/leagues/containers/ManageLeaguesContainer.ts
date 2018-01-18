@@ -1,7 +1,7 @@
 import { connect, Dispatch } from 'react-redux';
 import { deleteLeague, fetchLeagues } from '../../../../actions/resource/leaguesActions';
 import ManageLeaguesForm, { ManageLeaguesActions, ManageLeaguesProps } from '../presenters/ManageLeaguesForm';
-import { RootState } from '../../../../reducers';
+import { RootState } from '../../../../reducers/rootReducer';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
 import { PageDescriptor } from '../../../../reducers/resource/page';

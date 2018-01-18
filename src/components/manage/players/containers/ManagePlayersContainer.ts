@@ -1,10 +1,10 @@
 import { connect, Dispatch } from 'react-redux';
 import { deletePlayer, fetchPlayers } from '../../../../actions/resource/rosterpositionsActions';
 import ManagePlayersForm, { ManagePlayersFormActions, ManagePlayersFormProps } from '../presenters/ManagePlayersForm';
-import { RootState } from '../../../../reducers';
+import { RootState } from '../../../../reducers/rootReducer';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
-import { ResourceObjectState } from '../../../../reducers/resource';
+import { ResourceObjectState } from '../../../../reducers/resource/resourceReducer';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';

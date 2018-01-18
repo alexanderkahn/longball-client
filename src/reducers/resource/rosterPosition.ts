@@ -1,5 +1,5 @@
 import { Person } from './person';
-import { NEW_RESOURCE_FORM_ROUTE, RelationshipResource, ResourceObject } from './index';
+import { NEW_RESOURCE_FORM_ROUTE, RelationshipResource, ResourceObject } from './resourceReducer';
 
 export interface RosterPosition extends ResourceObject {
     id: string;

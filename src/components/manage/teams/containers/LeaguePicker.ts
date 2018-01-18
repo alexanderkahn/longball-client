@@ -1,4 +1,4 @@
-import { RootState } from '../../../../reducers';
+import { RootState } from '../../../../reducers/rootReducer';
 import { connect } from 'react-redux';
 import ResourcePickerPresenter, {
     ResourcePickerActions,

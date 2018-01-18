@@ -1,5 +1,5 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
-import { RootState } from '../../reducers';
+import { RootState } from '../../reducers/rootReducer';
 import { Dispatch } from 'redux';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
@@ -7,9 +7,9 @@ import {
     ReceiveResourcePageAction,
     RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
     ResourceActionType, ReceiveResourceObjectAction
-} from './index';
+} from './resourceActions';
 import { PageDescriptor, PageResultsMeta } from '../../reducers/resource/page';
-import { ResourceType } from '../../reducers/resource';
+import { ResourceType } from '../../reducers/resource/resourceReducer';
 import { Team } from '../../reducers/resource/team';
 
 const TEAMS_RESOURCE_TYPE: ResourceType = 'teams';

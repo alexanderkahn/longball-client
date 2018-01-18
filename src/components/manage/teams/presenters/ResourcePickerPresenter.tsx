@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
-import { ResourceObject } from '../../../../reducers/resource';
+import { ResourceObject } from '../../../../reducers/resource/resourceReducer';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { FetchingState, isAbsent, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 

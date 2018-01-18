@@ -1,7 +1,7 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { receivePeople, removePerson } from './peopleActions';
 import { Dispatch } from 'redux';
-import { RootState } from '../../reducers';
+import { RootState } from '../../reducers/rootReducer';
 import { isNullOrUndefined } from 'util';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
@@ -9,9 +9,9 @@ import {
     ReceiveResourcePageAction,
     RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
     ResourceActionType, ReceiveResourceObjectAction
-} from './index';
+} from './resourceActions';
 import { PageDescriptor, PageResultsMeta } from '../../reducers/resource/page';
-import { ResourceType } from '../../reducers/resource';
+import { ResourceType } from '../../reducers/resource/resourceReducer';
 import { Player, RosterPosition } from '../../reducers/resource/rosterPosition';
 import { Person } from '../../reducers/resource/person';
 

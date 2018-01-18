@@ -1,12 +1,12 @@
 import { connect, Dispatch } from 'react-redux';
 import { fetchLeague, saveLeague } from '../../../../actions/resource/leaguesActions';
 import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '../presenters/LeagueDetailForm';
-import { RootState } from '../../../../reducers';
+import { RootState } from '../../../../reducers/rootReducer';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
 import { resetForm, updateLeagueAttribute } from '../../../../actions/form/formUpdateActions';
 import { League } from '../../../../reducers/resource/league';
-import { NEW_RESOURCE_FORM_ROUTE } from '../../../../reducers/resource';
+import { NEW_RESOURCE_FORM_ROUTE } from '../../../../reducers/resource/resourceReducer';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): LeagueDetailProps => {
     const leagueId = ownProps.match.params.itemId;

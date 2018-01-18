@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import reducers from './reducers/index';
+import reducers from './reducers/rootReducer';
 import './App.css';
 import 'typeface-roboto';
 import { Provider } from 'react-redux';

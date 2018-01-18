@@ -1,4 +1,4 @@
-import { NEW_RESOURCE_FORM_ROUTE, RelationshipResource, ResourceObject } from './index';
+import { NEW_RESOURCE_FORM_ROUTE, RelationshipResource, ResourceObject } from './resourceReducer';
 
 export interface Team extends ResourceObject {
     id: string;

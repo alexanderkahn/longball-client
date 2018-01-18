@@ -1,4 +1,4 @@
-import { NEW_RESOURCE_FORM_ROUTE, ResourceObject } from './index';
+import { NEW_RESOURCE_FORM_ROUTE, ResourceObject } from './resourceReducer';
 
 export interface League extends ResourceObject {
     id: string;
