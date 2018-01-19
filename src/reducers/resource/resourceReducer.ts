@@ -6,7 +6,7 @@ import { blankLeague, League } from './league';
 import { blankTeam, Team } from './team';
 import { blankPerson, Person } from './person';
 import { blankRosterPosition, RosterPosition } from './rosterPosition';
-import { CachedStateWrapper, FetchingState, ResourceCache } from './cache';
+import { CachedStateWrapper, FetchingState, isPresent, ResourceCache } from './cache';
 
 export type ResourceType =
     | 'leagues'
@@ -40,24 +40,31 @@ export class ResourceObjectState<T extends ResourceObject> {
         this.data = data;
     }
 
-    // TODO: return fetched state here? Nothing to indicate whether it's "legitimately" empty
-    // TODO: you know what? I'm thinking pages returned from the store should just always have the associated items
-    // TODO: a more general "filter all the nulls out of this list" function could still be quite useful
-    getNonNullPageItems(page: PageDescriptor): Array<T> {
+    getMappedPage(page: PageDescriptor): ResourceCache<PageDescriptor, PageResult<T>> {
         const pageResult = this.pages.get(page);
-        if (!pageResult || pageResult.fetchingState !== FetchingState.FETCHED || !pageResult.object) {
-            return Array();
-        } else {
-            const ids = pageResult.object.contents;
-            const objects = Array<T>();
-            for (const id of ids.toArray()) {
-                const record = this.data.get(id);
-                if (record.fetchingState === FetchingState.FETCHED && record.object !== null) {
-                    objects.push(record.object as T);
+        if (isPresent<PageDescriptor, PageResult<string>>(pageResult)) {
+            const dataContents = this.getNonNullPageItems(pageResult.object.contents);
+            return {
+                ...pageResult,
+                object: {
+                    ...pageResult.object,
+                    contents: dataContents
                 }
-            }
-            return objects;
+            };
+        } else {
+            return pageResult;
         }
+    }
+
+    private getNonNullPageItems(itemIds: Immutable.List<string>): Immutable.List<T> {
+        const objects = Array<T>();
+        for (const id of itemIds.toArray()) {
+            const record = this.data.get(id);
+            if (record.fetchingState === FetchingState.FETCHED && record.object !== null) {
+                objects.push(record.object as T);
+            }
+        }
+        return Immutable.List(objects);
     }
 }
 
@@ -78,8 +85,7 @@ export function initialState<T extends ResourceObject>(defaultResource: T): Reso
 }
 
 const resourceReducerBuilder = <T extends ResourceObject>(typeFilter: ResourceType, addResource: T) => (
-    state: ResourceObjectState<T> = initialState(addResource),
-    action: ResourceObjectAction<T>
+    state: ResourceObjectState<T> = initialState(addResource), action: ResourceObjectAction<T>
 ): ResourceObjectState<T> => {
     if (action.resourceType !== typeFilter) {
         return state;

@@ -4,52 +4,20 @@ import ManageTeamsForm, { ManageTeamsFormActions, ManageTeamsFormProps } from '.
 import { RootState } from '../../../../reducers/rootReducer';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
-import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
+import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Team } from '../../../../reducers/resource/team';
 import { parseQueryParameters } from '../../../../models/models';
-import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
-import { List } from 'immutable';
 
 const MANAGE_TEAMS_BASE_URL = '/manage/teams';
 
-// TODO: lookit all this bullshit
-export function getResourcePageResult<T>(
-    pageResults: ResourceCache<PageDescriptor, PageResult<string>>,
-    nonNullPageItems: Array<T>
-): ResourceCache<PageDescriptor, PageResult<T>> {
-        if (isPresent<PageDescriptor, PageResult<string>>(pageResults)) {
-            return {
-                id: pageResults.id,
-                fetchingState: FetchingState.FETCHED,
-                object: {
-                    descriptor: pageResults.object.descriptor,
-                    meta: pageResults.object.meta,
-                    contents: List(nonNullPageItems)
-                }
-            };
-        } else if (pageResults.fetchingState === FetchingState.FETCHED) {
-            return {
-                id: pageResults.id,
-                fetchingState: FetchingState.FETCHED,
-                object: null
-            };
-        } else {
-            return {
-                id: pageResults.id,
-                fetchingState: pageResults.fetchingState
-            };
-        }
-}
-
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageTeamsFormProps => {
     const currentPage = parseQueryParameters(ownProps.location);
-    const pageResults = state.resource.teams.pages.get(currentPage);
     return {
-        teams: getResourcePageResult(pageResults, state.resource.teams.getNonNullPageItems(currentPage))
+        teams: state.resource.teams.getMappedPage(currentPage)
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<{}>)
+const mapDispatchToProps = (dispatch: Dispatch<RootState>)
     : ManageTeamsFormActions => {
     return {
         fetchListItems: (page: PageDescriptor) => () => dispatch(fetchTeams(page)),

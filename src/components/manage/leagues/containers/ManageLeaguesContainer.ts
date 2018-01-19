@@ -7,15 +7,13 @@ import { RouteComponentProps } from 'react-router';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { League } from '../../../../reducers/resource/league';
 import { parseQueryParameters } from '../../../../models/models';
-import { getResourcePageResult } from '../../teams/containers/ManageTeamsContainer';
 
 const MANAGE_LEAGUES_BASE_URL = '/manage/leagues';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{}>): ManageLeaguesProps => {
     const currentPage = parseQueryParameters(ownProps.location);
-    const pageResults = state.resource.leagues.pages.get(currentPage);
     return {
-        leagues: getResourcePageResult(pageResults, state.resource.leagues.getNonNullPageItems(currentPage)),
+        leagues: state.resource.leagues.getMappedPage(currentPage)
     };
 };
 

@@ -52,6 +52,10 @@ export class CachedStateWrapper<K, V> {
         return this.internal.get(key, {id: key, fetchingState: FetchingState.NOT_FETCHED});
     }
 
+    getAll(keys: K[]): Immutable.List<ResourceCache<K, V>> {
+        return Immutable.List(this.internal.toArray().filter((value) => keys.indexOf(value.id) > 0));
+    }
+
     setOneFetching(key: K): CachedStateWrapper<K, V> {
         return new CachedStateWrapper<K, V>(this.synthetic, this.internal.set(
             key, {id: key, fetchingState: FetchingState.FETCHING})

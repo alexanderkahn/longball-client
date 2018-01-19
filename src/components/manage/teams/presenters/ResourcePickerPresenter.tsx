@@ -4,11 +4,11 @@ import { MenuItem, TextField } from 'material-ui';
 import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
 import { ResourceObject } from '../../../../reducers/resource/resourceReducer';
-import { PageDescriptor } from '../../../../reducers/resource/page';
+import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 import { FetchingState, isAbsent, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 
 export interface ResourcePickerProps<T extends ResourceObject> {
-    matchingResources: ResourceCache<PageDescriptor, T[]>;
+    matchingResources: ResourceCache<PageDescriptor, PageResult<T>>;
     selectedResource: ResourceCache<string, T> | null;
     inputDisplayValue: string;
     inputDisplayPlaceholder: string;
@@ -41,9 +41,10 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
         return (
             <Downshift
                 inputValue={inputDisplayValue || ''}
-                selectedItem={(isPresent(selectedResource) && isPresent<PageDescriptor, T[]>(matchingResources))
-                    ? matchingResources.object.find(it => it === selectedResource.object)
-                    : null
+                selectedItem={(isPresent(selectedResource)
+                    && isPresent<PageDescriptor, PageResult<T>>(matchingResources))
+                        ? matchingResources.object.contents.find(it => it === selectedResource.object)
+                        : null
                 }
                 itemToString={parseDisplayValue}
                 onInputValueChange={(value: string) => onChangeDisplay(value)}
@@ -51,10 +52,10 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
                 render={({isOpen, getInputProps, getItemProps}) => (
                     <div>
                         {this.renderInput(getInputProps({placeholder: inputDisplayPlaceholder}))}
-                        {isOpen && isPresent<PageDescriptor, T[]>(matchingResources)
-                            ? this.renderSuggestionsContainer(matchingResources.object.map((resource: T) =>
+                        {isOpen && isPresent<PageDescriptor, PageResult<T>>(matchingResources)
+                            ? this.renderSuggestionsContainer(matchingResources.object.contents.map((resource: T) =>
                                 this.renderSuggestion(resource, getItemProps({item: resource}))
-                            )) : null}
+                            ).toArray()) : null}
                     </div>
                 )}
             />
