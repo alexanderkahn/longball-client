@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Button from 'material-ui/Button';
-import { User } from '../../../models/models';
+import { User } from '../../../reducers/resource/user';
 
 export interface UserLogControlProps {
     user: User | null;

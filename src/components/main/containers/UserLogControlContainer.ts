@@ -3,9 +3,12 @@ import { connect, Dispatch } from 'react-redux';
 import { redirectToAuthenticationProvider } from '../../../actions/session';
 import { RootState } from '../../../reducers/rootReducer';
 
+// FIXME: get user details from the server!
 const mapStateToProps = (state: RootState): UserLogControlProps => {
     return {
-        user: state.auth.user
+        user: {
+            name: 'Edgar Martinez belongs in the Hall of Fame'
+        }
     };
 };
 

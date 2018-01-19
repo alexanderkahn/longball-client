@@ -4,11 +4,7 @@ import { PageDescriptor } from '../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { isNumber } from 'util';
 
-// TODO: get this from the server, not directly from firebase. Will look like the other models
-export interface User {
-    name: string;
-}
-
+// TODO: move and rename this file.
 export function parseQueryParameters(location: Location): PageDescriptor {
     const params = parse(location.search.substr(1));
 

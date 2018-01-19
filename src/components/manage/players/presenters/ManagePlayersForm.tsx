@@ -38,6 +38,7 @@ export default class ManagePlayersForm extends Component<ManagePlayersFormProps 
     buildPlayerListItemRenderer(selectBuilder: (player: Player) => () => void,
                                 deleteBuilder: (player: Player) => () => void): (player: Player) => JSX.Element {
         return (player: Player) => {
+            // TODO: there ought to be an option for 'missing' player so we can display that something is messed up.
             return (
                 <PlayerListItem
                     player={player}

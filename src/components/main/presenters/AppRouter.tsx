@@ -5,16 +5,17 @@ import ManageViewWrapper from '../../manage/shared/presenters/ManagementViewRout
 import { Component } from 'react';
 import HeaderContainer from '../containers/HeaderContainer';
 import LoadingUserPage from './LoadingUserPage';
-import { User } from '../../../models/models';
+import { FetchingState } from '../../../reducers/resource/cache';
 
 export interface AppRouterProps {
-    user: User | null;
-    isFetching: boolean;
+    authenticated: boolean;
+    isFetching: FetchingState;
 }
 
 export default class AppRouter extends Component<AppRouterProps> {
     render() {
-        if (!this.props.user) {
+        // TODO: this control flow is weird. Once we're getting the user from the server let's make this better
+        if (!this.props.authenticated) {
             if (this.props.isFetching) {
                 return <LoadingUserPage/>;
             } else {

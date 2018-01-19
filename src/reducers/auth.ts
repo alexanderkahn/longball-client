@@ -1,25 +1,24 @@
 import { AuthAction, AuthActionTypeKeys } from '../actions/auth';
-import { User } from '../models/models';
+import { FetchingState } from './resource/cache';
 
 export interface AuthState {
-    isFetching: boolean;
-    user: User | null;
+    isFetching: FetchingState;
+    authenticated: boolean;
 }
 
-const initialState = { isFetching: false, user: null};
+const initialState = { isFetching: FetchingState.NOT_FETCHED, authenticated: false};
 
 export const auth = (state: AuthState = initialState, action: AuthAction): AuthState => {
     switch (action.type) {
         case AuthActionTypeKeys.RECEIVE_AUTHENTICATION:
             return {
-                ...state,
-                user: action.user,
-                isFetching: false
+                authenticated: action.authenticated,
+                isFetching: FetchingState.FETCHED
             };
         case AuthActionTypeKeys.TRY_RESOLVE_AUTHENTICATION:
             return {
-                ...state,
-                isFetching: true
+                isFetching: FetchingState.FETCHING,
+                authenticated: false
             };
         default:
             return state;
