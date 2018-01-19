@@ -79,7 +79,7 @@ export function fetchTeam(teamId: string): Dispatch<RootState> {
 
 export function saveTeam(team: Team): Dispatch<RootState> {
     return async function (dispatch: Dispatch<RootState>) {
-        const saveResponse = await postObject(team);
+        const saveResponse = (await postObject(team)).data;
         dispatch(receiveTeam(saveResponse.id, saveResponse));
         dispatch(replace(`/manage/teams/${saveResponse.id}`));
     };

@@ -162,17 +162,16 @@ export async function fetchObject<T extends ResourceObject>(type: string, id: st
 
 }
 
-// TODO: why not return ObjectResponse<T>?
-export async function postObject<T extends ResourceObject>(object: T): Promise<T> {
+export async function postObject<T extends ResourceObject>(object: T): Promise<ObjectResponse<T>> {
     const url = `/rest/${object.type}`;
     const json = await getJsonPostResponse(url, object);
-    return json.data as T;
+    return json as ObjectResponse<T>;
 }
 
-export async function deleteObject<T extends ResourceObject>(object: T): Promise<number> {
+export async function deleteObject<T extends ResourceObject>(object: T): Promise<boolean> {
     const url = `/rest/${object.type}/${object.id}`;
     const json = await getJsonDeleteResponse(url);
-    return json.meta.status; // TODO: is returning the number necessary here?
+    return json.meta.status === 200;
 }
 
 function formatUnexpectedResponseError(response: JsonResponse): UnexpectedServerResponseError {

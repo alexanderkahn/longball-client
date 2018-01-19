@@ -6,8 +6,7 @@ import { isNullOrUndefined } from 'util';
 import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 import {
-    ReceiveResourcePageAction,
-    RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
+    ReceiveResourcePageAction, RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
     ResourceActionType, ReceiveResourceObjectAction
 } from './resourceActions';
 import { PageDescriptor, PageResultsMeta } from '../../reducers/resource/page';
@@ -96,11 +95,11 @@ export function fetchPlayer(playerId: string) {
 export function savePlayer(player: Player) {
     return async function (dispatch: Dispatch<RootState>) {
 
-        const savePersonResponse = await postObject(player.person);
+        const savePersonResponse = (await postObject(player.person)).data;
         dispatch(receivePeople(OrderedMap([[savePersonResponse.id, savePersonResponse]])));
 
         player.rosterPosition.relationships.player.data.id = savePersonResponse.id;
-        const saveRosterPositionResponse = await postObject(player.rosterPosition);
+        const saveRosterPositionResponse = (await postObject(player.rosterPosition)).data;
         dispatch(receiveRosterPosition(saveRosterPositionResponse.id, saveRosterPositionResponse));
 
         dispatch(replace(`/manage/players/${saveRosterPositionResponse.id}`));
