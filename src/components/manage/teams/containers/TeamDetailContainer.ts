@@ -6,16 +6,13 @@ import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { resetForm, updateTeamAttribute } from '../../../../actions/form/formUpdateActions';
 import { Team } from '../../../../reducers/resource/team';
-import { NEW_RESOURCE_FORM_ROUTE } from '../../../../reducers/resource/cache';
 
-// FIXME: isEdit should probably be stored in state somewhere (in form? Seems like a form prop to me)
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): TeamDetailProps => {
     const teamId = ownProps.match.params.itemId;
-    const isNew = teamId === NEW_RESOURCE_FORM_ROUTE;
     return {
         storedTeam: state.resource.teams.data.get(teamId),
         formTeam: state.form.team.resource,
-        isEdit: isNew
+        isEdit: state.form.team.isEdit
     };
 };
 

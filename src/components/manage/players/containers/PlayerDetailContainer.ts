@@ -12,7 +12,6 @@ import {
 import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
-import { NEW_RESOURCE_FORM_ROUTE } from '../../../../reducers/resource/cache';
 
 const getStorePlayer = function (state: RootState, rosterPositionId: string): ResourceCache<string, Player> {
     const rosterPosition = state.resource.rosterPositions.data.get(rosterPositionId);
@@ -49,14 +48,13 @@ function toResourceCache<T>(fetchingState: FetchingState, id: string, object: T 
 
 function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailProps {
     let teamId = ownProps.match.params.itemId;
-    const isNew = teamId === NEW_RESOURCE_FORM_ROUTE;
     return {
         storedPlayer: getStorePlayer(state, teamId),
         formPlayer: {
             person: state.form.person.resource,
             rosterPosition: state.form.rosterPosition.resource,
         },
-        isEdit: isNew,
+        isEdit: state.form.person.isEdit,
     };
 }
 

@@ -4,7 +4,8 @@ export enum ResourceFormUpdateActionType {
     RESET_FORM = 'RESET_FORM',
     UPDATE_ATTRIBUTE = 'UPDATE_ATTRIBUTE',
     UPDATE_RELATIONSHIP = 'UPDATE_RELATIONSHIP',
-    UPDATE_RELATIONSHIP_DISPLAY = 'UPDATE_RELATIONSHIP_DISPLAY'
+    UPDATE_RELATIONSHIP_DISPLAY = 'UPDATE_RELATIONSHIP_DISPLAY',
+    TOGGLE_EDIT = 'TOGGLE_EDIT'
 }
 
 interface ResourceFormResetAction<T extends ResourceObject> {
@@ -34,11 +35,18 @@ interface ResourceFormUpdateRelationshipDisplayAction {
     value: string;
 }
 
+interface ResourceFormToggleEditAction {
+    type: ResourceFormUpdateActionType.TOGGLE_EDIT;
+    resourceType: ResourceType;
+    isEdit: boolean;
+}
+
 export type ResourceFormUpdateAction<T extends ResourceObject> =
     | ResourceFormResetAction<T>
     | ResourceFormUpdateAttributeAction
     | ResourceFormUpdateRelationshipAction
-    | ResourceFormUpdateRelationshipDisplayAction;
+    | ResourceFormUpdateRelationshipDisplayAction
+    | ResourceFormToggleEditAction;
 
 export function resetForm<T extends ResourceObject>(resourceType: ResourceType, resource: T)
 : ResourceFormResetAction<T> {
@@ -123,5 +131,13 @@ export function updateRosterPositionRelationshipDisplay(relationship: string, va
         resourceType: 'rosterpositions',
         relationship,
         value
+    };
+}
+
+export function toggleFormIsEdit(formType: ResourceType, isEdit: boolean): ResourceFormToggleEditAction {
+    return {
+        type: ResourceFormUpdateActionType.TOGGLE_EDIT,
+        resourceType: formType,
+        isEdit
     };
 }

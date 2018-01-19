@@ -6,15 +6,13 @@ import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRout
 import { RouteComponentProps } from 'react-router';
 import { resetForm, updateLeagueAttribute } from '../../../../actions/form/formUpdateActions';
 import { League } from '../../../../reducers/resource/league';
-import { NEW_RESOURCE_FORM_ROUTE } from '../../../../reducers/resource/cache';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): LeagueDetailProps => {
     const leagueId = ownProps.match.params.itemId;
-    const isNewItem = leagueId === NEW_RESOURCE_FORM_ROUTE;
     return {
         formLeague: state.form.league.resource,
         storedLeague: state.resource.leagues.data.get(leagueId),
-        isEdit: isNewItem,
+        isEdit: state.form.league.isEdit,
     };
 };
 
