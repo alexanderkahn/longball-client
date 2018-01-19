@@ -83,3 +83,5 @@ export class CachedStateWrapper<K, V> {
         }
     }
 }
+
+export const NEW_RESOURCE_FORM_ROUTE: string = 'add';

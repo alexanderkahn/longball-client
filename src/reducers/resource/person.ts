@@ -1,4 +1,5 @@
-import { NEW_RESOURCE_FORM_ROUTE, ResourceObject } from './resourceReducer';
+import { ResourceObject } from './resourceReducer';
+import { NEW_RESOURCE_FORM_ROUTE } from './cache';
 
 export interface Person extends ResourceObject {
     id: string;

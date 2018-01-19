@@ -8,8 +8,6 @@ import { blankPerson, Person } from './person';
 import { blankRosterPosition, RosterPosition } from './rosterPosition';
 import { CachedStateWrapper, FetchingState, ResourceCache } from './cache';
 
-export const NEW_RESOURCE_FORM_ROUTE = 'add';
-
 export type ResourceType =
     | 'leagues'
     | 'teams'
