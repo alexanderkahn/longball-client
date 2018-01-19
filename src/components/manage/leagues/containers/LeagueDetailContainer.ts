@@ -4,7 +4,7 @@ import LeagueDetailForm, { LeagueDetailFormActions, LeagueDetailProps } from '..
 import { RootState } from '../../../../reducers/rootReducer';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import { resetForm, updateLeagueAttribute } from '../../../../actions/form/formUpdateActions';
+import { resetForm, updateFormAttribute } from '../../../../actions/form/formUpdateActions';
 import { League } from '../../../../reducers/resource/league';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): LeagueDetailProps => {
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     return {
         fetchItem: () => dispatch(fetchLeague(leagueId)),
         resetFormItem: (league: League) => dispatch(resetForm('leagues', league)),
-        updateName: (name: string) => dispatch(updateLeagueAttribute('name', name)),
+        updateName: (name: string) => dispatch(updateFormAttribute('leagues', 'name', name)),
         saveLeague: (league: League) => dispatch(saveLeague(league))
     };
 };

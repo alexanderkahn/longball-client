@@ -57,78 +57,31 @@ export function resetForm<T extends ResourceObject>(resourceType: ResourceType, 
     };
 }
 
-// TODO: looks like these could just pass in which form they want to update. No need for separate methods.
-export function updateLeagueAttribute(attribute: string, value: string): ResourceFormUpdateAttributeAction {
+export function updateFormAttribute(resourceType: ResourceType, attribute: string, value: string)
+: ResourceFormUpdateAttributeAction {
     return {
         type: ResourceFormUpdateActionType.UPDATE_ATTRIBUTE,
-        resourceType: 'leagues',
+        resourceType,
         attribute,
         value
     };
 }
 
-export function updateTeamAttribute(attribute: string, value: string): ResourceFormUpdateAttributeAction {
-    return {
-        type: ResourceFormUpdateActionType.UPDATE_ATTRIBUTE,
-        resourceType: 'teams',
-        attribute,
-        value
-    };
-}
-
-export function updateTeamRelationship(relationship: string, value: RelationshipResource)
+export function updateFormRelationship(resourceType: ResourceType, relationship: string, value: RelationshipResource)
 : ResourceFormUpdateRelationshipAction {
     return {
         type: ResourceFormUpdateActionType.UPDATE_RELATIONSHIP,
-        resourceType: 'teams',
+        resourceType,
         relationship,
         value
     };
 }
 
-export function updateTeamRelationshipDisplay(relationship: string, value: string)
+export function updateFormRelationshipDisplay(resourceType: ResourceType, relationship: string, value: string)
 : ResourceFormUpdateRelationshipDisplayAction {
     return {
         type: ResourceFormUpdateActionType.UPDATE_RELATIONSHIP_DISPLAY,
-        resourceType: 'teams',
-        relationship,
-        value
-    };
-}
-
-export function updatePersonAttribute(attribute: string, value: string) {
-    return {
-        type: ResourceFormUpdateActionType.UPDATE_ATTRIBUTE,
-        resourceType: 'people',
-        attribute,
-        value
-    };
-}
-
-export function updateRosterPositionAttribute(attribute: string, value: string) {
-    return {
-        type: ResourceFormUpdateActionType.UPDATE_ATTRIBUTE,
-        resourceType: 'rosterpositions',
-        attribute,
-        value
-    };
-}
-
-export function updateRosterPositionRelationship(relationship: string, value: RelationshipResource)
-: ResourceFormUpdateRelationshipAction {
-    return {
-        type: ResourceFormUpdateActionType.UPDATE_RELATIONSHIP,
-        resourceType: 'rosterpositions',
-        relationship,
-        value
-    };
-}
-
-export function updateRosterPositionRelationshipDisplay(relationship: string, value: string)
-: ResourceFormUpdateRelationshipDisplayAction {
-    return {
-        type: ResourceFormUpdateActionType.UPDATE_RELATIONSHIP_DISPLAY,
-        resourceType: 'rosterpositions',
+        resourceType,
         relationship,
         value
     };

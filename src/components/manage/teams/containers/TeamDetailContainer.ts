@@ -4,7 +4,7 @@ import TeamDetailForm, { TeamDetailFormActions, TeamDetailProps } from '../prese
 import { RootState } from '../../../../reducers/rootReducer';
 import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
-import { resetForm, updateTeamAttribute } from '../../../../actions/form/formUpdateActions';
+import { resetForm, updateFormAttribute } from '../../../../actions/form/formUpdateActions';
 import { Team } from '../../../../reducers/resource/team';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): TeamDetailProps => {
@@ -22,9 +22,11 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
     return {
         fetchItem: () => dispatch(fetchTeam(teamId)),
         resetFormItem: (team: Team) => dispatch(resetForm('teams', team)),
-        updateAbbreviation: (abbreviation: string) => dispatch(updateTeamAttribute('abbreviation', abbreviation)),
-        updateLocation: (location: string) => dispatch(updateTeamAttribute('location', location)),
-        updateNickname: (nickname: string) => dispatch(updateTeamAttribute('nickname', nickname)),
+        updateAbbreviation: (abbreviation: string) => dispatch(updateFormAttribute(
+            'teams', 'abbreviation', abbreviation)
+        ),
+        updateLocation: (location: string) => dispatch(updateFormAttribute('teams', 'location', location)),
+        updateNickname: (nickname: string) => dispatch(updateFormAttribute('teams', 'nickname', nickname)),
         saveTeam: (team: Team) => dispatch(saveTeam(team))
     };
 };

@@ -1,11 +1,9 @@
 import { RootState } from '../../../../reducers/rootReducer';
 import { connect } from 'react-redux';
-import ResourcePickerPresenter, {
-    ResourcePickerActions,
-    ResourcePickerProps
-} from '../presenters/ResourcePickerPresenter';
+import ResourcePickerPresenter, { ResourcePickerActions, ResourcePickerProps }
+from '../presenters/ResourcePickerPresenter';
 import { Dispatch } from 'redux';
-import { updateTeamRelationship, updateTeamRelationshipDisplay } from '../../../../actions/form/formUpdateActions';
+import { updateFormRelationship, updateFormRelationshipDisplay } from '../../../../actions/form/formUpdateActions';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { fetchLeague, fetchLeagues } from '../../../../actions/resource/leaguesActions';
@@ -47,14 +45,14 @@ const mapStateToProps = (state: RootState, ownProps: LeaguePickerProps): Resourc
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): ResourcePickerActions<League> => {
     return {
-        populateDisplayValue: (value: string) => dispatch(updateTeamRelationshipDisplay('league', value)),
+        populateDisplayValue: (value: string) => dispatch(updateFormRelationshipDisplay('teams', 'league', value)),
         fetchMatchingResource: (id: string) => dispatch(fetchLeague(id)),
         fetchSuggestions: (searchTerm: string) =>
             dispatch(fetchLeagues(new PageDescriptor(1, ImmutableMap([['name', searchTerm]])))),
         parseDisplayValue: getLeagueDisplay,
         onChangeDisplay: (leagueDisplay: string) =>
-            dispatch(updateTeamRelationshipDisplay('league', leagueDisplay)),
-        onSelectResource: (leagueId: string) => dispatch(updateTeamRelationship('league', {
+            dispatch(updateFormRelationshipDisplay('teams', 'league', leagueDisplay)),
+        onSelectResource: (leagueId: string) => dispatch(updateFormRelationship('teams', 'league', {
             data: {
                 type: 'leagues',
                 id: leagueId

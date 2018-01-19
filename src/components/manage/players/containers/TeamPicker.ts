@@ -1,19 +1,14 @@
 import { RootState } from '../../../../reducers/rootReducer';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import ResourcePickerPresenter, {
-    ResourcePickerActions,
-    ResourcePickerProps
-} from '../../teams/presenters/ResourcePickerPresenter';
+import ResourcePickerPresenter, { ResourcePickerActions, ResourcePickerProps }
+from '../../teams/presenters/ResourcePickerPresenter';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { fetchTeam, fetchTeams } from '../../../../actions/resource/teamsActions';
-import {
-    updateRosterPositionRelationship,
-    updateRosterPositionRelationshipDisplay
-} from '../../../../actions/form/formUpdateActions';
 import { Team } from '../../../../reducers/resource/team';
 import { FetchingState, ResourceCache } from '../../../../reducers/resource/cache';
+import { updateFormRelationship, updateFormRelationshipDisplay } from '../../../../actions/form/formUpdateActions';
 
 const SEARCH_TERM = 'location,_,nickname';
 
@@ -72,14 +67,14 @@ function mapStateToProps(state: RootState, ownProps: TeamPickerProps): ResourceP
 function mapDispatchToProps(dispatch: Dispatch<RootState>): ResourcePickerActions<Team> {
     return {
         populateDisplayValue: (value: string) =>
-            dispatch(updateRosterPositionRelationshipDisplay('team', value)),
+            dispatch(updateFormRelationshipDisplay('rosterpositions', 'team', value)),
         fetchMatchingResource: (id: string) => dispatch(fetchTeam(id)),
         fetchSuggestions: (searchTerm: string) =>
             dispatch(fetchTeams(new PageDescriptor(1, ImmutableMap([[SEARCH_TERM, searchTerm]])))),
         parseDisplayValue: getTeamDisplay,
         onChangeDisplay: (teamDisplay: string) =>
-            dispatch(updateRosterPositionRelationshipDisplay('team', teamDisplay)),
-        onSelectResource: (teamId: string) => dispatch(updateRosterPositionRelationship('team', {
+            dispatch(updateFormRelationshipDisplay('rosterpositions', 'team', teamDisplay)),
+        onSelectResource: (teamId: string) => dispatch(updateFormRelationship('rosterpositions', 'team', {
             data: {
                 type: 'teams',
                 id: teamId

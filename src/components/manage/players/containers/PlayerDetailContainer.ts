@@ -5,10 +5,7 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../../../reducers/rootReducer';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
-import {
-    resetForm, updatePersonAttribute,
-    updateRosterPositionAttribute,
-} from '../../../../actions/form/formUpdateActions';
+import { resetForm, updateFormAttribute, } from '../../../../actions/form/formUpdateActions';
 import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
@@ -70,13 +67,13 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
             dispatch(resetForm('rosterpositions', player.rosterPosition));
         },
         updateFirstName: (firstName: string) =>
-            dispatch(updatePersonAttribute('first', firstName)),
+            dispatch(updateFormAttribute('people', 'first', firstName)),
         updateLastName: (lastName: string) =>
-            dispatch(updatePersonAttribute('last', lastName)),
+            dispatch(updateFormAttribute('people', 'last', lastName)),
         updateJerseyNumber: (jerseyNumber: string) =>
-            dispatch(updateRosterPositionAttribute('jerseyNumber', jerseyNumber)),
+            dispatch(updateFormAttribute('rosterpositions', 'jerseyNumber', jerseyNumber)),
         updateStartDate: (startDate: string) =>
-            dispatch(updateRosterPositionAttribute('startDate', startDate)),
+            dispatch(updateFormAttribute('rosterpositions', 'startDate', startDate)),
         savePlayer: function (player: Player) {
             dispatch(savePlayer(player));
         }
