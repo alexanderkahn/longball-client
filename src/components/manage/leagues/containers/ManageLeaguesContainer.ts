@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { League } from '../../../../reducers/resource/league';
-import { parseQueryParameters } from '../../../../models/models';
+import { parseQueryParameters } from '../../../../util/urlParser';
 
 const MANAGE_LEAGUES_BASE_URL = '/manage/leagues';
 

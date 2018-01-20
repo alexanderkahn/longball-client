@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
-import { parseQueryParameters } from '../../../../models/models';
+import { parseQueryParameters } from '../../../../util/urlParser';
 import { isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import * as Immutable from 'immutable';
 

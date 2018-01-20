@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
 import { PageDescriptor } from '../../../../reducers/resource/page';
 import { Team } from '../../../../reducers/resource/team';
-import { parseQueryParameters } from '../../../../models/models';
+import { parseQueryParameters } from '../../../../util/urlParser';
 
 const MANAGE_TEAMS_BASE_URL = '/manage/teams';
 
