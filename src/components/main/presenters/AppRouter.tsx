@@ -6,6 +6,7 @@ import { Component } from 'react';
 import HeaderContainer from '../containers/HeaderContainer';
 import LoadingUserPage from './LoadingUserPage';
 import { AuthToken } from '../../../reducers/resource/authToken';
+import { FetchingState } from '../../../reducers/resource/cache';
 
 export interface AppRouterProps {
     token: AuthToken;
@@ -13,20 +14,17 @@ export interface AppRouterProps {
 
 export default class AppRouter extends Component<AppRouterProps> {
     render() {
-        // TODO: this control flow is weird. Once we're getting the user from the server let's make this better
-        if (!this.props.token.isValid) {
-            if (this.props.token.isFetching) {
-                return <LoadingUserPage/>;
-            } else {
-                return <SignInContainer/>;
-            }
-        } else {
+        if (this.props.token.isValid) {
             return (
                 <div className="app-body">
                     <HeaderContainer/>
                     <Main/>
                 </div>
             );
+        } else if (this.props.token.isFetching === FetchingState.FETCHING) {
+            return <LoadingUserPage/>;
+        } else {
+            return <SignInContainer/>;
         }
     }
 }
