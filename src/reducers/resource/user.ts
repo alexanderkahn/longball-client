@@ -1,4 +1,10 @@
-// TODO: get this from the server, not directly from firebase. Will look like the other models
-export interface User {
-    name: string;
+import { ResourceObject } from './resourceReducer';
+
+export interface User extends ResourceObject {
+    type: 'users';
+    id: string;
+    attributes: {
+        issuer: string;
+        username: string;
+    };
 }

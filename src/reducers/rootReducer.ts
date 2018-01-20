@@ -1,4 +1,4 @@
-import { auth, AuthState } from './auth';
+import { auth, AuthState } from './authReducer';
 import { resource, ResourceState } from './resource/resourceReducer';
 import { combineReducers, Reducer } from 'redux';
 import { easterEgg, EasterEggState } from './easterEgg';

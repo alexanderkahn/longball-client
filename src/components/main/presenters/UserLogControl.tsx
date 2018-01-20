@@ -1,21 +1,40 @@
 import * as React from 'react';
 import Button from 'material-ui/Button';
 import { User } from '../../../reducers/resource/user';
+import { isNotFetched, isPresent, ResourceCache } from '../../../reducers/resource/cache';
+import LoadingProgressIndicator from '../../shared/presenters/LoadingProgressIndicator';
 
 export interface UserLogControlProps {
-    user: User | null;
+    user: ResourceCache<string, User>;
 }
 
 export interface UserLogControlActions {
-    onLogIn: () => void;
+    fetchCurrentUser: () => void;
 }
 
-function UserLogControl(props: UserLogControlProps & UserLogControlActions) {
-    if (props.user) {
-            return <span>{props.user.name}<Button color="contrast">Log out</Button></span>;
+export default class UserLogControl extends React.Component<UserLogControlProps & UserLogControlActions> {
+
+    componentWillMount() {
+        this.updateControl();
+    }
+
+    componentDidUpdate() {
+        this.updateControl();
+    }
+
+
+    render() {
+        const { user } = this.props;
+        if (isPresent<string, User>(user)) {
+            return <span>{user.object.attributes.username}<Button color="contrast">Log out</Button></span>;
         } else {
-            return <Button color="contrast" onClick={props.onLogIn}>Log in</Button>;
+            return <LoadingProgressIndicator enabled={true}/>;
         }
-}
+    }
 
-export default UserLogControl;
+    private updateControl() {
+        if (isNotFetched(this.props.user)) {
+            this.props.fetchCurrentUser();
+        }
+    }
+}

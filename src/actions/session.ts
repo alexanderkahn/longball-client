@@ -1,4 +1,4 @@
-import { receiveAuthentication, tryResolveAuthentication } from './auth';
+import { receiveAuthentication, requestAuthentication } from './authActions';
 import { Dispatch } from 'react-redux';
 import * as firebase from 'firebase';
 import { User } from 'firebase';
@@ -36,7 +36,7 @@ export function redirectToAuthenticationProvider(): Dispatch<RootState> {
 export function attemptVerifyAuthentication(): Dispatch<RootState> {
     return function (dispatch: Dispatch<{}>) {
         if (!firebase.auth().currentUser) {
-            dispatch(tryResolveAuthentication());
+            dispatch(requestAuthentication());
             firebase.auth().getRedirectResult();
             // watchForAuthChanges() will handle the state change
         }

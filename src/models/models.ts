@@ -4,7 +4,7 @@ import { PageDescriptor } from '../reducers/resource/page';
 import { Map as ImmutableMap } from 'immutable';
 import { isNumber } from 'util';
 
-// TODO: move and rename this file.
+// TODO: move and rename this file.]
 export function parseQueryParameters(location: Location): PageDescriptor {
     const params = parse(location.search.substr(1));
 

@@ -12,7 +12,8 @@ export type ResourceType =
     | 'leagues'
     | 'teams'
     | 'rosterpositions'
-    | 'people';
+    | 'people'
+    | 'users';
 
 export interface ResourceObject {
     id: string;

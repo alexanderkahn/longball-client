@@ -5,8 +5,7 @@ import { RootState } from '../../../reducers/rootReducer';
 
 const mapStateToProps = (state: RootState): AppRouterProps => {
     return {
-        authenticated: state.auth.authenticated,
-        isFetching: state.auth.isFetching
+        token: state.auth.token
     };
 };
 
