@@ -25,7 +25,7 @@ export default class UserLogControl extends React.Component<UserLogControlProps 
 
     render() {
         const { user } = this.props;
-        if (isPresent<string, User>(user)) {
+        if (isPresent(user)) {
             return <span>{user.object.attributes.username}<Button color="contrast">Log out</Button></span>;
         } else {
             return <LoadingProgressIndicator enabled={true}/>;

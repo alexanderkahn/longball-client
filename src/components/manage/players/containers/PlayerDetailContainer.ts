@@ -7,14 +7,13 @@ import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRout
 import { RouteComponentProps } from 'react-router';
 import { resetForm, updateFormAttribute, } from '../../../../actions/form/formUpdateActions';
 import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
-import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
-import { Person } from '../../../../reducers/resource/person';
+import { Player } from '../../../../reducers/resource/rosterPosition';
 
 const getStorePlayer = function (state: RootState, rosterPositionId: string): ResourceCache<string, Player> {
     const rosterPosition = state.resource.rosterPositions.data.get(rosterPositionId);
-    const person = !isPresent<string, RosterPosition>(rosterPosition) ? null
+    const person = !isPresent(rosterPosition) ? null
         : state.resource.people.data.get(rosterPosition.object.relationships.player.data.id);
-    const statePlayer = isPresent<string, RosterPosition>(rosterPosition) && isPresent<string, Person>(person) ? {
+    const statePlayer = isPresent(rosterPosition) && isPresent(person) ? {
         rosterPosition: rosterPosition.object,
         person: person.object,
     } : null;

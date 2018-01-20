@@ -43,7 +43,7 @@ export class ResourceObjectState<T extends ResourceObject> {
 
     getMappedPage(page: PageDescriptor): ResourceCache<PageDescriptor, PageResult<T>> {
         const pageResult = this.pages.get(page);
-        if (isPresent<PageDescriptor, PageResult<string>>(pageResult)) {
+        if (isPresent(pageResult)) {
             const dataContents = this.getNonNullPageItems(pageResult.object.contents);
             return {
                 ...pageResult,

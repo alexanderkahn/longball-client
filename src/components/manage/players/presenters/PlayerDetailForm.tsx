@@ -60,7 +60,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
         const {storedPlayer, formPlayer, fetchItem, resetFormItem} = this.props;
         if (storedPlayer.fetchingState === FetchingState.NOT_FETCHED) {
             fetchItem();
-        } else if (isPresent<string, Player>(storedPlayer) && (
+        } else if (isPresent(storedPlayer) && (
             storedPlayer.object.rosterPosition.id !== formPlayer.rosterPosition.id ||
             storedPlayer.object.person.id !== formPlayer.person.id)
         ) {

@@ -43,7 +43,7 @@ const ManagePlayersContainer = connect(
 export default ManagePlayersContainer;
 
 function getRelatedPersonIds(rosterPositions: ResourceCache<PageDescriptor, PageResult<RosterPosition>>): string[] {
-    if (!isPresent<PageDescriptor, PageResult<RosterPosition>>(rosterPositions)) {
+    if (!isPresent(rosterPositions)) {
         return [];
     }
     return rosterPositions.object.contents.toArray()
@@ -55,7 +55,7 @@ function mapCacheToPlayers(
     rosterPositions: ResourceCache<PageDescriptor, PageResult<RosterPosition>>,
     people: Array<ResourceCache<string, Person>>
 ): ResourceCache<PageDescriptor, PageResult<Player>> {
-    if (isPresent<PageDescriptor, PageResult<RosterPosition>>(rosterPositions)) {
+    if (isPresent(rosterPositions)) {
         return {
             ...rosterPositions,
             object: {
@@ -74,14 +74,14 @@ function getPlayers(
 ): Array<Player> {
     let players: Array<Player> = [];
 
-    if (!isPresent<PageDescriptor, PageResult<RosterPosition>>(rosterPositions)) {
+    if (!isPresent(rosterPositions)) {
         return [];
     }
     rosterPositions.object.contents.toArray().forEach((rosterPosition) => {
         const person = people.find(
             it => it.id === rosterPosition.relationships.player.data.id
         );
-        if (rosterPosition && person && isPresent<string, Person>(person)) {
+        if (rosterPosition && person && isPresent(person)) {
             players.push({rosterPosition, person: person.object});
         }
     });

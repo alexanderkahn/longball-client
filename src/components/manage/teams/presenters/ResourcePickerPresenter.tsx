@@ -41,8 +41,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
         return (
             <Downshift
                 inputValue={inputDisplayValue || ''}
-                selectedItem={(isPresent(selectedResource)
-                    && isPresent<PageDescriptor, PageResult<T>>(matchingResources))
+                selectedItem={(isPresent(selectedResource) && isPresent(matchingResources))
                         ? matchingResources.object.contents.find(it => it === selectedResource.object)
                         : null
                 }
@@ -52,7 +51,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
                 render={({isOpen, getInputProps, getItemProps}) => (
                     <div>
                         {this.renderInput(getInputProps({placeholder: inputDisplayPlaceholder}))}
-                        {isOpen && isPresent<PageDescriptor, PageResult<T>>(matchingResources)
+                        {isOpen && isPresent(matchingResources)
                             ? this.renderSuggestionsContainer(matchingResources.object.contents.map((resource: T) =>
                                 this.renderSuggestion(resource, getItemProps({item: resource}))
                             ).toArray()) : null}

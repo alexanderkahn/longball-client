@@ -42,12 +42,11 @@ export function  toCache<K, V>(key: K, value: V | undefined | null): ResourceCac
 
 export type ResourceCache<K, V> = UnknownItemCache<K> | AbsentItemCache<K> | PresentItemCache<K, V>;
 
-// TODO: figure out why calls to this method have to be explicitly typed instead of inferred.
-export function isPresent<K, V>(value: ResourceCache<K, V> | null): value is PresentItemCache<K, V> {
+export function isPresent(value: ResourceCache<{}, {}> | null): value is PresentItemCache<{}, {}> {
     return value !== null && value.fetchingState === FetchingState.FETCHED && value.object !== null;
 }
 
-export function isNotFetched<K, V>(value: ResourceCache<K, V> | null): value is AbsentItemCache<K> {
+export function isNotFetched(value: ResourceCache<{}, {}> | null): value is AbsentItemCache<{}> {
     return value !== null && value.fetchingState === FetchingState.NOT_FETCHED;
 }
 
