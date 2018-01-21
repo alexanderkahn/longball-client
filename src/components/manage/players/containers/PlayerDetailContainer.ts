@@ -1,69 +1,38 @@
 import { connect } from 'react-redux';
-import { fetchPlayer, savePlayer } from '../../../../actions/resource/rosterpositionsActions';
+import { fetchRosterPositionIncludePerson, saveRosterPosition } from '../../../../actions/resource/rosterpositionsActions';
 import PlayerDetailForm, { PlayerDetailFormActions, PlayerDetailProps } from '../presenters/PlayerDetailForm';
 import { Dispatch } from 'redux';
 import { RootState } from '../../../../reducers/rootReducer';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { RouteComponentProps } from 'react-router';
 import { resetForm, updateFormAttribute, } from '../../../../actions/form/formUpdateActions';
-import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
-import { Player } from '../../../../reducers/resource/rosterPosition';
-
-const getStorePlayer = function (state: RootState, rosterPositionId: string): ResourceCache<string, Player> {
-    const rosterPosition = state.resource.rosterPositions.data.get(rosterPositionId);
-    const person = !isPresent(rosterPosition) ? null
-        : state.resource.people.data.get(rosterPosition.object.relationships.player.data.id);
-    const statePlayer = isPresent(rosterPosition) && isPresent(person) ? {
-        rosterPosition: rosterPosition.object,
-        person: person.object,
-    } : null;
-    return toResourceCache(rosterPosition.fetchingState, rosterPositionId, statePlayer);
-};
-
-// TODO: get rid of this. Look into whether we really need to build the player for this view.
-function toResourceCache<T>(fetchingState: FetchingState, id: string, object: T | null): ResourceCache<string, T> {
-    if (fetchingState === FetchingState.FETCHED && object !== null) {
-        return {
-            id,
-            fetchingState,
-            object
-        };
-    } else if (fetchingState === FetchingState.FETCHED) {
-        return {
-            id,
-            fetchingState,
-            object: null
-        };
-    } else {
-        return {
-            id,
-            fetchingState
-        };
-    }
-}
+import { RosterPosition } from '../../../../reducers/resource/rosterPosition';
+import { Person } from '../../../../reducers/resource/person';
+import { savePerson } from '../../../../actions/resource/peopleActions';
+import { isPresent } from '../../../../reducers/resource/cache';
 
 function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailProps {
-    let teamId = ownProps.match.params.itemId;
+    let rosterPositionId = ownProps.match.params.itemId;
+    const storedRosterPosition = state.resource.rosterPositions.data.get(rosterPositionId);
+    const personId = isPresent(storedRosterPosition) ? storedRosterPosition.object.relationships.player.data.id : '';
     return {
-        storedPlayer: getStorePlayer(state, teamId),
-        formPlayer: {
-            person: state.form.person.resource,
-            rosterPosition: state.form.rosterPosition.resource,
-        },
+        storedPerson: state.resource.people.data.get(personId),
+        storedRosterPosition: storedRosterPosition,
+        formPerson: state.form.person.resource,
+        formRosterPosition: state.form.rosterPosition.resource,
         isEdit: state.form.person.isEdit,
     };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteComponentProps<ManageItemRouteProps>)
+const mapDispatchToProps = (dispatch: Dispatch<RootState>)
     : PlayerDetailFormActions => {
-    const playerId = ownProps.match.params.itemId;
     return {
-        fetchItem: function () {
-            dispatch(fetchPlayer(playerId));
+        fetchItem: function (rosterPositionId: string) {
+            dispatch(fetchRosterPositionIncludePerson(rosterPositionId));
         },
-        resetFormItem: (player: Player) => {
-            dispatch(resetForm('people', player.person));
-            dispatch(resetForm('rosterpositions', player.rosterPosition));
+        resetFormItem: (person, rosterPosition) => {
+            dispatch(resetForm('people', person));
+            dispatch(resetForm('rosterpositions', rosterPosition));
         },
         updateFirstName: (firstName: string) =>
             dispatch(updateFormAttribute('people', 'first', firstName)),
@@ -73,8 +42,9 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
             dispatch(updateFormAttribute('rosterpositions', 'jerseyNumber', jerseyNumber)),
         updateStartDate: (startDate: string) =>
             dispatch(updateFormAttribute('rosterpositions', 'startDate', startDate)),
-        savePlayer: function (player: Player) {
-            dispatch(savePlayer(player));
+        savePlayer: async function (person: Person, rosterPosition: RosterPosition) {
+            rosterPosition.relationships.player.data.id = await dispatch(savePerson(person));
+            dispatch(saveRosterPosition(rosterPosition));
         }
     };
 };

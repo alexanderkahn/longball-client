@@ -46,7 +46,7 @@ function ManagementViewRouter(props: ManagementViewRouterProps) {
                 <Route path={`${matchProp.url}/teams/:itemId`} component={TeamDetailContainer}/>
 
                 <Route exact={true} path={`${matchProp.url}/players`} component={ManagePlayersContainer}/>
-                <Route path={`${matchProp.url}/players/:itemId`} component={PlayerDetailContainer}/>
+                <Route path={`${matchProp.url}/players/:personId&:rosterPositionId`} component={PlayerDetailContainer}/>
             </Switch>
         </Paper>
     );

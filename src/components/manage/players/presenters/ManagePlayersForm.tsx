@@ -2,12 +2,14 @@ import * as React from 'react';
 import ManagementList from '../../shared/presenters/ManagementList';
 import PlayerListItem from './PlayerListItem';
 import { Component } from 'react';
-import { Player } from '../../../../reducers/resource/rosterPosition';
+import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 import { ResourceCache } from '../../../../reducers/resource/cache';
+import { Person } from '../../../../reducers/resource/person';
 
 export interface ManagePlayersFormProps {
-    players: ResourceCache<PageDescriptor, PageResult<Player>>;
+    rosterPositions: ResourceCache<PageDescriptor, PageResult<RosterPosition>>;
+    includedPeople: Array<ResourceCache<string, Person>>;
 }
 
 export interface ManagePlayersFormActions {
@@ -15,35 +17,35 @@ export interface ManagePlayersFormActions {
     onClickAdd: () => void;
     getPage: (page: number) => () => void;
     buildHandleSelectPlayerDetail: (player: Player) => () => void;
-    buildHandleDeletePlayer: (player: Player) => () => void;
+    buildHandleDeleteRosterPosition: (position: RosterPosition) => () => void;
 }
 
 export default class ManagePlayersForm extends Component<ManagePlayersFormProps & ManagePlayersFormActions> {
     render() {
-        const {
-            players, fetchListItems, onClickAdd, getPage, buildHandleSelectPlayerDetail, buildHandleDeletePlayer
-        } = this.props;
+        const {rosterPositions, fetchListItems, onClickAdd, getPage, buildHandleSelectPlayerDetail,
+            buildHandleDeleteRosterPosition} = this.props;
+        // FIXME: this will break. Need to pull rendering children back into this layer.
         return (
             <ManagementList
                 title="Players"
-                currentView={players}
-                fetchListItems={fetchListItems(players.id)}
+                currentView={rosterPositions}
+                fetchListItems={fetchListItems(rosterPositions.id)}
                 onClickAdd={onClickAdd}
                 getPage={getPage}
-                renderChild={this.buildPlayerListItemRenderer(buildHandleSelectPlayerDetail, buildHandleDeletePlayer)}
+                renderChild={this.buildPlayerListItemRenderer(buildHandleSelectPlayerDetail, buildHandleDeleteRosterPosition)}
             />
         );
     }
 
     buildPlayerListItemRenderer(selectBuilder: (player: Player) => () => void,
-                                deleteBuilder: (player: Player) => () => void): (player: Player) => JSX.Element {
+                                deleteBuilder: (position: RosterPosition) => () => void): (player: Player) => JSX.Element {
         return (player: Player) => {
             // TODO: there ought to be an option for 'missing' player so we can display that something is messed up.
             return (
                 <PlayerListItem
                     player={player}
                     handleSelectPlayerDetail={selectBuilder(player)}
-                    handleDeletePlayer={deleteBuilder(player)}
+                    handleDeletePlayer={deleteBuilder(player.rosterPosition)}
                     key={player.rosterPosition.id}
                 />
             );

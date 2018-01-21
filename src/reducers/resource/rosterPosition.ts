@@ -31,6 +31,7 @@ export const blankRosterPosition: RosterPosition = {
     }
 };
 
+// TODO: delete this interface
 export interface Player {
     rosterPosition: RosterPosition;
     person: Person;

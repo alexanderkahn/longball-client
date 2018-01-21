@@ -6,8 +6,9 @@ import DatePicker from 'react-datepicker';
 import { SaveDetailFooter } from '../../shared/presenters/SaveDetailFooter';
 import 'react-datepicker/dist/react-datepicker.css';
 import TeamPicker from '../containers/TeamPicker';
-import { FetchingState, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
-import { Player } from '../../../../reducers/resource/rosterPosition';
+import { FetchingState, isAbsent, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
+import { RosterPosition } from '../../../../reducers/resource/rosterPosition';
+import { Person } from '../../../../reducers/resource/person';
 
 const styles: CSSProperties = {
     root: {
@@ -22,19 +23,21 @@ const styles: CSSProperties = {
 };
 
 export interface PlayerDetailProps {
-    formPlayer: Player;
-    storedPlayer: ResourceCache<string, Player>;
+    formPerson: Person;
+    formRosterPosition: RosterPosition;
+    storedPerson: ResourceCache<string, Person>;
+    storedRosterPosition: ResourceCache<string, RosterPosition>;
     isEdit: boolean;
 }
 
 export interface PlayerDetailFormActions {
-    fetchItem: () => void;
-    resetFormItem: (player: Player) => void;
+    fetchItem: (rosterPositionId: string) => void;
+    resetFormItem: (person: Person, rosterPosition: RosterPosition) => void;
     updateFirstName: (name: string) => void;
     updateLastName: (name: string) => void;
     updateJerseyNumber: (jerseyNumber: string) => void;
     updateStartDate: (startDate: string) => void;
-    savePlayer: (player: Player) => void;
+    savePlayer: (person: Person, rosterPosition: RosterPosition) => void;
 }
 
 export default class PlayerDetailForm extends Component<PlayerDetailProps & PlayerDetailFormActions> {
@@ -48,29 +51,35 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
     }
 
     render() {
-        const {storedPlayer} = this.props;
+        const {storedPerson, storedRosterPosition} = this.props;
         return (
-            <FetchableAsset fetchingState={storedPlayer.fetchingState}>
+            <FetchableAsset fetchingState={Math.min(storedRosterPosition.fetchingState, storedPerson.fetchingState)}>
                 {this.getForm()}
             </FetchableAsset>
         );
     }
 
     private updateForm() {
-        const {storedPlayer, formPlayer, fetchItem, resetFormItem} = this.props;
-        if (storedPlayer.fetchingState === FetchingState.NOT_FETCHED) {
-            fetchItem();
-        } else if (isPresent(storedPlayer) && (
-            storedPlayer.object.rosterPosition.id !== formPlayer.rosterPosition.id ||
-            storedPlayer.object.person.id !== formPlayer.person.id)
+        const {
+            storedPerson, storedRosterPosition, formPerson, formRosterPosition, fetchItem, resetFormItem
+        } = this.props;
+        if (storedPerson.fetchingState === FetchingState.NOT_FETCHED
+            || storedRosterPosition.fetchingState === FetchingState.NOT_FETCHED) {
+            fetchItem(storedRosterPosition.id);
+        } else if (isPresent(storedPerson) && isPresent(storedRosterPosition) && (
+            storedRosterPosition.object.id !== formRosterPosition.id ||
+            storedPerson.object.id !== formPerson.id)
         ) {
-            resetFormItem(storedPlayer.object);
+            resetFormItem(storedPerson.object, storedRosterPosition.object);
         }
     }
 
     private getForm() {
         const {
-            formPlayer,
+            storedPerson,
+            storedRosterPosition,
+            formPerson,
+            formRosterPosition,
             isEdit,
             savePlayer,
             updateFirstName,
@@ -78,10 +87,9 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
             updateJerseyNumber,
             updateStartDate
         } = this.props;
-        if (!formPlayer) {
+        if (isAbsent(storedPerson) || isAbsent(storedRosterPosition)) {
             return <div>I can't find the selected player</div>;
         } else {
-            const {person, rosterPosition} = formPlayer;
             return (
                 <div>
                     <form style={styles.root}>
@@ -90,7 +98,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                             disabled={!isEdit}
                             id="first"
                             label="First Name"
-                            value={person.attributes.first}
+                            value={formPerson.attributes.first}
                             onChange={event => updateFirstName(event.target.value)}
 
                         />
@@ -99,7 +107,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                             disabled={!isEdit}
                             id="last"
                             label="Last Name"
-                            value={person.attributes.last}
+                            value={formPerson.attributes.last}
                             onChange={event => updateLastName(event.target.value)}
 
                         />
@@ -114,7 +122,7 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                             id="jerseyNumber"
                             label="Jersery Number"
                             type="number"
-                            value={rosterPosition.attributes.jerseyNumber}
+                            value={formRosterPosition.attributes.jerseyNumber}
                             onChange={event => updateJerseyNumber(event.target.value)}
 
                         />
@@ -122,13 +130,13 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
                         <DatePicker
                             disabled={!isEdit}
                             onChange={event => event && updateStartDate(event.format('YYYY-MM-DD'))}
-                            value={rosterPosition.attributes.startDate}
+                            value={formRosterPosition.attributes.startDate}
                             id="startDate"
                             dateFormat={'YYYY-MM-DD'}
                         />
                         <SaveDetailFooter
                             isEdit={isEdit}
-                            onSave={() => savePlayer(formPlayer)}
+                            onSave={() => savePlayer(formPerson, formRosterPosition)}
                         />
                     </form>
                 </div>

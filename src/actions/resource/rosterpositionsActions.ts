@@ -1,5 +1,5 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
-import { receivePeople, removePerson } from './peopleActions';
+import { receivePeopleIncludes } from './peopleActions';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/rootReducer';
 import { isNullOrUndefined } from 'util';
@@ -11,7 +11,7 @@ import {
 } from './resourceActions';
 import { PageDescriptor, PageResultsMeta } from '../../reducers/resource/page';
 import { ResourceType } from '../../reducers/resource/resourceReducer';
-import { Player, RosterPosition } from '../../reducers/resource/rosterPosition';
+import { RosterPosition } from '../../reducers/resource/rosterPosition';
 import { Person } from '../../reducers/resource/person';
 
 const ROSTER_POSITIONS_RESOURCE_TYPE: ResourceType = 'rosterpositions';
@@ -70,7 +70,7 @@ export function fetchPlayers(page: PageDescriptor) {
         const collection = await fetchCollection<RosterPosition>('rosterpositions', page, ['player']);
         if (!isNullOrUndefined(collection.included)) {
             const people = collection.included.filter(ro => ro.type === 'people') as Array<Person>;
-            dispatch(receivePeople(OrderedMap(people.map(person => [person.id, person]))));
+            dispatch(receivePeopleIncludes(OrderedMap(people.map(person => [person.id, person]))));
         }
         dispatch(receiveRosterPositions(
             OrderedMap(collection.data.map(position => [position.id, position])),
@@ -80,37 +80,31 @@ export function fetchPlayers(page: PageDescriptor) {
     };
 }
 
-export function fetchPlayer(playerId: string) {
+export function fetchRosterPositionIncludePerson(playerId: string) {
     return async function (dispatch: Dispatch<RootState>) {
         dispatch(requestRosterPosition(playerId));
         const object = await fetchObject<RosterPosition>('rosterpositions', playerId, ['player']);
         if (object && object.included) {
             const people = object.included.filter(ro => ro.type === 'people') as Array<Person>;
-            dispatch(receivePeople(OrderedMap(people.map(person => [person.id, person]))));
+            dispatch(receivePeopleIncludes(OrderedMap(people.map(person => [person.id, person]))));
         }
         dispatch(receiveRosterPosition(playerId, object ? object.data : null));
     };
 }
 
-export function savePlayer(player: Player) {
+// TODO: This shouldn't redirect -- it's a side effect. Will need a generic util dispatch function to do that now.
+// TODO: all these save methods should return ID of the new saved object (see savePerson)
+export function saveRosterPosition(rosterPosition: RosterPosition) {
     return async function (dispatch: Dispatch<RootState>) {
-
-        const savePersonResponse = (await postObject(player.person)).data;
-        dispatch(receivePeople(OrderedMap([[savePersonResponse.id, savePersonResponse]])));
-
-        player.rosterPosition.relationships.player.data.id = savePersonResponse.id;
-        const saveRosterPositionResponse = (await postObject(player.rosterPosition)).data;
-        dispatch(receiveRosterPosition(saveRosterPositionResponse.id, saveRosterPositionResponse));
-
-        dispatch(replace(`/manage/players/${saveRosterPositionResponse.id}`));
+        const savedRosterPosition = (await postObject(rosterPosition)).data;
+        dispatch(receiveRosterPosition(savedRosterPosition.id, savedRosterPosition));
+        dispatch(replace(`/manage/players/${savedRosterPosition.id}`));
     };
 }
 
-export function deletePlayer(player: Player) {
+export function deleteRosterPosition(rosterPosition: RosterPosition) {
     return async function (dispatch: Dispatch<RootState>) {
-        await deleteObject(player.rosterPosition);
-        await deleteObject(player.person);
-        dispatch(removeRosterPosition(player.rosterPosition.id));
-        dispatch(removePerson(player.person.id));
+        await deleteObject(rosterPosition);
+        dispatch(removeRosterPosition(rosterPosition.id));
     };
 }

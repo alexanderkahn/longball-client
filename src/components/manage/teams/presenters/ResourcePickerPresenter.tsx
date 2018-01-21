@@ -5,7 +5,7 @@ import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
 import { ResourceObject } from '../../../../reducers/resource/resourceReducer';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { FetchingState, isNotFetched, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
+import { FetchingState, isUnfetched, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 
 export interface ResourcePickerProps<T extends ResourceObject> {
     matchingResources: ResourceCache<PageDescriptor, PageResult<T>>;
@@ -64,7 +64,7 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     private updatePicker() {
         const { selectedResource, fetchMatchingResource, inputDisplayValue, populateDisplayValue, parseDisplayValue,
             matchingResources, fetchSuggestions} = this.props;
-        if (selectedResource && isNotFetched(selectedResource) && selectedResource.id.length > 1) {
+        if (selectedResource && isUnfetched(selectedResource) && selectedResource.id.length > 1) {
             fetchMatchingResource(selectedResource.id);
         } else if (isPresent(selectedResource) && !inputDisplayValue) {
             populateDisplayValue(parseDisplayValue(selectedResource.object));

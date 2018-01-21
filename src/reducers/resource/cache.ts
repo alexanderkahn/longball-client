@@ -7,7 +7,7 @@ export enum FetchingState {
     FETCHED
 }
 
-interface UnknownItemCache<K> {
+interface UnfetchedItemCache<K> {
     readonly id: K;
     readonly fetchingState: FetchingState.NOT_FETCHED | FetchingState.FETCHING;
 }
@@ -40,14 +40,18 @@ export function  toCache<K, V>(key: K, value: V | undefined | null): ResourceCac
 }
 }
 
-export type ResourceCache<K, V> = UnknownItemCache<K> | AbsentItemCache<K> | PresentItemCache<K, V>;
+export type ResourceCache<K, V> = UnfetchedItemCache<K> | AbsentItemCache<K> | PresentItemCache<K, V>;
+
+export function isUnfetched(value: ResourceCache<{}, {}> | null): value is UnfetchedItemCache<{}> {
+    return value !== null && FetchingState.NOT_FETCHED === value.fetchingState;
+}
+
+export function isAbsent(value: ResourceCache<{}, {}> | null): value is AbsentItemCache<{}> {
+    return value !== null && value.fetchingState === FetchingState.FETCHED && value.object === null;
+}
 
 export function isPresent(value: ResourceCache<{}, {}> | null): value is PresentItemCache<{}, {}> {
     return value !== null && value.fetchingState === FetchingState.FETCHED && value.object !== null;
-}
-
-export function isNotFetched(value: ResourceCache<{}, {}> | null): value is AbsentItemCache<{}> {
-    return value !== null && value.fetchingState === FetchingState.NOT_FETCHED;
 }
 
 export class CachedStateWrapper<K, V> {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from 'material-ui/Button';
 import { User } from '../../../reducers/resource/user';
-import { isNotFetched, isPresent, ResourceCache } from '../../../reducers/resource/cache';
+import { isUnfetched, isPresent, ResourceCache } from '../../../reducers/resource/cache';
 import LoadingProgressIndicator from '../../shared/presenters/LoadingProgressIndicator';
 
 export interface UserLogControlProps {
@@ -22,7 +22,6 @@ export default class UserLogControl extends React.Component<UserLogControlProps 
         this.updateControl();
     }
 
-
     render() {
         const { user } = this.props;
         if (isPresent(user)) {
@@ -33,7 +32,7 @@ export default class UserLogControl extends React.Component<UserLogControlProps 
     }
 
     private updateControl() {
-        if (isNotFetched(this.props.user)) {
+        if (isUnfetched(this.props.user)) {
             this.props.fetchCurrentUser();
         }
     }
