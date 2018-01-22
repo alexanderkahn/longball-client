@@ -3,12 +3,13 @@ import ManagementList from '../../shared/presenters/ManagementList';
 import LeagueListItem from './LeagueListItem';
 import { Component } from 'react';
 import { League } from '../../../../reducers/resource/league';
-import { ResourceCache } from '../../../../reducers/resource/cache';
+import { isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { getListElements } from '../../../../util/listTransformer';
+import { copyContentsToCache } from '../../../../util/listTransformer';
+import { MissingResourceListItem } from '../../../shared/presenters/MissingResourceListItem';
 
 export interface ManageLeaguesProps {
-    leagues: ResourceCache<PageDescriptor, PageResult<League>>;
+    leagues: ResourceCache<PageDescriptor, PageResult<ResourceCache<string, League>>>;
 }
 
 export interface ManageLeaguesActions {
@@ -23,11 +24,10 @@ export default class ManageLeaguesForm extends Component<ManageLeaguesProps & Ma
 
     render() {
         const {leagues, onClickAdd, getPage, fetchListItems} = this.props;
-        const transform = this.buildLeagueListItem.bind(this);
         return (
             <ManagementList
                 title="Leagues"
-                currentView={getListElements(leagues, transform)}
+                currentView={isPresent(leagues) ? copyContentsToCache(leagues, leagues.object.contents.toArray().map(it => this.buildLeagueListItem(it))) : leagues}
                 onClickAdd={onClickAdd}
                 getPage={getPage}
                 fetchListItems={fetchListItems(leagues.id)}
@@ -35,15 +35,20 @@ export default class ManageLeaguesForm extends Component<ManageLeaguesProps & Ma
         );
     }
 
-    buildLeagueListItem(league: League): JSX.Element {
+    buildLeagueListItem(league: ResourceCache<string, League>): JSX.Element {
         const {buildHandleSelectDetail, buildHandleDeleteLeague} = this.props;
-        return (
-            <LeagueListItem
-                key={league.id}
-                league={league}
-                handleSelectLeagueDetail={buildHandleSelectDetail(league)}
-                handleDeleteLeague={buildHandleDeleteLeague(league)}
-            />
-        );
+        if (isPresent(league)) {
+            return (
+                <LeagueListItem
+                    key={league.id}
+                    league={league.object}
+                    handleSelectLeagueDetail={buildHandleSelectDetail(league.object)}
+                    handleDeleteLeague={buildHandleDeleteLeague(league.object)}
+                />
+            );
+        } else {
+            return <MissingResourceListItem/>;
+        }
     }
+
 }

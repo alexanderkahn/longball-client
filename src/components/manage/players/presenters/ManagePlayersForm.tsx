@@ -6,10 +6,11 @@ import { RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 import { isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { Person } from '../../../../reducers/resource/person';
-import { getListElements } from '../../../../util/listTransformer';
+import { copyContentsToCache } from '../../../../util/listTransformer';
+import { MissingResourceListItem } from '../../../shared/presenters/MissingResourceListItem';
 
 export interface ManagePlayersFormProps {
-    rosterPositions: ResourceCache<PageDescriptor, PageResult<RosterPosition>>;
+    rosterPositions: ResourceCache<PageDescriptor, PageResult<ResourceCache<string, RosterPosition>>>;
     includedPeople: Array<ResourceCache<string, Person>>;
 }
 
@@ -24,11 +25,13 @@ export interface ManagePlayersFormActions {
 export default class ManagePlayersForm extends Component<ManagePlayersFormProps & ManagePlayersFormActions> {
     render() {
         const {rosterPositions, fetchListItems, onClickAdd, getPage} = this.props;
-        const transform = this.buildPlayerListItem.bind(this);
+        const cachedElements = isPresent(rosterPositions)
+            ? copyContentsToCache(rosterPositions, rosterPositions.object.contents.toArray().map(it => this.buildPlayerListItem(it)))
+            : rosterPositions;
         return (
             <ManagementList
                 title="Players"
-                currentView={getListElements(rosterPositions, transform)}
+                currentView={cachedElements}
                 fetchListItems={fetchListItems(rosterPositions.id)}
                 onClickAdd={onClickAdd}
                 getPage={getPage}
@@ -36,19 +39,20 @@ export default class ManagePlayersForm extends Component<ManagePlayersFormProps 
         );
     }
 
-    private buildPlayerListItem(rosterPosition: RosterPosition | undefined): JSX.Element {
+    private buildPlayerListItem(rosterPosition: ResourceCache<string, RosterPosition>): JSX.Element {
         const {buildHandleSelectPlayerDetail, buildHandleDeleteRosterPosition, includedPeople} = this.props;
-        const person = rosterPosition ? includedPeople.find(it => it.id === rosterPosition.relationships.player.data.id) : null;
-        if (!rosterPosition || !person || !isPresent(person)) {
-            // TODO: there ought to be an option for 'missing' player so we can display that something is messed up.
-            return <div key="asdfasdfasdfsadfwerwae"/>;
+        const person = isPresent(rosterPosition)
+            ? includedPeople.find(it => it.id === rosterPosition.object.relationships.player.data.id)
+            : null;
+        if (!isPresent(rosterPosition) || !person || !isPresent(person)) {
+            return <MissingResourceListItem/>;
         } else {
             return (
                 <PlayerListItem
                     person={person.object}
-                    rosterPosition={rosterPosition}
-                    handleSelectPlayerDetail={buildHandleSelectPlayerDetail(rosterPosition)}
-                    handleDeletePlayer={buildHandleDeleteRosterPosition(rosterPosition)}
+                    rosterPosition={rosterPosition.object}
+                    handleSelectPlayerDetail={buildHandleSelectPlayerDetail(rosterPosition.object)}
+                    handleDeletePlayer={buildHandleDeleteRosterPosition(rosterPosition.object)}
                     key={rosterPosition.id}
                 />
             );

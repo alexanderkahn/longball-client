@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 import { RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { parseQueryParameters } from '../../../../util/urlParser';
-import { isPresent, ResourceCache } from '../../../../reducers/resource/cache';
+import { isPresent, PresentItemCache, ResourceCache } from '../../../../reducers/resource/cache';
 
 const MANAGE_PLAYERS_BASE_URL = '/manage/players';
 
@@ -39,10 +39,11 @@ const ManagePlayersContainer = connect(
 
 export default ManagePlayersContainer;
 
-function getRelatedPersonIds(rosterPositions: ResourceCache<PageDescriptor, PageResult<RosterPosition>>): string[] {
+function getRelatedPersonIds(rosterPositions: ResourceCache<PageDescriptor, PageResult<ResourceCache<string, RosterPosition>>>): string[] {
     if (!isPresent(rosterPositions)) {
         return [];
     }
     return rosterPositions.object.contents.toArray()
-        .map((it) => it.relationships.player.data.id);
+        .filter(it => isPresent(it))
+        .map((it) => (it as PresentItemCache<string, RosterPosition>).object.relationships.player.data.id);
 }

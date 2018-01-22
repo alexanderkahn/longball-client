@@ -18,7 +18,7 @@ interface AbsentItemCache<K> {
     readonly object: null;
 }
 
-interface PresentItemCache<K, V> {
+export interface PresentItemCache<K, V> {
     readonly id: K;
     readonly fetchingState: FetchingState.FETCHED;
     readonly object: V;
@@ -51,6 +51,9 @@ export function isAbsent(value: ResourceCache<{}, {}> | null): value is AbsentIt
 }
 
 export function isPresent(value: ResourceCache<{}, {}> | null): value is PresentItemCache<{}, {}> {
+    if (value === undefined) {
+        console.info('help');
+    }
     return value !== null && value.fetchingState === FetchingState.FETCHED && value.object !== null;
 }
 

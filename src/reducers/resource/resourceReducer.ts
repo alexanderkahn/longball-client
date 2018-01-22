@@ -41,10 +41,10 @@ export class ResourceObjectState<T extends ResourceObject> {
         this.data = data;
     }
 
-    getMappedPage(page: PageDescriptor): ResourceCache<PageDescriptor, PageResult<T>> {
+    getMappedPage(page: PageDescriptor): ResourceCache<PageDescriptor, PageResult<ResourceCache<string, T>>> {
         const pageResult = this.pages.get(page);
         if (isPresent(pageResult)) {
-            const dataContents = this.getNonNullPageItems(pageResult.object.contents);
+            const dataContents = Immutable.List(pageResult.object.contents.toArray().map(it => this.data.get(it)));
             return {
                 ...pageResult,
                 object: {
@@ -55,17 +55,6 @@ export class ResourceObjectState<T extends ResourceObject> {
         } else {
             return pageResult;
         }
-    }
-
-    private getNonNullPageItems(itemIds: Immutable.List<string>): Immutable.List<T> {
-        const objects = Array<T>();
-        for (const id of itemIds.toArray()) {
-            const record = this.data.get(id);
-            if (record.fetchingState === FetchingState.FETCHED && record.object !== null) {
-                objects.push(record.object as T);
-            }
-        }
-        return Immutable.List(objects);
     }
 }
 

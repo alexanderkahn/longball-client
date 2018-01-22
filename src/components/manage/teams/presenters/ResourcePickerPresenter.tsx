@@ -5,10 +5,13 @@ import Downshift from 'downshift';
 import Paper from 'material-ui/Paper';
 import { ResourceObject } from '../../../../reducers/resource/resourceReducer';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { FetchingState, isUnfetched, isPresent, ResourceCache } from '../../../../reducers/resource/cache';
+import {
+    FetchingState, isUnfetched, isPresent, ResourceCache,
+    PresentItemCache
+} from '../../../../reducers/resource/cache';
 
 export interface ResourcePickerProps<T extends ResourceObject> {
-    matchingResources: ResourceCache<PageDescriptor, PageResult<T>>;
+    matchingResources: ResourceCache<PageDescriptor, PageResult<ResourceCache<string, T>>>;
     selectedResource: ResourceCache<string, T> | null;
     inputDisplayValue: string;
     inputDisplayPlaceholder: string;
@@ -38,11 +41,12 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
     render() {
         const {inputDisplayValue, inputDisplayPlaceholder, matchingResources, selectedResource, parseDisplayValue,
             onChangeDisplay, onSelectResource} = this.props;
+        const presentResources = this.getPresentResources(matchingResources);
         return (
             <Downshift
                 inputValue={inputDisplayValue || ''}
                 selectedItem={(isPresent(selectedResource) && isPresent(matchingResources))
-                        ? matchingResources.object.contents.find(it => it === selectedResource.object)
+                        ? presentResources.find(it => it === selectedResource.object)
                         : null
                 }
                 itemToString={parseDisplayValue}
@@ -52,9 +56,9 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
                     <div>
                         {this.renderInput(getInputProps({placeholder: inputDisplayPlaceholder}))}
                         {isOpen && isPresent(matchingResources)
-                            ? this.renderSuggestionsContainer(matchingResources.object.contents.map((resource: T) =>
+                            ? this.renderSuggestionsContainer(presentResources.map((resource: T) =>
                                 this.renderSuggestion(resource, getItemProps({item: resource}))
-                            ).toArray()) : null}
+                            )) : null}
                     </div>
                 )}
             />
@@ -85,6 +89,16 @@ export default class ResourcePickerPresenter<T extends ResourceObject>
                 autoComplete="off"
             />
         );
+    }
+
+    private getPresentResources(matchingResources: ResourceCache<PageDescriptor, PageResult<ResourceCache<string, T>>>): Array<T> {
+        if (isPresent(matchingResources)) {
+            return matchingResources.object.contents.toArray()
+                .filter(it => isPresent(it))
+                .map(it => (it as PresentItemCache<string, T>).object);
+        } else {
+            return [];
+        }
     }
 
     private renderSuggestion(resource: T, itemProps: {}): JSX.Element {

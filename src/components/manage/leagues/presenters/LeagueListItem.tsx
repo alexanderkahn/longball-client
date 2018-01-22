@@ -28,5 +28,4 @@ export default class LeagueListItem extends Component<LeagueListItemProps> {
             </ListItem>
         );
     }
-
 }

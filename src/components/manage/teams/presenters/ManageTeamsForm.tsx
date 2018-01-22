@@ -3,12 +3,13 @@ import ManagementList from '../../shared/presenters/ManagementList';
 import TeamListItem from './TeamListItem';
 import { Component } from 'react';
 import { Team } from '../../../../reducers/resource/team';
-import { ResourceCache } from '../../../../reducers/resource/cache';
+import { isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { getListElements } from '../../../../util/listTransformer';
+import { copyContentsToCache } from '../../../../util/listTransformer';
+import { MissingResourceListItem } from '../../../shared/presenters/MissingResourceListItem';
 
 export interface ManageTeamsFormProps {
-    teams: ResourceCache<PageDescriptor, PageResult<Team>>;
+    teams: ResourceCache<PageDescriptor, PageResult<ResourceCache<string, Team>>>;
 }
 
 export interface ManageTeamsFormActions {
@@ -23,11 +24,10 @@ export default class ManageTeamsForm extends Component<ManageTeamsFormProps & Ma
 
     render() {
         const {teams, fetchListItems, getPage, onClickAdd} = this.props;
-        const transform = this.buildTeamListItem.bind(this);
         return (
             <ManagementList
                 title="Teams"
-                currentView={getListElements(teams, transform)}
+                currentView={isPresent(teams) ? copyContentsToCache(teams, teams.object.contents.toArray().map(it => this.buildTeamListItem(it))) : teams}
                 fetchListItems={fetchListItems(teams.id)}
                 getPage={getPage}
                 onClickAdd={onClickAdd}
@@ -35,15 +35,19 @@ export default class ManageTeamsForm extends Component<ManageTeamsFormProps & Ma
         );
     }
 
-    buildTeamListItem(team: Team): JSX.Element {
+    buildTeamListItem(team: ResourceCache<string, Team>): JSX.Element {
         const {buildHandleSelectTeamDetail, buildHandleDeleteTeam} = this.props;
-        return (
-            <TeamListItem
-                key={team.id}
-                team={team}
-                handleSelectTeamDetail={buildHandleSelectTeamDetail(team)}
-                handleDeleteTeam={buildHandleDeleteTeam(team)}
-            />
-        );
+        if (isPresent(team)) {
+            return (
+                <TeamListItem
+                    key={team.id}
+                    team={team.object}
+                    handleSelectTeamDetail={buildHandleSelectTeamDetail(team.object)}
+                    handleDeleteTeam={buildHandleDeleteTeam(team.object)}
+                />
+            );
+        } else {
+            return <MissingResourceListItem/>;
+        }
     }
 }

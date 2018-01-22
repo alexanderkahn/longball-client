@@ -1,20 +1,16 @@
 import { PageDescriptor, PageResult } from '../reducers/resource/page';
-import { isPresent, ResourceCache } from '../reducers/resource/cache';
+import { PresentItemCache, ResourceCache } from '../reducers/resource/cache';
+import * as Immutable from 'immutable';
 
-export function getListElements<T>(
-    pageCache: ResourceCache<PageDescriptor, PageResult<T>>,
-    transform: (original: T | undefined) => JSX.Element
-): ResourceCache<PageDescriptor, PageResult<JSX.Element>> {
-    if (isPresent(pageCache)) {
-        const elements = pageCache.object.contents.map(it => transform(it)).toList();
-        return {
-            ...pageCache,
-            object: {
-                ...pageCache.object,
-                contents: elements
-            }
-        };
-    } else {
-        return pageCache;
-    }
+export function copyContentsToCache<T>(
+    original: PresentItemCache<PageDescriptor, PageResult<{}>>,
+    contents: Array<T>)
+: ResourceCache<PageDescriptor, PageResult<T>> {
+    return {
+        ...original,
+        object: {
+            ...original.object,
+            contents: Immutable.List(contents)
+        }
+    };
 }
