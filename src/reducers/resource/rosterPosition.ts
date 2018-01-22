@@ -22,10 +22,8 @@ export const blankRosterPosition: RosterPosition = {
         jerseyNumber: 0,
         startDate: '',
     },
-    // TODO the pre-canned relationship to the 'person' is weird. Try and figure out a way to decouple these.
-    // It's needed for now because that's how the person object is loaded into the form in PlayerDetailContainer
     relationships: {
         team: {data: {type: 'teams', id: ''}},
-        player: {data: {type: 'people', id: 'add'}}
+        player: {data: {type: 'people', id: ''}}
     }
 };

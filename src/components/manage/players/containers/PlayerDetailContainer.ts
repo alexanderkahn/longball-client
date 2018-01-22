@@ -21,7 +21,7 @@ function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageI
         storedRosterPosition: storedRosterPosition,
         formPerson: state.form.person.resource,
         formRosterPosition: state.form.rosterPosition.resource,
-        isEdit: state.form.person.isEdit,
+        isEdit: state.form.rosterPosition.isEdit,
     };
 }
 
