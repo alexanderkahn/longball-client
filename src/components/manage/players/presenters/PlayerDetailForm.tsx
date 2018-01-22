@@ -51,9 +51,9 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
     }
 
     render() {
-        const {storedPerson, storedRosterPosition} = this.props;
+        const {storedRosterPosition} = this.props;
         return (
-            <FetchableAsset fetchingState={Math.min(storedRosterPosition.fetchingState, storedPerson.fetchingState)}>
+            <FetchableAsset fetchingState={storedRosterPosition.fetchingState}>
                 {this.getForm()}
             </FetchableAsset>
         );
@@ -76,16 +76,9 @@ export default class PlayerDetailForm extends Component<PlayerDetailProps & Play
 
     private getForm() {
         const {
-            storedPerson,
-            storedRosterPosition,
-            formPerson,
-            formRosterPosition,
-            isEdit,
-            savePlayer,
-            updateFirstName,
-            updateLastName,
-            updateJerseyNumber,
-            updateStartDate
+            storedPerson, storedRosterPosition,
+            formPerson, formRosterPosition, isEdit,
+            savePlayer, updateFirstName, updateLastName, updateJerseyNumber, updateStartDate
         } = this.props;
         if (isAbsent(storedPerson) || isAbsent(storedRosterPosition)) {
             return <div>I can't find the selected player</div>;
