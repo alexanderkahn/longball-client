@@ -5,7 +5,7 @@ import { RootState } from '../../../../reducers/rootReducer';
 import { push } from 'react-router-redux';
 import { RouteComponentProps } from 'react-router';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { Player, RosterPosition } from '../../../../reducers/resource/rosterPosition';
+import { RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { parseQueryParameters } from '../../../../util/urlParser';
 import { isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 
@@ -26,8 +26,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): ManagePlayersFormAct
         fetchListItems: (currentPage: PageDescriptor) => () => dispatch(fetchPlayers(currentPage)),
         onClickAdd: () => dispatch(push(MANAGE_PLAYERS_BASE_URL + '/add')),
         getPage: (page: number) => () => dispatch(push(MANAGE_PLAYERS_BASE_URL + `?page=${page}`)),
-        buildHandleSelectPlayerDetail: (player: Player) => () =>
-            dispatch(push(`${MANAGE_PLAYERS_BASE_URL}/${player.rosterPosition.id}`)),
+        buildHandleSelectPlayerDetail: (rosterPosition: RosterPosition) => () =>
+            dispatch(push(`${MANAGE_PLAYERS_BASE_URL}/${rosterPosition.id}`)),
         buildHandleDeleteRosterPosition: (rosterPosition: RosterPosition) => () => dispatch(deleteRosterPosition(rosterPosition)),
     };
 };

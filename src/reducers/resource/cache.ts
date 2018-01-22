@@ -24,7 +24,7 @@ interface PresentItemCache<K, V> {
     readonly object: V;
 }
 
-export function  toCache<K, V>(key: K, value: V | undefined | null): ResourceCache<K, V> {
+export function  toFetchedCache<K, V>(key: K, value: V | undefined | null): ResourceCache<K, V> {
     if (value) {
         return {
             id: key,
@@ -83,11 +83,11 @@ export class CachedStateWrapper<K, V> {
     }
 
     setOneFetched(key: K, value: V | null): CachedStateWrapper<K, V> {
-        return new CachedStateWrapper<K, V>(this.synthetic, this.internal.set(key, toCache(key, value)));
+        return new CachedStateWrapper<K, V>(this.synthetic, this.internal.set(key, toFetchedCache(key, value)));
     }
 
     setAllFetched(other: Immutable.Map<K, V>): CachedStateWrapper<K, V> {
-        const cachedValues = other.map((value, key) => toCache(<K> key, value));
+        const cachedValues = other.map((value, key) => toFetchedCache(<K> key, value));
         return new CachedStateWrapper<K, V>(this.synthetic, this.internal.merge(cachedValues));
     }
 }

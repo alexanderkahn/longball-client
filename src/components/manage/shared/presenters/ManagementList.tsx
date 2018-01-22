@@ -18,16 +18,15 @@ const styles: CSSProperties = {
     },
 };
 
-interface ManagementListProps<T> {
+interface ManagementListProps {
     title: string;
-    currentView: ResourceCache<PageDescriptor, PageResult<T>>;
-    renderChild: (child: T) => JSX.Element;
+    currentView: ResourceCache<PageDescriptor, PageResult<JSX.Element>>;
     onClickAdd: () => void;
     getPage: (page: number) => () => void;
     fetchListItems: () => void;
 }
 
-export default class ManagementList<T> extends Component<ManagementListProps<T>> {
+export default class ManagementList extends Component<ManagementListProps> {
 
     componentWillMount() {
         this.tryFetch();
@@ -38,10 +37,9 @@ export default class ManagementList<T> extends Component<ManagementListProps<T>>
     }
 
     render() {
-        const {title, currentView, onClickAdd, getPage, renderChild} = this.props;
+        const {title, currentView, onClickAdd, getPage} = this.props;
         const page = isPresent(currentView) ? currentView.object : null;
         return (
-
             <form>
                 <DialogTitle style={styles.title}>{title}</DialogTitle>
                 <span>
@@ -61,7 +59,7 @@ export default class ManagementList<T> extends Component<ManagementListProps<T>>
                     </PagingButton>
                 </span>
                 <List>
-                    {page ? page.contents.toArray().map(renderChild) : []}
+                    {page ? page.contents.toArray() : []}
                 </List>
                 <LoadingProgressIndicator enabled={currentView.fetchingState === FetchingState.FETCHING}/>
                 <Button

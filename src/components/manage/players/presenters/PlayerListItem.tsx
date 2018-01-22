@@ -4,21 +4,23 @@ import { Avatar, ListItemSecondaryAction } from 'material-ui';
 import { Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
-import { Player } from '../../../../reducers/resource/rosterPosition';
+import { RosterPosition } from '../../../../reducers/resource/rosterPosition';
+import { Person } from '../../../../reducers/resource/person';
 
 interface PlayerListItemProps {
-    player: Player;
+    person: Person;
+    rosterPosition: RosterPosition;
     handleSelectPlayerDetail: () => void;
     handleDeletePlayer: () => void;
 }
 
 export default class PlayerListItem extends Component<PlayerListItemProps> {
     render() {
-        const {player, handleSelectPlayerDetail, handleDeletePlayer } = this.props;
+        const {person, handleSelectPlayerDetail, handleDeletePlayer } = this.props;
         return (
             <ListItem button={true} onClick={handleSelectPlayerDetail}>
-                <ListItemIcon><Avatar>{player.person.attributes.last[0]}</Avatar></ListItemIcon>
-                <ListItemText primary={player.person.attributes.first + ' ' + player.person.attributes.last}/>
+                <ListItemIcon><Avatar>{person.attributes.last[0]}</Avatar></ListItemIcon>
+                <ListItemText primary={person.attributes.first + ' ' + person.attributes.last}/>
                 <ListItemSecondaryAction>
                     <IconButton onClick={handleDeletePlayer} aria-label="Delete">
                         <DeleteIcon/>

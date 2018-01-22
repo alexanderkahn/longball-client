@@ -1,4 +1,3 @@
-import { Person } from './person';
 import { RelationshipResource, ResourceObject } from './resourceReducer';
 import { NEW_RESOURCE_FORM_ROUTE } from './cache';
 
@@ -30,9 +29,3 @@ export const blankRosterPosition: RosterPosition = {
         player: {data: {type: 'people', id: 'add'}}
     }
 };
-
-// TODO: delete this interface
-export interface Player {
-    rosterPosition: RosterPosition;
-    person: Person;
-}

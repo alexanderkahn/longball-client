@@ -1,5 +1,5 @@
 import { AuthAction, AuthActionTypeKeys } from '../actions/authActions';
-import { FetchingState, ResourceCache, toCache } from './resource/cache';
+import { FetchingState, ResourceCache, toFetchedCache } from './resource/cache';
 import { User } from './resource/user';
 import { AuthToken } from './resource/authToken';
 
@@ -48,7 +48,7 @@ export const auth = (state: AuthState = initialState, action: AuthAction): AuthS
         case AuthActionTypeKeys.RECEIVE_CURRENT_USER: {
             return {
                 token: state.token,
-                currentUser: toCache(initialState.currentUser.id, action.user)
+                currentUser: toFetchedCache(initialState.currentUser.id, action.user)
             };
         }
         default:

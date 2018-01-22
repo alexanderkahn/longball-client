@@ -5,6 +5,7 @@ import { Component } from 'react';
 import { Team } from '../../../../reducers/resource/team';
 import { ResourceCache } from '../../../../reducers/resource/cache';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
+import { getListElements } from '../../shared/util/listTransformer';
 
 export interface ManageTeamsFormProps {
     teams: ResourceCache<PageDescriptor, PageResult<Team>>;
@@ -21,31 +22,28 @@ export interface ManageTeamsFormActions {
 export default class ManageTeamsForm extends Component<ManageTeamsFormProps & ManageTeamsFormActions> {
 
     render() {
-        const {teams, fetchListItems, getPage, onClickAdd,
-            buildHandleSelectTeamDetail, buildHandleDeleteTeam} = this.props;
+        const {teams, fetchListItems, getPage, onClickAdd} = this.props;
+        const transform = this.buildTeamListItem.bind(this);
         return (
             <ManagementList
                 title="Teams"
-                currentView={teams}
+                currentView={getListElements(teams, transform)}
                 fetchListItems={fetchListItems(teams.id)}
                 getPage={getPage}
                 onClickAdd={onClickAdd}
-                renderChild={this.buildTeamListItemRenderer(buildHandleSelectTeamDetail, buildHandleDeleteTeam)}
             />
         );
     }
 
-    buildTeamListItemRenderer(selectBuilder: (team: Team) => () => void, deleteBuilder: (team: Team) => () => void)
-    : (team: Team) => JSX.Element {
-        return (team: Team) => {
-            return (
-                <TeamListItem
-                    key={team.id}
-                    team={team}
-                    handleSelectTeamDetail={selectBuilder(team)}
-                    handleDeleteTeam={deleteBuilder(team)}
-                />
-            );
-        };
+    buildTeamListItem(team: Team): JSX.Element {
+        const {buildHandleSelectTeamDetail, buildHandleDeleteTeam} = this.props;
+        return (
+            <TeamListItem
+                key={team.id}
+                team={team}
+                handleSelectTeamDetail={buildHandleSelectTeamDetail(team)}
+                handleDeleteTeam={buildHandleDeleteTeam(team)}
+            />
+        );
     }
 }
