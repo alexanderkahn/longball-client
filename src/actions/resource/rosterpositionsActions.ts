@@ -3,7 +3,6 @@ import { receivePeopleIncludes } from './peopleActions';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/rootReducer';
 import { isNullOrUndefined } from 'util';
-import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 import {
     ReceiveResourcePageAction, RemoveResourceObjectAction, RequestResourcePageAction, RequestResourceObjectAction,
@@ -92,12 +91,10 @@ export function fetchRosterPositionIncludePerson(playerId: string) {
     };
 }
 
-// TODO: This shouldn't redirect -- it's a side effect. Will need a generic util dispatch function to do that now.
 export function saveRosterPosition(rosterPosition: RosterPosition): (dispatch: Dispatch<RootState>) => Promise<string> {
     return async (dispatch) => {
         const savedRosterPosition = (await postObject(rosterPosition)).data;
         dispatch(receiveRosterPosition(savedRosterPosition.id, savedRosterPosition));
-        dispatch(replace(`/manage/players/${savedRosterPosition.id}`));
         return savedRosterPosition.id;
     };
 }

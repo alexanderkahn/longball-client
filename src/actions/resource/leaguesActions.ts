@@ -1,7 +1,6 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { Dispatch } from 'redux';
 import { RootState } from '../../reducers/rootReducer';
-import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 import {
     ReceiveResourcePageAction,
@@ -81,8 +80,7 @@ export function saveLeague(league: League): (dispatch: Dispatch<RootState>) => P
     return async (dispatch) => {
         const saveResponse = (await postObject(league)).data;
         dispatch(receiveLeague(saveResponse.id, saveResponse));
-        dispatch(replace(`/manage/leagues/${saveResponse.id}`));
-        return league.id;
+        return saveResponse.id;
     };
 }
 

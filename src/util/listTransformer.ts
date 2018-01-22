@@ -1,5 +1,5 @@
-import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { isPresent, ResourceCache } from '../../../../reducers/resource/cache';
+import { PageDescriptor, PageResult } from '../reducers/resource/page';
+import { isPresent, ResourceCache } from '../reducers/resource/cache';
 
 export function getListElements<T>(
     pageCache: ResourceCache<PageDescriptor, PageResult<T>>,

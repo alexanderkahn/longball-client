@@ -1,7 +1,6 @@
 import { deleteObject, fetchCollection, fetchObject, postObject } from '../rest';
 import { RootState } from '../../reducers/rootReducer';
 import { Dispatch } from 'redux';
-import { replace } from 'react-router-redux';
 import { OrderedMap } from 'immutable';
 import {
     ReceiveResourcePageAction,
@@ -81,8 +80,7 @@ export function saveTeam(team: Team): (dispatch: Dispatch<RootState>) => Promise
     return async (dispatch) => {
         const saveResponse = (await postObject(team)).data;
         dispatch(receiveTeam(saveResponse.id, saveResponse));
-        dispatch(replace(`/manage/teams/${saveResponse.id}`));
-        return team.id;
+        return saveResponse.id;
     };
 }
 

@@ -6,7 +6,7 @@ import { RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
 import { isPresent, ResourceCache } from '../../../../reducers/resource/cache';
 import { Person } from '../../../../reducers/resource/person';
-import { getListElements } from '../../shared/util/listTransformer';
+import { getListElements } from '../../../../util/listTransformer';
 
 export interface ManagePlayersFormProps {
     rosterPositions: ResourceCache<PageDescriptor, PageResult<RosterPosition>>;

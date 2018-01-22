@@ -6,6 +6,7 @@ import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRout
 import { RouteComponentProps } from 'react-router';
 import { resetForm, updateFormAttribute } from '../../../../actions/form/formUpdateActions';
 import { League } from '../../../../reducers/resource/league';
+import { redirectToManagementRoute } from '../../../../actions/routeActions';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): LeagueDetailProps => {
     const leagueId = ownProps.match.params.itemId;
@@ -23,7 +24,10 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         fetchItem: () => dispatch(fetchLeague(leagueId)),
         resetFormItem: (league: League) => dispatch(resetForm('leagues', league)),
         updateName: (name: string) => dispatch(updateFormAttribute('leagues', 'name', name)),
-        saveLeague: (league: League) => dispatch(saveLeague(league))
+        saveLeague: async (league: League) => {
+            const savedId = await dispatch(saveLeague(league));
+            dispatch(redirectToManagementRoute('leagues', savedId));
+        }
     };
 };
 

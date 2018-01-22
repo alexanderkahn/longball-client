@@ -10,6 +10,7 @@ import { RosterPosition } from '../../../../reducers/resource/rosterPosition';
 import { Person } from '../../../../reducers/resource/person';
 import { savePerson } from '../../../../actions/resource/peopleActions';
 import { isPresent } from '../../../../reducers/resource/cache';
+import { redirectToManagementRoute } from '../../../../actions/routeActions';
 
 function mapStateToProps(state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): PlayerDetailProps {
     let rosterPositionId = ownProps.match.params.itemId;
@@ -44,7 +45,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>)
             dispatch(updateFormAttribute('rosterpositions', 'startDate', startDate)),
         savePlayer: async function (person: Person, rosterPosition: RosterPosition) {
             rosterPosition.relationships.player.data.id = await dispatch(savePerson(person));
-            dispatch(saveRosterPosition(rosterPosition));
+            const savedId = await dispatch(saveRosterPosition(rosterPosition));
+            dispatch(redirectToManagementRoute('players', savedId));
         }
     };
 };

@@ -6,6 +6,7 @@ import { RouteComponentProps } from 'react-router';
 import { ManageItemRouteProps } from '../../shared/presenters/ManagementViewRouter';
 import { resetForm, updateFormAttribute } from '../../../../actions/form/formUpdateActions';
 import { Team } from '../../../../reducers/resource/team';
+import { redirectToManagementRoute } from '../../../../actions/routeActions';
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<ManageItemRouteProps>): TeamDetailProps => {
     const teamId = ownProps.match.params.itemId;
@@ -27,7 +28,10 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>, ownProps: RouteCompon
         ),
         updateLocation: (location: string) => dispatch(updateFormAttribute('teams', 'location', location)),
         updateNickname: (nickname: string) => dispatch(updateFormAttribute('teams', 'nickname', nickname)),
-        saveTeam: (team: Team) => dispatch(saveTeam(team))
+        saveTeam: async (team: Team) => {
+            const savedId = await dispatch(saveTeam(team));
+            dispatch(redirectToManagementRoute('teams', savedId));
+        }
     };
 };
 

@@ -5,7 +5,7 @@ import { Component } from 'react';
 import { League } from '../../../../reducers/resource/league';
 import { ResourceCache } from '../../../../reducers/resource/cache';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { getListElements } from '../../shared/util/listTransformer';
+import { getListElements } from '../../../../util/listTransformer';
 
 export interface ManageLeaguesProps {
     leagues: ResourceCache<PageDescriptor, PageResult<League>>;

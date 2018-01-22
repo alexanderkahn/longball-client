@@ -5,7 +5,7 @@ import { Component } from 'react';
 import { Team } from '../../../../reducers/resource/team';
 import { ResourceCache } from '../../../../reducers/resource/cache';
 import { PageDescriptor, PageResult } from '../../../../reducers/resource/page';
-import { getListElements } from '../../shared/util/listTransformer';
+import { getListElements } from '../../../../util/listTransformer';
 
 export interface ManageTeamsFormProps {
     teams: ResourceCache<PageDescriptor, PageResult<Team>>;
