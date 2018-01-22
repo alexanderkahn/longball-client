@@ -77,11 +77,12 @@ export function fetchLeague(leagueId: string): Dispatch<RootState> {
     };
 }
 
-export function saveLeague(league: League): Dispatch<RootState> {
-    return async function (dispatch: Dispatch<RootState>) {
+export function saveLeague(league: League): (dispatch: Dispatch<RootState>) => Promise<string> {
+    return async (dispatch) => {
         const saveResponse = (await postObject(league)).data;
         dispatch(receiveLeague(saveResponse.id, saveResponse));
         dispatch(replace(`/manage/leagues/${saveResponse.id}`));
+        return league.id;
     };
 }
 

@@ -93,12 +93,12 @@ export function fetchRosterPositionIncludePerson(playerId: string) {
 }
 
 // TODO: This shouldn't redirect -- it's a side effect. Will need a generic util dispatch function to do that now.
-// TODO: all these save methods should return ID of the new saved object (see savePerson)
-export function saveRosterPosition(rosterPosition: RosterPosition) {
-    return async function (dispatch: Dispatch<RootState>) {
+export function saveRosterPosition(rosterPosition: RosterPosition): (dispatch: Dispatch<RootState>) => Promise<string> {
+    return async (dispatch) => {
         const savedRosterPosition = (await postObject(rosterPosition)).data;
         dispatch(receiveRosterPosition(savedRosterPosition.id, savedRosterPosition));
         dispatch(replace(`/manage/players/${savedRosterPosition.id}`));
+        return savedRosterPosition.id;
     };
 }
 

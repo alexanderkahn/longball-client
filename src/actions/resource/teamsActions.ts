@@ -77,11 +77,12 @@ export function fetchTeam(teamId: string): Dispatch<RootState> {
     };
 }
 
-export function saveTeam(team: Team): Dispatch<RootState> {
-    return async function (dispatch: Dispatch<RootState>) {
+export function saveTeam(team: Team): (dispatch: Dispatch<RootState>) => Promise<string> {
+    return async (dispatch) => {
         const saveResponse = (await postObject(team)).data;
         dispatch(receiveTeam(saveResponse.id, saveResponse));
         dispatch(replace(`/manage/teams/${saveResponse.id}`));
+        return team.id;
     };
 }
 
