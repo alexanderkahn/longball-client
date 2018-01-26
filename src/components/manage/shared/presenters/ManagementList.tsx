@@ -45,14 +45,14 @@ export default class ManagementList extends Component<ManagementListProps> {
                 <span>
                     <PagingButton
                         ariaLabel="previous"
-                        enabled={page ? page.meta.hasPrevious : false}
+                        enabled={page ? !page.meta.first : false}
                         onClick={getPage(page ? page.meta.number - 1 : 1)}
                     >
                         <ChevronLeftIcon/>
                     </PagingButton>
                     <PagingButton
                         ariaLabel="next"
-                        enabled={page ? page.meta.hasNext : false}
+                        enabled={page ? !page.meta.last : false}
                         onClick={getPage(page ? page.meta.number + 1 : 1)}
                     >
                         <ChevronRightIcon/>

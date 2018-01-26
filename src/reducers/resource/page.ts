@@ -27,6 +27,6 @@ export class PageDescriptor {
 export interface PageResultsMeta {
     totalPages: number;
     number: number;
-    hasPrevious: boolean;
-    hasNext: boolean;
+    first: boolean;
+    last: boolean;
 }
