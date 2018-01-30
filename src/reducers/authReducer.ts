@@ -37,6 +37,8 @@ export const auth = (state: AuthState = initialState, action: AuthAction): AuthS
                 },
                 currentUser: initialState.currentUser
             };
+        case AuthActionTypeKeys.CLEAR_AUTHENTICATION:
+            return initialState;
         case AuthActionTypeKeys.REQUEST_CURRENT_USER:
             return {
                 token: state.token,

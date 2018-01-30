@@ -10,6 +10,7 @@ export interface UserLogControlProps {
 
 export interface UserLogControlActions {
     fetchCurrentUser: () => void;
+    logout: () => void;
 }
 
 export default class UserLogControl extends React.Component<UserLogControlProps & UserLogControlActions> {
@@ -23,9 +24,9 @@ export default class UserLogControl extends React.Component<UserLogControlProps 
     }
 
     render() {
-        const { user } = this.props;
+        const { user, logout } = this.props;
         if (isPresent(user)) {
-            return <span>{user.object.attributes.displayName}<Button color="contrast">Log out</Button></span>;
+            return <span>{user.object.attributes.displayName}<Button color="contrast" onClick={logout}>Log out</Button></span>;
         } else {
             return <LoadingProgressIndicator enabled={true}/>;
         }

@@ -2,6 +2,7 @@ import UserLogControl, { UserLogControlActions, UserLogControlProps } from '../p
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../../reducers/rootReducer';
 import { fetchCurrentUser } from '../../../actions/resource/usersActions';
+import { attemptClearAuthentication } from '../../../actions/session';
 
 const mapStateToProps = (state: RootState): UserLogControlProps => {
     return {
@@ -12,6 +13,7 @@ const mapStateToProps = (state: RootState): UserLogControlProps => {
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): UserLogControlActions => {
     return {
         fetchCurrentUser: () => dispatch(fetchCurrentUser()),
+        logout: () => dispatch(attemptClearAuthentication())
     };
 };
 

@@ -1,4 +1,4 @@
-import { receiveAuthentication, requestAuthentication } from './authActions';
+import { clearAuthentication, receiveAuthentication, requestAuthentication } from './authActions';
 import { Dispatch } from 'react-redux';
 import * as firebase from 'firebase';
 import { User } from 'firebase';
@@ -39,6 +39,15 @@ export function attemptVerifyAuthentication(): Dispatch<RootState> {
             dispatch(requestAuthentication());
             firebase.auth().getRedirectResult();
             // watchForAuthChanges() will handle the state change
+        }
+    };
+}
+
+export function attemptClearAuthentication(): Dispatch<RootState> {
+    return function (dispatch: Dispatch<RootState>) {
+        dispatch(clearAuthentication());
+        if (firebase.auth().currentUser) {
+            firebase.auth().signOut();
         }
     };
 }
