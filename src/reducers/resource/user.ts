@@ -6,5 +6,6 @@ export interface User extends ResourceObject {
     attributes: {
         issuer: string;
         username: string;
+        displayName: string;
     };
 }
