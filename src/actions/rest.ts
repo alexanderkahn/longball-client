@@ -29,7 +29,7 @@ export interface CollectionResponse<T extends ResourceObject> extends MetaRespon
 interface RequestOptions extends RequestInit {
     method: RequestMethod;
     headers: Array<Array<string>>;
-    body?: {};
+    body?: string;
 }
 
 type RequestMethod = 'GET' | 'POST' | 'DELETE';

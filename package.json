@@ -29,6 +29,7 @@
     "redux-thunk": "^2.2.0",
     "typeface-faster-one": "^0.0.43",
     "typeface-roboto": "^0.0.43",
+    "typescript": "^2.7.1",
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
