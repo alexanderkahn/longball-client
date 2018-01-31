@@ -51,9 +51,6 @@ export function isAbsent(value: ResourceCache<{}, {}> | null): value is AbsentIt
 }
 
 export function isPresent(value: ResourceCache<{}, {}> | null): value is PresentItemCache<{}, {}> {
-    if (value === undefined) {
-        console.info('help');
-    }
     return value !== null && value.fetchingState === FetchingState.FETCHED && value.object !== null;
 }
 
@@ -76,7 +73,7 @@ export class CachedStateWrapper<K, V> {
     }
 
     getAll(keys: K[]): Immutable.List<ResourceCache<K, V>> {
-        return Immutable.List(this.internal.toArray().filter((value) => keys.indexOf(value.id) > 0));
+        return Immutable.List(this.internal.toArray().filter((value) => keys.indexOf(value.id) >= 0));
     }
 
     setOneFetching(key: K): CachedStateWrapper<K, V> {
