@@ -4,8 +4,6 @@
   "private": true,
   "proxy": "http://localhost:8411/",
   "dependencies": {
-    "@types/qhistory": "^1.0.0",
-    "@types/react-datepicker": "^0.55.1",
     "downshift": "^1.22.3",
     "firebase": "^4.3.1",
     "history": "^4.7.2",
@@ -43,7 +41,9 @@
     "@types/jest": "^21.1.5",
     "@types/lodash": "^4.14.84",
     "@types/node": "^8.0.51",
+    "@types/qhistory": "^1.0.0",
     "@types/react": "^16.0.22",
+    "@types/react-datepicker": "^0.55.1",
     "@types/react-dom": "^16.0.3",
     "@types/react-redux": "^5.0.12",
     "@types/react-router-dom": "^4.2.1",
