@@ -1,6 +1,6 @@
 import { connect, Dispatch } from 'react-redux';
 import { resetCreditsClick } from '../../../actions/easteregg';
-import DingerzCredits from '../presenters/DingerzCredits';
+import LongballCredits from '../presenters/LongballCredits';
 import { RootState } from '../../../reducers/rootReducer';
 
 const mapStateToProps = () => {
@@ -15,9 +15,9 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     };
 };
 
-const DingerzCreditsContainer = connect(
+const LongballCreditsContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(DingerzCredits);
+)(LongballCredits);
 
-export default DingerzCreditsContainer;
+export default LongballCreditsContainer;

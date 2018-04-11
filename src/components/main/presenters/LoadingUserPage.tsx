@@ -38,7 +38,7 @@ function LoadingUserPage() {
             <Card style={styles.card}>
                 <CardContent>
                     <Typography style={styles.title} align="center" type="headline">
-                        Dingerz!
+                        Longball
                     </Typography>
                     <br/>
                     <div style={styles.progressWrapper}>

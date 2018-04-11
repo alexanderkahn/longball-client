@@ -6,7 +6,7 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import UserControlContainer from '../containers/UserLogControlContainer';
-import DingerzCreditsContainer from '../containers/DingerzCreditsContainer';
+import LongballCreditsContainer from '../containers/LongballCreditsContainer';
 
 const styles: CSSProperties = {
     root: {
@@ -37,12 +37,12 @@ export default class Header extends Component<HeaderProps> {
                             <MenuIcon/>
                         </IconButton>
                         <Typography type="title" color="inherit" style={styles.title}>
-                            Dinger<span onClick={onClick}>z</span>!
+                            <span onClick={onClick}>Longball</span>
                         </Typography>
                         <UserControlContainer />
                     </Toolbar>
                 </AppBar>
-                {showCredits && <DingerzCreditsContainer/>}
+                {showCredits && <LongballCreditsContainer/>}
             </div>
         );
     }

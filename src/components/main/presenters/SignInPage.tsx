@@ -32,10 +32,10 @@ export default function SignInPage(props: SignInPageProps) {
             <Card style={styles.card}>
                 <CardContent>
                     <Typography type="body1" style={styles.title}>
-                        Dingerz!
+                        Longball
                     </Typography>
                     <Typography component="p">
-                       A baseball scoring app to make your dreams come true.
+                       A baseball scoring app to make your weird, baseball-scoring-related dreams come true.
                     </Typography>
                 </CardContent>
                 <CardActions>

@@ -89,6 +89,7 @@ async function getJsonGetResponse<T>(url: string): Promise<T> {
 }
 
 async function getJsonPostResponse<T extends ResourceObject>(url: string, body: T): Promise<ObjectResponse<T>> {
+    delete body.id;
     const response = await fetchJson(url, {
         headers: [['Content-Type', 'application/json']],
         method: 'POST',
